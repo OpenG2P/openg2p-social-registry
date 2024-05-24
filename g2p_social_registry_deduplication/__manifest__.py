@@ -17,9 +17,9 @@
     "external_dependencies": {},
     "data": [
         "data/data.xml",
-        "views/menu.xml",
         "views/registrant_view.xml",
         "views/registrant_action_view.xml",
+        "views/menu.xml",
         "views/id_deduplication_view.xml",
     ],
     "assets": {
