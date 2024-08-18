@@ -2,7 +2,7 @@
 {
     "name": "OpenG2P Registry: G2P Connect REST API",
     "category": "G2P",
-    "version": "17.0.1.2.0-develop",
+    "version": "17.0.1.2.0",
     "author": "OpenG2P",
     "development_status": "Alpha",
     "website": "https://openg2p.org",
