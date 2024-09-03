@@ -27,6 +27,7 @@ addon | version | maintainers | summary
 [g2p_registry_id_deduplication](g2p_registry_id_deduplication/) | 17.0.1.0.0 |  | OpenG2P Registry ID Deduplication
 [g2p_social_registry](g2p_social_registry/) | 17.0.1.0.0 |  | OpenG2P Social Registry
 [g2p_social_registry_theme](g2p_social_registry_theme/) | 17.0.1.0.0 |  | OpenG2P Social Registry: Theme
+[g2p_social_registry_theme_muk](g2p_social_registry_theme_muk/) | 17.0.1.0.0 |  | OpenG2P Social Registry Muk Theme
 
 [//]: # (end addons)
 
