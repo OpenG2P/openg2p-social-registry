@@ -1,6 +1,6 @@
 [project]
 name = "odoo-addons-openg2p-social-registry"
-version = "0.0.0"
+version = "1.3.0"
 dependencies = [
     "odoo-addon-g2p_odk_user_mapping @ {root:uri}/g2p_odk_user_mapping",
     "odoo-addon-g2p_registry_g2p_connect_rest_api @ {root:uri}/g2p_registry_g2p_connect_rest_api",
