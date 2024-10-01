@@ -27,6 +27,7 @@
             "/g2p_registry_id_deduplication/static/src/xml/duplicate_template.xml",
         ],
     },
+    # 'test': ['tests/test_registry_config.py', 'tests/test_registrant.py'],
     "demo": [],
     "images": [],
     "application": True,

@@ -2,7 +2,6 @@
 
 from . import models
 
-
 def _uninstall_cleanup(env):
     parameter_keys = [
         "g2p_registry_id_deduplication.grp_deduplication_id_types_ids",
