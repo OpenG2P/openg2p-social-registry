@@ -23,11 +23,24 @@ class TestG2PReferenceIdconfig(TransactionCase):
     @patch("requests.post")
     def test_get_access_token(self, mock_post):
         mock_response = MagicMock()
-        mock_response.json.return_value = {"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"}
+        mock_response.json.return_value = {
+            "access_token": (
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+                "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ."
+                "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+            )
+        }
         mock_response.raise_for_status = lambda: None
         mock_post.return_value = mock_response
         access_token = self.config.get_access_token()
-        self.assertEqual(access_token, "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9")
+        self.assertEqual(
+            access_token,
+            (
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+                "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ."
+                "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+            ),
+        )
 
     @patch("requests.post")
     def test_get_access_token_error(self, mock_post):
@@ -40,7 +53,13 @@ class TestG2PReferenceIdconfig(TransactionCase):
     @patch("requests.post")
     def test_write_access_token(self, mock_post):
         mock_response = MagicMock()
-        mock_response.json.return_value = {"access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9"}
+        mock_response.json.return_value = {
+            "access_token": (
+                "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9."
+                "eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ."
+                "SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+            )
+        }
         mock_response.raise_for_status = lambda: None
         mock_post.return_value = mock_response
         self.config.get_access_token()

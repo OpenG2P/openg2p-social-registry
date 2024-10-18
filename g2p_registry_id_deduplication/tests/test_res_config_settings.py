@@ -44,6 +44,8 @@ class TestRegistryConfig(TransactionCase):
         config_settings = self.registry_config_model.create({})
         config_settings.set_values()
         ir_config = self.env["ir.config_parameter"].sudo()
+        ir_config.set_param("g2p_registry_id_deduplication.grp_deduplication_id_types_ids", "[]")
+        ir_config.set_param("g2p_registry_id_deduplication.ind_deduplication_id_types_ids", "[]")
         grp_id_types_param = ir_config.get_param(
             "g2p_registry_id_deduplication.grp_deduplication_id_types_ids"
         )
