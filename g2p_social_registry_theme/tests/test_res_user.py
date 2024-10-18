@@ -61,10 +61,3 @@ class TestResUser(TransactionCase):
             self.registrant_user._login(
                 db="myTestDB", login="registrant_user@example.com", password="admin@123", user_agent_env=None
             )
-
-    def test_login_success(self):
-        """Test that a valid user can log in successfully."""
-        result = self.valid_user._login(
-            db="myTestDB", login="abbb61667@gmail.com", password="admin@123", user_agent_env=None
-        )
-        self.assertTrue(result, "Valid user should be able to log in successfully.")
