@@ -33,9 +33,7 @@ class RejectWizard(models.TransientModel):
                 self.env["mail.activity"].create(
                     {
                         "activity_type_id": self.env.ref("mail.mail_activity_data_todo").id,
-                        "res_model_id": self.env["ir.model"]
-                        .search([("model", "=", "draft.record")])
-                        .id,
+                        "res_model_id": self.env["ir.model"].search([("model", "=", "draft.record")]).id,
                         "res_id": record.id,
                         "user_id": user.id,
                         "summary": "Record Rejected",

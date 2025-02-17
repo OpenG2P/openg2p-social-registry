@@ -301,16 +301,12 @@ class G2PRespartnerIntegration(models.Model):
                     draft_record[field] = vals[field]
 
         if vals.get("given_name") or vals.get("family_name") or vals.get("addl_name"):
-            
             name_parts = [
-                val.upper() for val in [
-                    vals.get("given_name"),
-                    vals.get("family_name"),
-                    vals.get("addl_name")
-                    ] if val
-                ]
-            
-            
+                val.upper()
+                for val in [vals.get("given_name"), vals.get("family_name"), vals.get("addl_name")]
+                if val
+            ]
+
             draft_record["name"] = " ".join(filter(None, name_parts)).strip()
 
         active_record.write({"partner_data": json.dumps(draft_record)})
