@@ -14,7 +14,7 @@ class RejectWizard(models.TransientModel):
     def confirm_rejection(self):
         active_ids = self._context.get("active_ids")
         self.ensure_one()
-        record = self.env["draft.imported.record"].browse(active_ids[0])
+        record = self.env["draft.record"].browse(active_ids[0])
 
         record.write(
             {
@@ -34,7 +34,7 @@ class RejectWizard(models.TransientModel):
                     {
                         "activity_type_id": self.env.ref("mail.mail_activity_data_todo").id,
                         "res_model_id": self.env["ir.model"]
-                        .search([("model", "=", "draft.imported.record")])
+                        .search([("model", "=", "draft.record")])
                         .id,
                         "res_id": record.id,
                         "user_id": user.id,
