@@ -311,7 +311,6 @@ class G2PRespartnerIntegration(models.Model):
                 ]
             
             
-            
             draft_record["name"] = " ".join(filter(None, name_parts)).strip()
 
         active_record.write({"partner_data": json.dumps(draft_record)})
