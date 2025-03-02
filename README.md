@@ -22,15 +22,15 @@ Available addons
 ----------------
 addon | version | maintainers | summary
 --- | --- | --- | ---
-[g2p_draft_publish](g2p_draft_publish/) | 17.0.0.0.0 |  | Draft Publish Module
-[g2p_leaflet_map](g2p_leaflet_map/) | 17.0.0.0.0 |  | g2p_leaflet_map
-[g2p_registry_g2p_connect_rest_api](g2p_registry_g2p_connect_rest_api/) | 17.0.0.0.0 |  | OpenG2P Registry: G2P Connect REST API
-[g2p_registry_id_deduplication](g2p_registry_id_deduplication/) | 17.0.0.0.0 |  | OpenG2P Registry ID Deduplication
-[g2p_social_registry](g2p_social_registry/) | 17.0.0.0.0 |  | OpenG2P Social Registry
-[g2p_social_registry_dashboard](g2p_social_registry_dashboard/) | 17.0.0.0.0 |  | OpenG2P Social Registry: Dashboard
-[g2p_social_registry_model](g2p_social_registry_model/) | 17.0.0.0.0 |  | G2P Social Registry: Demo
-[g2p_social_registry_proxy_means_test](g2p_social_registry_proxy_means_test/) | 17.0.0.0.0 |  | G2P Social Registry: PMT
-[g2p_social_registry_theme](g2p_social_registry_theme/) | 17.0.0.0.0 |  | OpenG2P Social Registry: Theme
+[g2p_draft_publish](g2p_draft_publish/) | 17.0.1.4.0 |  | Draft Publish Module
+[g2p_leaflet_map](g2p_leaflet_map/) | 17.0.1.4.0 |  | g2p_leaflet_map
+[g2p_registry_g2p_connect_rest_api](g2p_registry_g2p_connect_rest_api/) | 17.0.1.4.0 |  | OpenG2P Registry: G2P Connect REST API
+[g2p_registry_id_deduplication](g2p_registry_id_deduplication/) | 17.0.1.4.0 |  | OpenG2P Registry ID Deduplication
+[g2p_social_registry](g2p_social_registry/) | 17.0.1.4.0 |  | OpenG2P Social Registry
+[g2p_social_registry_dashboard](g2p_social_registry_dashboard/) | 17.0.1.4.0 |  | OpenG2P Social Registry: Dashboard
+[g2p_social_registry_model](g2p_social_registry_model/) | 17.0.1.4.0 |  | G2P Social Registry: Demo
+[g2p_social_registry_proxy_means_test](g2p_social_registry_proxy_means_test/) | 17.0.1.4.0 |  | G2P Social Registry: PMT
+[g2p_social_registry_theme](g2p_social_registry_theme/) | 17.0.1.4.0 |  | OpenG2P Social Registry: Theme
 
 [//]: # (end addons)
 
