@@ -2,10 +2,13 @@
 name = "odoo-addons-openg2p-social-registry"
 version = "0.0.0"
 dependencies = [
-    "odoo-addon-g2p_odk_user_mapping @ {root:uri}/g2p_odk_user_mapping",
+    "odoo-addon-g2p_draft_publish @ {root:uri}/g2p_draft_publish",
     "odoo-addon-g2p_registry_g2p_connect_rest_api @ {root:uri}/g2p_registry_g2p_connect_rest_api",
     "odoo-addon-g2p_registry_id_deduplication @ {root:uri}/g2p_registry_id_deduplication",
     "odoo-addon-g2p_social_registry @ {root:uri}/g2p_social_registry",
+    "odoo-addon-g2p_social_registry_dashboard @ {root:uri}/g2p_social_registry_dashboard",
+    "odoo-addon-g2p_social_registry_model @ {root:uri}/g2p_social_registry_model",
+    "odoo-addon-g2p_social_registry_proxy_means_test @ {root:uri}/g2p_social_registry_proxy_means_test",
     "odoo-addon-g2p_social_registry_theme @ {root:uri}/g2p_social_registry_theme",
 ]
 

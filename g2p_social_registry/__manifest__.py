@@ -18,6 +18,7 @@
         "views/main_view.xml",
         "views/region.xml",
         "views/registrant_view.xml",
+        "views/group_individual_search_extend.xml",
     ],
     "assets": {},
     "demo": [],

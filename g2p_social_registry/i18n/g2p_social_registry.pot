@@ -90,6 +90,8 @@ msgstr ""
 #. module: g2p_social_registry
 #: model:ir.model.fields,field_description:g2p_social_registry.field_res_partner__unique_id
 #: model:ir.model.fields,field_description:g2p_social_registry.field_res_users__unique_id
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry.view_registry_groups_filter_social_registry
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry.view_registry_individuals_filter_social_registry
 msgid "Unique ID"
 msgstr ""
 
