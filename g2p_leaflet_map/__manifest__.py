@@ -1,7 +1,7 @@
 {
     "name": "g2p_leaflet_map",
     "category": "Uncategorized",
-    "version": "17.0.1.4.0",
+    "version": "17.0.0.0.0",
     "depends": ["base"],
     "data": [
         "security/ir.model.access.csv",
