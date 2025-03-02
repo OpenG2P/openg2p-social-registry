@@ -1,6 +1,6 @@
 {
     "name": "Draft Publish",
-    "version": "17.0.1.4.0",
+    "version": "17.0.0.0.0",
     "summary": "Draft Publish  Module",
     "category": "tools",
     "depends": ["base", "mail", "g2p_social_registry", "g2p_registry_addl_info", "web"],
