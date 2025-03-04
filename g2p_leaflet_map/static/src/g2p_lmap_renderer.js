@@ -58,37 +58,45 @@ export class G2PLeafletMapRenderer extends Component {
             }).addTo(this.map);
 
             const bounds = L.latLngBounds([]);
-            let polygon = null;
-            let polygonCenter = null;
 
-            // **Add Polygon**
+            // Define a set of colors for polygons
+            const colors = ["blue", "green", "red", "purple", "orange", "yellow"];
+
+            // **Add Polygons from Land Data**
             if (this.props.polygonCoords?.length) {
-                polygon = L.polygon(this.props.polygonCoords).addTo(this.map);
-                bounds.extend(polygon.getBounds());
+                this.props.polygonCoords.forEach((land, index) => {
+                    const polygonColor = colors[index % colors.length];
+                    const polygon = L.polygon(land.polygon_data, {
+                        color: polygonColor,
+                        fillColor: polygonColor,
+                        fillOpacity: 0.5,
+                    }).addTo(this.map);
 
-                // **Calculate Polygon Center**
-                polygonCenter = polygon.getBounds().getCenter();
+                    bounds.extend(polygon.getBounds());
 
-                // **Add a Pin at Polygon Center**
-                L.marker(polygonCenter, {
-                    icon: L.icon({
-                        iconUrl: "/g2p_leaflet_map/static/lib/leaflet/images/marker-icon.png",
-                        iconSize: [25, 40],
-                        iconAnchor: [12, 40],
-                    }),
-                })
-                    .addTo(this.map)
-                    .bindPopup("Land Shape");
+                    // **Show information on hover**
+                    polygon.on("mouseover", (e) => {
+                        const popupContent = `
+                            <b>Land Information</b><br>
+                            Area: ${land.total_land_area} sq km<br>
+                            Owner: ${land.ownership_type}
+                        `;
+                        const tooltip = L.tooltip({
+                            permanent: false,
+                            direction: "top",
+                            opacity: 0.9,
+                        })
+                            .setContent(popupContent)
+                            .setLatLng(e.latlng);
+                        polygon.bindTooltip(tooltip).openTooltip();
+                    });
+
+                    polygon.on("mouseout", () => {
+                        polygon.unbindTooltip();
+                    });
+                });
             } else {
-                console.warn("No polygon coordinates received.");
-            }
-
-            // **Add Partner Location Marker**
-            if (this.props.partnerLatitude !== null && this.props.partnerLongitude !== null) {
-                const partnerLocation = [this.props.partnerLatitude, this.props.partnerLongitude];
-                L.marker(partnerLocation).addTo(this.map).bindPopup("Data Collection Point").openPopup();
-
-                bounds.extend(partnerLocation);
+                console.warn("No land data received.");
             }
 
             // **Fit Map to Show Everything**
