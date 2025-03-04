@@ -79,7 +79,7 @@ export class G2PLeafletMapRenderer extends Component {
                         const popupContent = `
                             <b>Land Information</b><br>
                             Area: ${land.total_land_area} sq km<br>
-                            Owner: ${land.ownership_type}
+                            Ownership: ${land.ownership_type}
                         `;
                         const tooltip = L.tooltip({
                             permanent: false,
