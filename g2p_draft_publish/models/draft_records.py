@@ -39,7 +39,7 @@ class G2PDraftRecord(models.Model):
     phone = fields.Char()
     gender = fields.Char()
     region = fields.Char()
-
+    is_group = fields.Boolean(default=False)
     partner_data = fields.Json(string="Partner Data (JSON)")
     state = fields.Selection(
         selection=[
@@ -52,25 +52,38 @@ class G2PDraftRecord(models.Model):
     )
     rejection_reason = fields.Text("remark")
 
+    group_member_ids_json = fields.Json(string="Group Members (JSON)", default=list)
+
     @api.model
     def create(self, vals):
-        partner_data = {
-            "given_name": vals["given_name"],
-            "family_name": vals["family_name"],
-            "addl_name": vals["addl_name"],
-            "gender": vals["gender"],
-            "region": vals["region"],
-            "imported_record_state": "draft",
-        }
+        partner_data = {}
+        is_group = vals.get("is_group", False)
+        vals["is_group"] = is_group
 
-        if vals["phone"]:
+        if vals.get("is_group"):
+            partner_data["name"] = vals.get("name", "")
+            partner_data["is_group"] = True
+        else:
+            given_name = vals.get("given_name", "")
+            family_name = vals.get("family_name", "")
+            addl_name = vals.get("addl_name", "")
+            partner_data = {
+                "given_name": given_name,
+                "family_name": family_name,
+                "addl_name": addl_name,
+                "gender": vals.get("gender", ""),
+                "region": vals.get("region", ""),
+                "is_group": False,
+            }
+            vals["name"] = f"{given_name} {family_name} {addl_name}".strip().upper()
+
+        if vals.get("phone"):
             partner_data["phone_number_ids"] = [(0, 0, {"phone_no": vals["phone"]})]
 
+        partner_data["imported_record_state"] = "draft"
         vals["partner_data"] = json.dumps(partner_data)
 
-        self.sudo().write({"message_partner_ids": [(6, 0, self.message_partner_ids.ids)]})
-        record = super().create(vals)
-        return record
+        return super().create(vals)
 
     def action_change_state(self):
         return {
@@ -88,23 +101,48 @@ class G2PDraftRecord(models.Model):
         res_partner_model = self.env["res.partner"]
         fields_metadata = res_partner_model.fields_get()
         valid_data = {}
-        given_name = partner_data.get("given_name", "")
-        family_name = partner_data.get("family_name", "")
-        addl_name = partner_data.get("addl_name", "")
+        created_partner = None
 
         self._prepare_valid_data(valid_data, fields_metadata, partner_data)
 
         if valid_data:
             valid_data["db_import"] = "yes"
-            valid_data["name"] = f"{given_name} {family_name} {addl_name}".upper()
-
-            res_partner_model.sudo().create(valid_data)
-            self.write({"state": "published"})
-
-            self._notify_validators()
-
+            valid_data["is_registrant"] = True
         else:
             raise ValueError("No valid data found to create a partner record.")
+
+        if partner_data.get("is_group"):
+            group_name = partner_data.get("name", "").strip().upper()
+
+            valid_data["name"] = group_name
+            valid_data["is_group"] = True
+        else:
+            given_name = partner_data.get("given_name", "")
+            family_name = partner_data.get("family_name", "")
+            addl_name = partner_data.get("addl_name", "")
+
+            valid_data["name"] = f"{given_name} {family_name} {addl_name}".strip().upper()
+            valid_data["is_group"] = False
+
+        created_partner = res_partner_model.sudo().create(valid_data)
+
+        if partner_data.get("is_group"):
+            individual_draft_ids = self.group_member_ids_json or []
+            membership_model = self.env["g2p.group.membership"].sudo()
+            for draft_id in individual_draft_ids:
+                draft_individual = self.env["draft.record"].browse(draft_id)
+                if draft_individual.exists():
+                    individual_partner = draft_individual.action_publish()
+                    membership_model.create(
+                        {
+                            "group": created_partner.id,
+                            "individual": individual_partner.id,
+                        }
+                    )
+
+        self.write({"state": "published"})
+        self._notify_validators()
+        return created_partner
 
     def _prepare_valid_data(self, valid_data, fields_metadata, partner_data):
         """Prepare valid data for partner creation based on field types."""
@@ -182,6 +220,13 @@ class G2PDraftRecord(models.Model):
             partner_data = json.loads(record.partner_data)
             partner_data["imported_record_state"] = "submitted"
 
+            if partner_data.get("is_group"):
+                individual_draft_ids = record.group_member_ids_json or []
+                for draft_id in individual_draft_ids:
+                    draft_individual = self.env["draft.record"].browse(draft_id)
+                    if draft_individual.exists() and draft_individual.state == "draft":
+                        draft_individual.action_submit()
+
             self.write({"state": "submitted", "partner_data": json.dumps(partner_data)})
             activities = self.env["mail.activity"].search(
                 [("res_model", "=", self._name), ("res_id", "in", self.ids)]
@@ -239,15 +284,28 @@ class G2PDraftRecord(models.Model):
                 "default_phone_number_ids": json_data.get("phone_number_ids", []),
                 "default_individual_membership_ids": json_data.get("individual_membership_ids", []),
                 "default_reg_ids": json_data.get("reg_ids", []),
+                "default_is_group": json_data.get("is_group", False),
             },
         }
 
-    def action_open_wizard(self):
-        return self._return_wizard_with_context(self.env.ref("g2p_draft_publish.g2p_validation_form_view").id)
-
-    def action_open_wizard_view_only(self):
+    def action_open_individual_wizard(self):
         return self._return_wizard_with_context(
-            self.env.ref("g2p_draft_publish.g2p_validation_form_view_only").id
+            self.env.ref("g2p_draft_publish.g2p_validation_individual_form_view").id
+        )
+
+    def action_open_individual_wizard_view_only(self):
+        return self._return_wizard_with_context(
+            self.env.ref("g2p_draft_publish.g2p_validation_individual_form_view_only").id
+        )
+
+    def action_open_group_wizard(self):
+        return self._return_wizard_with_context(
+            self.env.ref("g2p_draft_publish.g2p_validation_group_form_view").id
+        )
+
+    def action_open_group_wizard_view_only(self):
+        return self._return_wizard_with_context(
+            self.env.ref("g2p_draft_publish.g2p_validation_group_form_view_only").id
         )
 
     def _process_json_data(self, json_data):
@@ -337,8 +395,7 @@ class G2PRespartnerIntegration(models.Model):
         model_name = context.get("active_model")
         record_id = context.get("active_id")
         active_record = self.env[model_name].browse(record_id)
-        partner_data = json.loads(active_record.partner_data) or {}
-
+        partner_data = json.loads(active_record.partner_data or "{}")
         m2m_fields = {
             "tags_ids": "tags_ids",
         }
@@ -349,7 +406,7 @@ class G2PRespartnerIntegration(models.Model):
 
         dynamic_fields = {
             "is_company": False,
-            "is_group": False,
+            "is_group": active_record.is_group,
             "is_registrant": True,
             "db_import": "yes",
             **processed_m2m_fields,
@@ -368,7 +425,7 @@ class G2PRespartnerIntegration(models.Model):
                 if vals.get(field):
                     draft_record[field] = vals[field]
 
-        if vals.get("given_name") or vals.get("family_name") or vals.get("addl_name"):
+        if not self.is_group and (vals.get("given_name") or vals.get("family_name") or vals.get("addl_name")):
             name_parts = [
                 val.upper()
                 for val in [vals.get("given_name"), vals.get("family_name"), vals.get("addl_name")]

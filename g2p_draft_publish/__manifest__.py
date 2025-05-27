@@ -7,6 +7,7 @@
     "data": [
         "security/rules.xml",
         "security/ir.model.access.csv",
+        "wizards/group_member.xml",
         "views/draft_records.xml",
         "wizards/rejection.xml",
     ],
