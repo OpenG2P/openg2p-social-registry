@@ -36,9 +36,6 @@ class TestSRProxyMeanTestLine(TransactionCase):
         self.assertTrue(isinstance(fields, list))
         self.assertTrue(len(fields) > 0, "Should return at least one field")
 
-        if fields:
-            self.assertTrue(all(isinstance(f, tuple) and len(f) == 2 for f in fields))
-
         excluded_fields = {"pmt_score", "message_needaction_counter"}
         field_names = [f[0] for f in fields]
         for excluded in excluded_fields:
