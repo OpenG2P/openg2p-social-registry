@@ -4,12 +4,13 @@
         <field name="model">draft.record</field>
         <field name="arch" type="xml">
             <tree create="true" delete="true" edit="true" editable="bottom">
-                <field name="given_name" />
-                <field name="family_name" />
-                <field name="addl_name" />
-                <field name="phone" />
-                <field name="gender" />
-                <field name="region" />
+                <field name="given_name" readonly="id != False" />
+                <field name="family_name" readonly="id != False" />
+                <field name="addl_name" readonly="id != False" />
+                <field name="phone" readonly="id != False" />
+                <field name="gender" readonly="id != False" />
+                <field name="region" readonly="id != False" />
+
                 <field
                     decoration-warning="state == 'draft'"
                     decoration-success="state == 'published'"
