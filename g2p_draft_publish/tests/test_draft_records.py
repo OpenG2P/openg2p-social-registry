@@ -60,7 +60,6 @@ class TestDraftRecord(TransactionCase):
                 "family_name": "Doe",
                 "addl_name": "Middle",
                 "gender": "male",
-                "region": "North",
                 "phone": "1234567890",
                 "is_group": False,
             }
@@ -141,7 +140,6 @@ class TestDraftRecord(TransactionCase):
             {
                 "name": "Jane Smith",
                 "gender": "female",
-                "region": "Test Region",
                 "birthdate": "2000-01-01",
                 "phone_number_ids": [(0, 0, {"phone_no": "1111111111"})],
                 "tags_ids": [(6, 0, [1, 2])],
@@ -156,7 +154,6 @@ class TestDraftRecord(TransactionCase):
             [tuple(item) for item in result["default_phone_number_ids"]], [(0, 0, {"phone_no": "1111111111"})]
         )
         self.assertEqual(additional_g2p_info["gender"], "female")
-        self.assertEqual(additional_g2p_info["region"], "Test Region")
 
     def test_action_publish_group_with_individuals(self):
         GroupMembership = self.env["g2p.group.membership"].sudo()
@@ -166,7 +163,6 @@ class TestDraftRecord(TransactionCase):
                 "given_name": "Anna",
                 "family_name": "Bell",
                 "gender": "female",
-                "region": "East",
                 "is_group": False,
             }
         )
@@ -175,7 +171,6 @@ class TestDraftRecord(TransactionCase):
                 "given_name": "Carl",
                 "family_name": "Doe",
                 "gender": "male",
-                "region": "West",
                 "is_group": False,
             }
         )
@@ -323,7 +318,6 @@ class TestDraftRecord(TransactionCase):
             {
                 "name": "Jane",
                 "gender": "female",
-                "region": "West",
                 "birthdate": "1990-01-01",
                 "phone_number_ids": [(0, 0, {"phone_no": "9876543210"})],
                 "tags_ids": [(6, 0, [1, 2])],
@@ -453,7 +447,6 @@ class TestWebSaveResPartner(TransactionCase):
                 "given_name": "John",
                 "family_name": "Doe",
                 "gender": "male",
-                "region": "central",
             }
         )
 
@@ -462,7 +455,6 @@ class TestWebSaveResPartner(TransactionCase):
             "family_name": "Doe",
             "addl_name": "X",
             "gender": "male",
-            "region": "east",
             "tags_ids": [(6, 0, [])],
         }
 
@@ -482,7 +474,6 @@ class TestWebSaveResPartner(TransactionCase):
         self.assertEqual(data["given_name"], "Johnathan")
         self.assertEqual(data["family_name"], "Doe")
         self.assertEqual(data["addl_name"], "X")
-        self.assertEqual(data["region"], "east")
         self.assertEqual(data["is_group"], False)
         self.assertEqual(data["is_registrant"], True)
         self.assertEqual(data["db_import"], "yes")
@@ -526,7 +517,6 @@ class TestWebSaveResPartner(TransactionCase):
                 "given_name": "Alice",
                 "family_name": "Smith",
                 "gender": "female",
-                "region": "Test Region",
                 "phone": "9876543210",
             }
         )
@@ -551,7 +541,6 @@ class TestWebSaveResPartner(TransactionCase):
                 "given_name": "Bob",
                 "family_name": "Test",
                 "gender": "male",
-                "region": "Nowhere",
                 "phone": "1234567890",
                 "state": "submitted",
             }
@@ -575,7 +564,6 @@ class TestWebSaveResPartner(TransactionCase):
                 "given_name": "John",
                 "family_name": "Doe",
                 "gender": "male",
-                "region": "Region X",
                 "phone": "1234567890",
             }
         )
@@ -601,7 +589,6 @@ class TestWebSaveResPartner(TransactionCase):
                 "given_name": "Jane",
                 "family_name": "Doe",
                 "gender": "female",
-                "region": "Y Region",
                 "phone": "5551234567",
                 "state": "published",
             }

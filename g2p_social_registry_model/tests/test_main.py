@@ -30,6 +30,9 @@ class TestG2PSocialRegistryModel(HttpCase):
         )
         cls.test_user.write({"password": "SocialTest123!"})
 
+        # Make the user a supplier with supplier_rank > 0 so portal check passes
+        cls.test_user.partner_id.write({"supplier_rank": 1})
+
         # Shared payload data
         cls.shared_data = {
             "birthdate": "1990-01-01",
@@ -42,9 +45,9 @@ class TestG2PSocialRegistryModel(HttpCase):
             "employment_status": "self_employed",
             "marital_status": "single",
             # Social group data
-            "num_preg_lact_women": 2,
-            "num_malnourished_children": 1,
-            "num_disabled": 1,
+            "num_preg_lact_women": "2",
+            "num_malnourished_children": "1",
+            "num_disabled": "1",
             "type_of_disability": "visual_impairment",
             "caste_ethnic_group": "bantu",
             "belong_to_protected_groups": "no",
