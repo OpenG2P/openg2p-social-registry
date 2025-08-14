@@ -270,6 +270,7 @@ class G2PDraftRecord(models.Model):
                 if isinstance(field_value, int):
                     field_value = int(field_value)
                     context_data[f"default_{field_name}"] = json_data[field_name]
+                    # Valid many2one value - don't add to additional_g2p_info
                 else:
                     if field_name in self._fields and field_value is not None:
                         additional_g2p_info[field_name] = field_value
@@ -289,8 +290,8 @@ class G2PDraftRecord(models.Model):
 
                 if field_value in selection_values:
                     context_data[f"default_{field_name}"] = field_value
-
-                if field_value not in selection_values:
+                    # Valid selection value - don't add to additional_g2p_info
+                else:
                     if field_name in self._fields and field_value is not None:
                         additional_g2p_info[field_name] = field_value
 
@@ -334,7 +335,6 @@ class G2PRespartnerIntegration(models.Model):
         Saves data from the wizard to the draft record, intelligently reconciling
         valid and invalid data to prevent data loss.
         """
-        # 1. Get the active draft record from the context
         context = self.env.context
         model_name = context.get("active_model")
         record_id = context.get("active_id")
@@ -344,37 +344,25 @@ class G2PRespartnerIntegration(models.Model):
         active_record = self.env[model_name].browse(record_id)
         active_record.ensure_one()
 
-        # 2. Load the original state of `partner_data`
         try:
             partner_data = json.loads(active_record.partner_data or "{}")
         except (json.JSONDecodeError, TypeError):
             partner_data = {}
 
-        # 3. *** NEW: Reconcile invalid data that was not corrected in the wizard ***
-        # This is the core of the fix. We look at the 'additional_g2p_info' that was
-        # sent back from the wizard. If a field in there corresponds to a field in `vals`
-        # that is empty (False), it means the user didn't pick a valid value, so we
-        # should restore the original invalid text value.
         additional_info_str = vals.get("additional_g2p_info", "{}")
         try:
             additional_info = json.loads(additional_info_str)
         except (json.JSONDecodeError, TypeError):
             additional_info = {}
 
-        # Create a copy to avoid modifying the dictionary while iterating
         processed_vals = vals.copy()
         if additional_info:
             for field_name, original_invalid_value in additional_info.items():
-                # Check if the user has NOT provided a new, valid value for this field.
                 if field_name in processed_vals and not processed_vals[field_name]:
-                    # Restore the original invalid value from additional_info.
                     processed_vals[field_name] = original_invalid_value
 
-        # 4. Merge the now-corrected values into the partner_data dictionary
         partner_data.update(processed_vals)
 
-        # 5. Handle specific data transformations
-        # Recompute the full 'name' from its components
         name_parts = [
             partner_data.get("given_name", ""),
             partner_data.get("family_name", ""),
@@ -384,7 +372,6 @@ class G2PRespartnerIntegration(models.Model):
         if computed_name:
             partner_data["name"] = computed_name
 
-        # Enforce static/default values required for the draft
         partner_data.update(
             {
                 "is_company": False,
@@ -394,28 +381,14 @@ class G2PRespartnerIntegration(models.Model):
             }
         )
 
-        # 6. Prepare the final dictionary for the `write` call on draft.record
         final_update_vals = {"partner_data": json.dumps(partner_data)}
 
-        # 7. Denormalize data from the JSON back to the direct fields of the draft record
-        # This keeps the draft record's form/list views up-to-date.
         draft_model_fields = active_record._fields
 
-        # Sync simple fields that share the same name
-        fields_to_sync = ["name", "given_name", "family_name", "addl_name"]
+        fields_to_sync = ["name", "given_name", "family_name", "addl_name", "gender"]
         for field_name in fields_to_sync:
             if field_name in partner_data and field_name in draft_model_fields:
                 final_update_vals[field_name] = partner_data[field_name]
-
-        # Sync gender and region (handle both valid IDs and invalid text)
-        if "gender" in partner_data and partner_data.get("gender") and "gender" in draft_model_fields:
-            gender_val = partner_data.get("gender")
-            if isinstance(gender_val, int):
-                gender_obj = self.env["g2p.gender"].browse(gender_val).exists()
-                if gender_obj:
-                    final_update_vals["gender"] = gender_obj.name 
-            # else:  # It's likely the original invalid text
-            #     final_update_vals["gender"] = gender_val
 
         if "region" in partner_data and "region" in draft_model_fields:
             region_val = partner_data.get("region")
@@ -424,10 +397,6 @@ class G2PRespartnerIntegration(models.Model):
                 if region_obj:
                     final_update_vals["region"] = region_obj.name
 
-            # else:  # It's likely the original invalid text
-            #     final_update_vals["region"] = region_val or ""
-
-        # Sync the phone
         if "phone_number_ids" in partner_data and "phone" in draft_model_fields:
             phone_numbers = partner_data.get("phone_number_ids", [])
             if phone_numbers and isinstance(phone_numbers, list) and phone_numbers:
@@ -436,7 +405,6 @@ class G2PRespartnerIntegration(models.Model):
                 if phone_no:
                     final_update_vals["phone"] = phone_no
 
-        # 8. Perform a single, efficient write to the draft record
         active_record.write(final_update_vals)
 
     def action_publish(self):
