@@ -408,28 +408,33 @@ class G2PRespartnerIntegration(models.Model):
                 final_update_vals[field_name] = partner_data[field_name]
 
         # Sync gender and region (handle both valid IDs and invalid text)
-        if "gender" in partner_data and "gender" in draft_model_fields:
+        if "gender" in partner_data and partner_data.get("gender") and "gender" in draft_model_fields:
             gender_val = partner_data.get("gender")
             if isinstance(gender_val, int):
                 gender_obj = self.env["g2p.gender"].browse(gender_val).exists()
-                final_update_vals["gender"] = gender_obj.name if gender_obj else ""
-            else:  # It's likely the original invalid text
-                final_update_vals["gender"] = gender_val or ""
+                if gender_obj:
+                    final_update_vals["gender"] = gender_obj.name 
+            # else:  # It's likely the original invalid text
+            #     final_update_vals["gender"] = gender_val
 
         if "region" in partner_data and "region" in draft_model_fields:
             region_val = partner_data.get("region")
             if isinstance(region_val, int):
                 region_obj = self.env["g2p.region"].browse(region_val).exists()
-                final_update_vals["region"] = region_obj.name if region_obj else ""
-            else:  # It's likely the original invalid text
-                final_update_vals["region"] = region_val or ""
+                if region_obj:
+                    final_update_vals["region"] = region_obj.name
+
+            # else:  # It's likely the original invalid text
+            #     final_update_vals["region"] = region_val or ""
 
         # Sync the phone
         if "phone_number_ids" in partner_data and "phone" in draft_model_fields:
             phone_numbers = partner_data.get("phone_number_ids", [])
             if phone_numbers and isinstance(phone_numbers, list) and phone_numbers:
                 first_phone_details = phone_numbers[0][2]
-                final_update_vals["phone"] = first_phone_details.get("phone_no", "")
+                phone_no = first_phone_details.get("phone_no", False)
+                if phone_no:
+                    final_update_vals["phone"] = phone_no
 
         # 8. Perform a single, efficient write to the draft record
         active_record.write(final_update_vals)
