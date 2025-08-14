@@ -20,9 +20,9 @@
     },
     "demo": [],
     "images": [],
-    "application": False,
+    "application": True,
     "installable": True,
-    "auto_install": True,
+    "auto_install": False,
     "post_init_hook": "init_materialized_view",
     "uninstall_hook": "drop_materialized_view",
 }
