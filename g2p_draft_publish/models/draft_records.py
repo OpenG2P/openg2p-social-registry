@@ -222,9 +222,6 @@ class G2PDraftRecord(models.Model):
         context_data, additional_g2p_info = self._process_json_data(json_data)
 
         context_data["active_id"] = active_id
-
-        _logger.info("The Additionla info")
-        _logger.info(additional_g2p_info)
         return {
             "type": "ir.actions.act_window",
             "name": "Record Data",
@@ -273,6 +270,7 @@ class G2PDraftRecord(models.Model):
                 if isinstance(field_value, int):
                     field_value = int(field_value)
                     context_data[f"default_{field_name}"] = json_data[field_name]
+                    # Valid many2one value - don't add to additional_g2p_info
                 else:
                     if field_name in self._fields and field_value is not None:
                         additional_g2p_info[field_name] = field_value
@@ -292,8 +290,8 @@ class G2PDraftRecord(models.Model):
 
                 if field_value in selection_values:
                     context_data[f"default_{field_name}"] = field_value
-
-                if field_value not in selection_values:
+                    # Valid selection value - don't add to additional_g2p_info
+                else:
                     if field_name in self._fields and field_value is not None:
                         additional_g2p_info[field_name] = field_value
 
@@ -333,70 +331,81 @@ class G2PRespartnerIntegration(models.Model):
         return
 
     def action_save_to_draft(self, vals):
+        """
+        Saves data from the wizard to the draft record, intelligently reconciling
+        valid and invalid data to prevent data loss.
+        """
         context = self.env.context
         model_name = context.get("active_model")
         record_id = context.get("active_id")
+        if not all([model_name, record_id]):
+            raise UserError(_("Could not find the source draft record. Missing context."))
+
         active_record = self.env[model_name].browse(record_id)
-        partner_data = json.loads(active_record.partner_data) or {}
+        active_record.ensure_one()
 
-        m2m_fields = {
-            "tags_ids": "tags_ids",
-        }
+        try:
+            partner_data = json.loads(active_record.partner_data or "{}")
+        except (json.JSONDecodeError, TypeError):
+            partner_data = {}
 
-        processed_m2m_fields = {}
-        for field in m2m_fields:
-            processed_m2m_fields[field] = [item[1] for item in vals.get(field, [])]
+        additional_info_str = vals.get("additional_g2p_info", "{}")
+        try:
+            additional_info = json.loads(additional_info_str)
+        except (json.JSONDecodeError, TypeError):
+            additional_info = {}
 
-        dynamic_fields = {
-            "is_company": False,
-            "is_group": False,
-            "is_registrant": True,
-            "db_import": "yes",
-            **processed_m2m_fields,
-        }
+        processed_vals = vals.copy()
+        if additional_info:
+            for field_name, original_invalid_value in additional_info.items():
+                if field_name in processed_vals and not processed_vals[field_name]:
+                    processed_vals[field_name] = original_invalid_value
 
-        static_fields = self.get_fields_in_view()
+        partner_data.update(processed_vals)
 
-        draft_record = {}
+        name_parts = [
+            partner_data.get("given_name", ""),
+            partner_data.get("family_name", ""),
+            partner_data.get("addl_name", ""),
+        ]
+        computed_name = " ".join(filter(None, name_parts)).strip().upper()
+        if computed_name:
+            partner_data["name"] = computed_name
 
-        draft_record.update(dynamic_fields)
+        partner_data.update(
+            {
+                "is_company": False,
+                "is_group": False,
+                "is_registrant": True,
+                "db_import": "yes",
+            }
+        )
 
-        for field in static_fields:
-            if field in self.env[model_name]._fields:
-                if field in vals:
-                    draft_record[field] = vals[field]
-                else:
-                    draft_record[field] = partner_data.get(field)
-            else:
-                if field in vals:
-                    draft_record[field] = vals[field]
+        final_update_vals = {"partner_data": json.dumps(partner_data)}
 
-        if vals.get("given_name") or vals.get("family_name") or vals.get("addl_name"):
-            name_parts = [
-                val.upper()
-                for val in [vals.get("given_name"), vals.get("family_name"), vals.get("addl_name")]
-                if val
-            ]
-            draft_record["name"] = " ".join(filter(None, name_parts)).strip()
+        draft_model_fields = active_record._fields
 
-        active_record.write({"partner_data": json.dumps(draft_record)})
+        fields_to_sync = ["name", "given_name", "family_name", "addl_name", "gender"]
+        for field_name in fields_to_sync:
+            if field_name in partner_data and field_name in draft_model_fields:
+                final_update_vals[field_name] = partner_data[field_name]
 
-        # After updating partner_data (the JSON), also update the direct fields
-        direct_fields = ["region"]
-        update_vals = {}
+        if "region" in partner_data and "region" in draft_model_fields:
+            region_val = partner_data.get("region")
+            if isinstance(region_val, int):
+                region_obj = self.env["g2p.region"].browse(region_val).exists()
+                if region_obj:
+                    final_update_vals["region"] = region_obj.name
 
-        for field in direct_fields:
-            field_val = vals.get(field)
-            if field_val:
-                if field == "region":
-                    region = self.env["g2p.region"].browse(field_val)
-                    update_vals[field] = region.name if region.exists() else ""
-                else:
-                    update_vals[field] = field_val
-            else:
-                update_vals[field] = ""
+        if "phone_number_ids" in partner_data and "phone" in draft_model_fields:
+            phone_numbers = partner_data.get("phone_number_ids", [])
+            if phone_numbers and isinstance(phone_numbers, list) and phone_numbers:
+                first_phone_details = phone_numbers[0][2]
+                phone_no = first_phone_details.get("phone_no", False)
+                if phone_no:
+                    final_update_vals["phone"] = phone_no
 
-        active_record.write(update_vals)
+        active_record.write(final_update_vals)
 
     def action_publish(self):
         context = self.env.context
