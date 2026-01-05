@@ -23,6 +23,7 @@
     font-style: italic;
     font-weight: 400;
 }
+
 @font-face {
     font-family: "Roboto";
     src: url("fonts/Roboto-Medium.woff") format("woff");
@@ -35,27 +36,37 @@ body {
 }
 
 .o_main_navbar {
-    background-color: hsl(44, 92%, 53%) !important;
+    /*background-color: hsl(44, 92%, 53%) !important; #1e40af*/
+    background-color: #1e40af !important;
     border-bottom: 1px solid #011627;
     --o-navbar-height: 56px;
 }
 
 .o_main_navbar .o_menu_brand {
-    color: #011627;
+    color: #fcfeff;
     font-weight: bold;
 }
 
+.o_main_navbar .o_menu_brand:hover {
+    color: #ffff00 !important;
+}
+
+
 .o_main_navbar .o_menu_sections .o_nav_entry,
 .o_main_navbar .o_menu_sections .dropdown-toggle {
-    background-color: #f5bb1a !important;
-    color: #011627;
+    /*background-color: #f5bb1a !important;*/
+    background-color: #1e40af !important;
+    color: #fcfeff;
     border: none;
     border-bottom: 1px solid #011627 !important;
 }
 
-.o_main_navbar .o_navbar_apps_menu .dropdown-toggle {
-    color: #011627;
+.o_main_navbar .o_menu_sections .o_nav_entry:hover,
+.o_main_navbar .o_menu_sections .dropdown-toggle:hover,
+.o_main_navbar .o_navbar_apps_menu .dropdown-toggle:hover {
+    color: #ffff00 !important;
 }
+
 
 .o_menu_sections {
     background-image: url("/g2p_social_registry_theme/static/src/img/sr_logo.png");
@@ -102,7 +113,7 @@ body {
     font: normal normal medium 18px/24px Roboto;
 }
 
-.breadcrumb-item + .breadcrumb-item::before {
+.breadcrumb-item+.breadcrumb-item::before {
     color: #202528;
 }
 
@@ -130,12 +141,20 @@ body {
     border-color: #011627;
 }
 
+.o_list_button_add,
+.o_list_button_add_program {
+    background-color: #011627 !important;
+    border-color: #011627 !important;
+    color: #ffffff !important;
+}
+
 .o_list_button_add:hover,
+.o_list_button_add_program:hover,
 .btn-outline-primary:hover,
 .btn-primary:hover {
-    background-color: #ffffff;
-    color: #011627;
-    border-color: #011627;
+    background-color: #ffffff !important;
+    color: #011627 !important;
+    border-color: #011627 !important;
 }
 
 .o_form_button_save i,
@@ -155,6 +174,28 @@ main {
 .o_cp_action_menus .dropdown-toggle,
 .o_cp_action_menus .dropdown-toggle:active {
     font-size: 20px;
+    color: #000000 !important;
+}
+
+.o_cp_action_menus .dropdown-toggle:hover {
+    color: #333333 !important;
+}
+
+/* Control panel buttons styling */
+.o_control_panel .btn:not(.btn-primary):not(.btn-success):not(.btn-danger):not(.btn-warning),
+.o_control_panel .btn-secondary,
+.o_control_panel .btn-light {
+    background-color: #ffffff !important;
+    color: #011627 !important;
+    border-color: #011627 !important;
+}
+
+.o_control_panel .btn:not(.btn-primary):not(.btn-success):not(.btn-danger):not(.btn-warning):hover,
+.o_control_panel .btn-secondary:hover,
+.o_control_panel .btn-light:hover {
+    background-color: #f8f9fa !important;
+    color: #011627 !important;
+    border-color: #011627 !important;
 }
 
 .o_form_sheet_bg .o_form_sheet {
@@ -165,7 +206,7 @@ main {
 }
 
 .oe_stat_button .o_button_icon {
-    color: #011627 !important;
+    color: #1e40af !important;
 }
 
 .oe_stat_button .o_stat_text {
@@ -184,7 +225,7 @@ main {
     color: #ffffff !important;
 }
 
-.o_list_renderer .o_data_row.o_selected_row > .o_data_cell.o_required_modifier:not(.o_readonly_modifier) {
+.o_list_renderer .o_data_row.o_selected_row>.o_data_cell.o_required_modifier:not(.o_readonly_modifier) {
     border-bottom: none;
 }
 
@@ -222,20 +263,20 @@ main {
     color: #88488f !important;
 }
 
-.custom-control-input:checked ~ .custom-control-label::before {
+.custom-control-input:checked~.custom-control-label::before {
     color: #fff;
     border-color: #2a477a;
     background-color: #2a477a;
 }
 
-.custom-radio .custom-control-input:checked ~ .custom-control-label::after {
+.custom-radio .custom-control-input:checked~.custom-control-label::after {
     border-radius: 50%;
     border-color: #2a477a;
     background-color: #2a477a;
 }
 
 .o_quick_editable a,
-.o_quick_editable > span {
+.o_quick_editable>span {
     color: #e27d21 !important;
 }
 
@@ -427,4 +468,10 @@ main {
     min-width: 90px;
     height: 31px;
     color: #ffffff !important;
+}
+
+.o_control_panel .fa-refresh,
+.o_control_panel .fa-undo,
+.o_control_panel .fa-repeat {
+    color: #1e40af !important;
 }
