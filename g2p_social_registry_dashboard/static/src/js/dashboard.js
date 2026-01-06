@@ -1,15 +1,15 @@
 /** @odoo-module **/
-import {Component, useState} from "@odoo/owl";
-import {ChartComponent} from "../components/chart/chart";
-import {KpiComponent} from "../components/kpi/kpi";
-import {registry} from "@web/core/registry";
-import {useService} from "@web/core/utils/hooks";
+import { Component, useState } from "@odoo/owl";
+import { ChartComponent } from "../components/chart/chart";
+import { KpiComponent } from "../components/kpi/kpi";
+import { registry } from "@web/core/registry";
+import { useService } from "@web/core/utils/hooks";
 
 class SRDashboard extends Component {
     setup() {
         super.setup();
         this.orm = useService("orm");
-        this.dashboard_title = "SR Dashboard";
+        this.dashboard_title = "Zanzibar Registry Dashboard";
 
         this.dashboard_data = useState({
             total_groups: 0,
@@ -20,7 +20,7 @@ class SRDashboard extends Component {
             age_distribution_values: [],
         });
 
-        this.dataLoaded = useState({flag: false});
+        this.dataLoaded = useState({ flag: false });
 
         this.fetchData();
     }
@@ -44,6 +44,6 @@ class SRDashboard extends Component {
 }
 
 SRDashboard.template = "g2p_social_registry_dashboard.dashboard_template";
-SRDashboard.components = {ChartComponent, KpiComponent};
+SRDashboard.components = { ChartComponent, KpiComponent };
 
 registry.category("actions").add("g2p_social_registry_dashboard.sr_dashboard_tag", SRDashboard);
