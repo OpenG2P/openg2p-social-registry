@@ -19,7 +19,24 @@ class ResPartnerDashboard(models.Model):
         self.env.cr.execute(query, (company_id,))
         result = self.env.cr.fetchone()
 
+        if not result:
+            return {
+                "total_individuals": 0,
+                "total_groups": 0,
+                "gender_distribution": {},
+                "age_distribution": {
+                    "Below 18": 0,
+                    "18 to 30": 0,
+                    "31 to 40": 0,
+                    "41 to 50": 0,
+                    "Above 50": 0,
+                },
+            }
+
         total_registrants, gender_spec, age_distribution = result
+        total_registrants = total_registrants or {}
+        gender_spec = gender_spec or {}
+        age_distribution = age_distribution or {}
 
         return {
             "total_individuals": total_registrants.get("total_individuals", 0),

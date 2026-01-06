@@ -5,7 +5,7 @@
 <odoo>
 
     <record model="ir.ui.menu" id="g2p_registry_base.g2p_main_menu_root">
-        <field name="name">Social Registry</field>
+        <field name="name">Zanzibar Pensioner Registry</field>
     </record>
 
 </odoo>

@@ -6,6 +6,6 @@ import {patch} from "@web/core/utils/patch";
 patch(WebClient.prototype, {
     setup() {
         super.setup();
-        this.title.setParts({zopenerp: "OpenG2P"});
+        this.title.setParts({zopenerp: "ZPR"});
     },
 });
