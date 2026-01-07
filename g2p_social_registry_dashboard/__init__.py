@@ -73,8 +73,14 @@ def init_materialized_view(env):
                         '41_to_50', COUNT(rp.id) FILTER (
                             WHERE EXTRACT(YEAR FROM AGE(rp.birthdate)) BETWEEN 41 AND 50
                         ),
-                        'above_50', COUNT(rp.id) FILTER (
-                            WHERE EXTRACT(YEAR FROM AGE(rp.birthdate)) > 50
+                        '51_to_60', COUNT(rp.id) FILTER (
+                            WHERE EXTRACT(YEAR FROM AGE(rp.birthdate)) BETWEEN 51 AND 60
+                        ),
+                        '61_to_70', COUNT(rp.id) FILTER (
+                            WHERE EXTRACT(YEAR FROM AGE(rp.birthdate)) BETWEEN 61 AND 70
+                        ),
+                        'above_70', COUNT(rp.id) FILTER (
+                            WHERE EXTRACT(YEAR FROM AGE(rp.birthdate)) > 70
                         )
                     ) AS age_distribution
                 FROM

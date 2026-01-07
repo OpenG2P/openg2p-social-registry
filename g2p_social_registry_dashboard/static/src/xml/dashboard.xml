@@ -16,11 +16,6 @@ Part of OpenG2P. See LICENSE file for full copyright and licensing details.
                     <!-- KPIs Section -->
                     <div style="display: flex; justify-content: space-around; gap: 20px;">
                         <KpiComponent
-                            title="'Groups'"
-                            data="dashboard_data.total_groups"
-                            icon_class="'fa fa-group'"
-                        />
-                        <KpiComponent
                             title="'Individuals'"
                             data="dashboard_data.total_individuals"
                             icon_class="'fa fa-user'"

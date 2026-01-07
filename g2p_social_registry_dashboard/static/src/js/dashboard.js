@@ -12,7 +12,6 @@ class SRDashboard extends Component {
         this.dashboard_title = "Zanzibar Registry Dashboard";
 
         this.dashboard_data = useState({
-            total_groups: 0,
             total_individuals: 0,
             gender_distribution_keys: [],
             gender_distribution_values: [],

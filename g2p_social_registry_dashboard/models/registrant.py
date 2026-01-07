@@ -22,14 +22,15 @@ class ResPartnerDashboard(models.Model):
         if not result:
             return {
                 "total_individuals": 0,
-                "total_groups": 0,
                 "gender_distribution": {},
                 "age_distribution": {
                     "Below 18": 0,
                     "18 to 30": 0,
                     "31 to 40": 0,
                     "41 to 50": 0,
-                    "Above 50": 0,
+                    "51 to 60": 0,
+                    "61 to 70": 0,
+                    "Above 70": 0,
                 },
             }
 
@@ -40,13 +41,14 @@ class ResPartnerDashboard(models.Model):
 
         return {
             "total_individuals": total_registrants.get("total_individuals", 0),
-            "total_groups": total_registrants.get("total_groups", 0),
             "gender_distribution": gender_spec,
             "age_distribution": {
                 "Below 18": age_distribution.get("below_18", 0),
                 "18 to 30": age_distribution.get("18_to_30", 0),
                 "31 to 40": age_distribution.get("31_to_40", 0),
                 "41 to 50": age_distribution.get("41_to_50", 0),
-                "Above 50": age_distribution.get("above_50", 0),
+                "51 to 60": age_distribution.get("51_to_60", 0),
+                "61 to 70": age_distribution.get("61_to_70", 0),
+                "Above 70": age_distribution.get("above_70", 0),
             },
         }
