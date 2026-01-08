@@ -18,6 +18,7 @@ def init_materialized_view(env):
     matviews_to_check = [
         "g2p_gender_count_view",
         "g2p_age_distribution_view",
+        "g2p_region_distribution_view",
         "g2p_total_registrants_view",
         "g2p_sr_dashboard_data",
     ]
@@ -33,6 +34,20 @@ def init_materialized_view(env):
         )
 
         existing_views = set([row[0] for row in cr.fetchall()])
+
+        # Self-healing: If the main view exists but is missing the new column, drop it
+        if "g2p_sr_dashboard_data" in existing_views:
+            cr.execute("SELECT * FROM g2p_sr_dashboard_data LIMIT 0")
+            colnames = [desc[0] for desc in cr.description]
+            if 'region_distribution' not in colnames:
+                _logger.info("Dashboard view is outdated. Dropping for recreation...")
+                cr.execute("DROP MATERIALIZED VIEW IF EXISTS g2p_sr_dashboard_data CASCADE")
+                # Also remove from existing_views set so it gets recreated below
+                existing_views.discard("g2p_sr_dashboard_data")
+                existing_views.discard("g2p_gender_count_view")
+                existing_views.discard("g2p_age_distribution_view")
+                existing_views.discard("g2p_region_distribution_view")
+                existing_views.discard("g2p_total_registrants_view")
 
         if "g2p_gender_count_view" not in existing_views:
             gender_query = """
@@ -95,6 +110,29 @@ def init_materialized_view(env):
             cr.execute(age_distribution_query)
             _logger.info("Created materialized view: g2p_age_distribution_view")
 
+        if "g2p_region_distribution_view" not in existing_views:
+            region_distribution_query = """
+                CREATE MATERIALIZED VIEW g2p_region_distribution_view AS
+                SELECT
+                    c.id AS company_id,
+                    gr.name AS region,
+                    COUNT(rp.id) AS region_count
+                FROM
+                    res_company c
+                CROSS JOIN
+                    g2p_region gr
+                LEFT JOIN
+                    res_partner rp ON rp.region = gr.id 
+                    AND rp.company_id = c.id
+                    AND rp.is_registrant = True
+                    AND rp.active = True
+                    AND rp.is_group = False
+                GROUP BY
+                    c.id, gr.name;
+            """
+            cr.execute(region_distribution_query)
+            _logger.info("Created materialized view: g2p_region_distribution_view")
+
         if "g2p_total_registrants_view" not in existing_views:
             total_registrants_query = """
                 CREATE MATERIALIZED VIEW g2p_total_registrants_view AS
@@ -125,18 +163,25 @@ def init_materialized_view(env):
                         jsonb_object_agg(gc.gender, gc.gender_count) FILTER (WHERE gc.gender IS NOT NULL),
                         '{}'
                     ) AS gender_spec,
-                    adv.age_distribution
+                    adv.age_distribution,
+                    COALESCE(
+                        jsonb_object_agg(rc.region, rc.region_count) FILTER (WHERE rc.region IS NOT NULL),
+                        '{}'
+                    ) AS region_distribution
                 FROM
                     g2p_total_registrants_view trv
                 LEFT JOIN
                     g2p_gender_count_view gc ON trv.company_id = gc.company_id
                 LEFT JOIN
                     g2p_age_distribution_view adv ON trv.company_id = adv.company_id
+                LEFT JOIN
+                    g2p_region_distribution_view rc ON trv.company_id = rc.company_id
                 GROUP BY
                     trv.company_id, trv.total_registrants, adv.age_distribution;
             """
             cr.execute(dashboard_query)
             _logger.info("Created materialized view: g2p_sr_dashboard_data")
+
 
     except Exception as exc:
         _logger.error("Error while creating materialized views: %s", str(exc))
@@ -158,6 +203,7 @@ def drop_materialized_view(env):
         "g2p_sr_dashboard_data",
         "g2p_gender_count_view",
         "g2p_age_distribution_view",
+        "g2p_region_distribution_view",
         "g2p_total_registrants_view",
     ]
 

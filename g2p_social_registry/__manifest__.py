@@ -15,6 +15,7 @@
     "external_dependencies": {"python": ["python-jose"]},
     "data": [
         "security/ir.model.access.csv",
+        "data/region_data.xml",
         "views/main_view.xml",
         "views/region.xml",
         "views/registrant_view.xml",

@@ -10,14 +10,42 @@ class ResPartnerDashboard(models.Model):
     def get_dashboard_data(self):
         """Fetch data from materialized view and prepare it for charts."""
         company_id = self.env.company.id
+        cr = self.env.cr
+
+        # Check if the view needs updating (e.g., if columns were recently added)
+        cr.execute("SELECT * FROM g2p_sr_dashboard_data LIMIT 0")
+        colnames = [desc[0] for desc in cr.description]
+
+        if "region_distribution" not in colnames:
+            needs_refresh = True
+        else:
+            # Check if we have all regions (Cross Join) or just non-zero ones (Old Logic)
+            cr.execute("SELECT COUNT(*) FROM g2p_region_distribution_view")
+            view_row_count = cr.fetchone()[0]
+            cr.execute("SELECT COUNT(*) FROM g2p_region")
+            total_regions = cr.fetchone()[0]
+            # If the count is different, it means the view is outdated (missing rows or has 'Unknown')
+            needs_refresh = view_row_count != total_regions
+
+        if needs_refresh:
+            # Import and run the init function from the module level
+            try:
+                from odoo.addons.g2p_social_registry_dashboard import init_materialized_view, drop_materialized_view
+                # Drop everything to ensure the NEW SQL logic for regions is applied
+                drop_materialized_view(self.env)
+                init_materialized_view(self.env)
+                self.env.cr.commit() # Commit so the next query sees the new columns
+            except Exception as e:
+                _logger.error("Failed to refresh dashboard views: %s", str(e))
+                pass
 
         query = """
-            SELECT total_registrants, gender_spec, age_distribution
+            SELECT total_registrants, gender_spec, age_distribution, region_distribution
             FROM g2p_sr_dashboard_data
             WHERE company_id = %s
         """
-        self.env.cr.execute(query, (company_id,))
-        result = self.env.cr.fetchone()
+        cr.execute(query, (company_id,))
+        result = cr.fetchone()
 
         if not result:
             return {
@@ -32,12 +60,14 @@ class ResPartnerDashboard(models.Model):
                     "61 to 70": 0,
                     "Above 70": 0,
                 },
+                "region_distribution": {},
             }
 
-        total_registrants, gender_spec, age_distribution = result
+        total_registrants, gender_spec, age_distribution, region_distribution = result
         total_registrants = total_registrants or {}
         gender_spec = gender_spec or {}
         age_distribution = age_distribution or {}
+        region_distribution = region_distribution or {}
 
         return {
             "total_individuals": total_registrants.get("total_individuals", 0),
@@ -51,4 +81,5 @@ class ResPartnerDashboard(models.Model):
                 "61 to 70": age_distribution.get("61_to_70", 0),
                 "Above 70": age_distribution.get("above_70", 0),
             },
+            "region_distribution": region_distribution,
         }

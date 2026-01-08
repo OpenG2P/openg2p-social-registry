@@ -17,7 +17,20 @@ class SRDashboard extends Component {
             gender_distribution_values: [],
             age_distribution_keys: [],
             age_distribution_values: [],
+            region_distribution_keys: [],
+            region_distribution_values: [],
         });
+
+        this.barChartOptions = {
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        precision: 0,
+                    },
+                },
+            },
+        };
 
         this.dataLoaded = useState({ flag: false });
 
@@ -32,6 +45,8 @@ class SRDashboard extends Component {
             data.gender_distribution_values = Object.values(data.gender_distribution);
             data.age_distribution_keys = Object.keys(data.age_distribution);
             data.age_distribution_values = Object.values(data.age_distribution);
+            data.region_distribution_keys = Object.keys(data.region_distribution);
+            data.region_distribution_values = Object.values(data.region_distribution);
 
             Object.assign(this.dashboard_data, data);
 
