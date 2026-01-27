@@ -17,7 +17,7 @@ Part of OpenG2P. See LICENSE file for full copyright and licensing details.
                         <!-- KPIs Section -->
                         <div style="display: flex; justify-content: flex-start; gap: 20px;">
                             <KpiComponent
-                                title="'Individuals'"
+                                title="labels.individuals"
                                 data="dashboard_data.total_individuals"
                                 icon_class="'fa fa-user'"
                             />
@@ -27,13 +27,13 @@ Part of OpenG2P. See LICENSE file for full copyright and licensing details.
                         <div
                             style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); flex-grow: 1;"
                         >
-                            <h3 style="text-align: center; margin-bottom: 10px; font-size: 1.2rem;">Age Distribution</h3>
+                            <h3 style="text-align: center; margin-bottom: 10px; font-size: 1.2rem;"><t t-esc="labels.age_distribution"/></h3>
                             <t t-if="dataLoaded.flag">
                                 <ChartComponent
                                     type="'bar'"
                                     labels="dashboard_data.age_distribution_keys"
                                     data="dashboard_data.age_distribution_values"
-                                    data_label="'Age Distribution'"
+                                    data_label="labels.age_distribution"
                                     backgroundColor="['#C4C4C4']"
                                     options="barChartOptions"
                                 />
@@ -45,7 +45,7 @@ Part of OpenG2P. See LICENSE file for full copyright and licensing details.
                     <div
                         style="flex: 1; min-width: 300px; background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; align-items: center; justify-content: center;"
                     >
-                        <h3 style="text-align: center; margin-bottom: 10px; font-size: 1.2rem;">Gender Distribution</h3>
+                        <h3 style="text-align: center; margin-bottom: 10px; font-size: 1.2rem;"><t t-esc="labels.gender_distribution"/></h3>
                         <t t-if="dataLoaded.flag">
                             <ChartComponent
                                 type="'pie'"
@@ -63,13 +63,13 @@ Part of OpenG2P. See LICENSE file for full copyright and licensing details.
                     <div
                         style="background: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);"
                     >
-                        <h3 style="text-align: center; margin-bottom: 15px; font-size: 1.2rem;">Region Distribution</h3>
+                        <h3 style="text-align: center; margin-bottom: 15px; font-size: 1.2rem;"><t t-esc="labels.region_distribution"/></h3>
                         <t t-if="dataLoaded.flag">
                             <ChartComponent
                                 type="'bar'"
                                 labels="dashboard_data.region_distribution_keys"
                                 data="dashboard_data.region_distribution_values"
-                                data_label="'Region Distribution'"
+                                data_label="labels.region_distribution"
                                 backgroundColor="['#F07B1A']"
                                 options="barChartOptions"
                             />
