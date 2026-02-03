@@ -1,305 +1,1521 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <odoo>
 
-
-
-    <!-- Update Form Template -->
-    <template
-        id="social_registry_model_individual_update_form_template"
-        name="Social Registry Model Individual Update Form"
-        inherit_id="g2p_registration_portal_base.individual_update_form_template"
-    >
-        <xpath expr="//div[@id='demographic']" position="inside">
-            <div class="row">
-                <!-- Address Field -->
-                <div class="col-lg-6">
-                    <div class="s_website_form_field">
-                        <label class="s_website_form_label" for="address">
-                            <span class="s_website_form_label_content" style="color: #666666;">Address</span>
-                        </label>
-                        <textarea
-                            id="address"
-                            name="address"
-                            class="form-control"
-                            rows="2"
-                            cols="10"
-                            placeholder="Enter Address"
-                        ><t t-esc="beneficiary.address" /></textarea>
+    <!-- Base template for Nominee tab - Inherited by both forms -->
+    <template id="individual_nominee_tab_fragment">
+        <div class="accordion-item" style="border-top: 1px solid #dee2e6;">
+            <h2 class="accordion-header">
+                <button
+                    class="accordion-button card-header form-card-header collapsed"
+                    style="padding:15px;font-weight:500;"
+                    id="nominee_header"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#nominee_info"
+                    aria-expanded="false"
+                    aria-controls="nominee_info">Nominee Details</button>
+            </h2>
+        </div>
+        <div class="card-body" style="padding: 0px;">
+            <div
+                class="s_website_form_rows collapse"
+                id="nominee_info"
+                data-bs-parent="#accordion"
+            >
+                <div class="row mem-ind-row" style="padding: 20px;">
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_zanid">
+                                <span class="s_website_form_label_content" style="color: #666666;">Zan ID</span>
+                                <span class="s_website_form_mark">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="nominee_zanid"
+                                name="nominee_zanid"
+                                class="form-control"
+                                placeholder="Enter Zan ID"
+                                maxlength="9"
+                                minlength="9"
+                                required="1"
+                                t-att-value="beneficiary.nominee_zanid if beneficiary else ''"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_first_name">
+                                <span class="s_website_form_label_content" style="color: #666666;">First Name</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="nominee_first_name"
+                                name="nominee_first_name"
+                                class="form-control"
+                                placeholder="Enter Nominee First Name"
+                                t-att-value="beneficiary.nominee_first_name if beneficiary else ''"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_last_name">
+                                <span class="s_website_form_label_content" style="color: #666666;">Last Name</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="nominee_last_name"
+                                name="nominee_last_name"
+                                class="form-control"
+                                placeholder="Enter Nominee Last Name"
+                                t-att-value="beneficiary.nominee_last_name if beneficiary else ''"
+                            />
+                        </div>
                     </div>
                 </div>
 
-                <!-- Occupation Field -->
-                <div class="col-lg-6">
-                    <div class="s_website_form_field">
-                        <label class="s_website_form_label" for="occupation">
-                            <span
-                                class="s_website_form_label_content"
-                                style="color: #666666;"
-                            >Occupation</span>
-                        </label>
-                        <input
-                            type="text"
-                            id="occupation"
-                            name="occupation"
-                            class="form-control"
-                            placeholder="Enter Occupation"
-                            t-att-value="beneficiary.occupation"
-                        />
+                <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_gender">
+                                <span class="s_website_form_label_content" style="color: #666666;">Gender</span>
+                            </label>
+                            <select id="nominee_gender" name="nominee_gender" class="form-select">
+                                <option value="">Select</option>
+                                <t t-foreach="gender" t-as="g">
+                                    <option t-att-value="g.value" t-att-selected="beneficiary.nominee_gender == g.value if beneficiary else False">
+                                        <t t-esc="g.code" />
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_rel_benf">
+                                <span class="s_website_form_label_content" style="color: #666666;">Relationship with beneficiary</span>
+                            </label>
+                            <select id="nominee_rel_benf" name="nominee_rel_benf" class="form-select">
+                                <option value="">Select</option>
+                                <option value="wife" t-att-selected="beneficiary.nominee_rel_benf == 'wife' if beneficiary else False">Wife</option>
+                                <option value="husband" t-att-selected="beneficiary.nominee_rel_benf == 'husband' if beneficiary else False">Husband</option>
+                                <option value="son" t-att-selected="beneficiary.nominee_rel_benf == 'son' if beneficiary else False">Son</option>
+                                <option value="daughter" t-att-selected="beneficiary.nominee_rel_benf == 'daughter' if beneficiary else False">Daughter</option>
+                                <option value="grandchild" t-att-selected="beneficiary.nominee_rel_benf == 'grandchild' if beneficiary else False">Grandchild</option>
+                                <option value="other" t-att-selected="beneficiary.nominee_rel_benf == 'other' if beneficiary else False">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_mobile">
+                                <span class="s_website_form_label_content" style="color: #666666;">Mobile Number</span>
+                            </label>
+                            <input
+                                type="tel"
+                                id="nominee_mobile"
+                                name="nominee_mobile"
+                                class="form-control"
+                                placeholder="Enter Nominee Mobile Number"
+                                maxlength="10"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                t-att-value="beneficiary.nominee_mobile if beneficiary else ''"
+                            />
+                        </div>
                     </div>
                 </div>
-        </div>
 
-        <div class="row">
-            <!-- Income Field -->
-            <div class="col-lg-6">
-                <div class="s_website_form_field">
-                    <label class="s_website_form_label" for="income">
-                        <span class="s_website_form_label_content" style="color: #666666;">Income</span>
-                    </label>
-                    <input
-                            type="number"
-                            id="income"
-                            name="income"
-                            class="form-control"
-                            placeholder="Enter Income"
-                            step="1000"
-                            t-att-value="beneficiary.income"
-                        />
+                <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_region">
+                                <span class="s_website_form_label_content" style="color: #666666;">Region</span>
+                            </label>
+                            <select id="nominee_region" name="nominee_region" class="form-select">
+                                <option value="">Select</option>
+                                <t t-foreach="regions" t-as="r">
+                                    <!-- Use code for value as defined in model selection -->
+                                    <option t-att-value="r.code" t-att-selected="beneficiary.nominee_region == r.code if beneficiary else False">
+                                        <t t-esc="r.name" />
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_district">
+                                <span class="s_website_form_label_content" style="color: #666666;">District</span>
+                            </label>
+                            <select id="nominee_district" name="nominee_district" class="form-select">
+                                <option value="">Select</option>
+                                <t t-foreach="districts" t-as="d">
+                                    <!-- Use code for value, and add data-district-code using 'code' as well -->
+                                    <option t-att-value="d.code" t-att-selected="beneficiary.nominee_district == d.code if beneficiary else False" t-att-data-district-code="d.code">
+                                        <t t-esc="d.name" />
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_shehia">
+                                <span class="s_website_form_label_content" style="color: #666666;">Shehia (Ward)</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="nominee_shehia"
+                                name="nominee_shehia"
+                                class="form-control"
+                                placeholder="Enter Shehia"
+                                t-att-value="beneficiary.nominee_shehia if beneficiary else ''"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+                    <div class="col-lg-12">
+                         <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_house_street">
+                                <span class="s_website_form_label_content" style="color: #666666;">House &amp; Street</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="nominee_house_street"
+                                name="nominee_house_street"
+                                class="form-control"
+                                placeholder="Enter House &amp; Street"
+                                t-att-value="beneficiary.nominee_house_street if beneficiary else ''"
+                            />
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+        
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function() {
+                try {
+                    var nomRegionSelect = document.getElementById('nominee_region');
+                    var nomDistrictSelect = document.getElementById('nominee_district');
+                    
+                    if (!nomRegionSelect || !nomDistrictSelect) {
+                        return;
+                    }
 
-            <!-- Education Level Field -->
-            <div class="col-lg-6">
-                <div class="s_website_form_field">
-                    <label class="s_website_form_label" for="education_level">
-                        <span
-                                class="s_website_form_label_content"
-                                style="color: #666666;"
-                            >Education Level</span>
+                    // Clone allowed options
+                    var allNomDistricts = Array.from(nomDistrictSelect.options).map(function(opt) {
+                        return { 
+                            text: opt.text, 
+                            value: opt.value, 
+                            dCode: opt.getAttribute('data-district-code') 
+                        };
+                    });
+                    
+                    // Reusing the same map structure.
+                    // Ideally this should be a shared global or injected via a common asset,
+                    // but for now extending the template with local scope.
+                    var regionDistrictMap = {
+                        'mjini_magharibi': ['mjini_magharibi_a', 'magharibi_b', 'mjini'],
+                        'kaskazini_unguja': ['kaskazini_a', 'kaskazini_b'],
+                        'kusini_unguja': ['kati', 'kusini'],
+                        'kaskazini_pemba': ['wete', 'micheweni'],
+                        'kusini_pemba': ['chake_chake', 'mkoani'],
+                        // Fallback
+                        'MJ': ['mjini_magharibi_a', 'magharibi_b', 'mjini'],
+                        'KU': ['kaskazini_a', 'kaskazini_b'],
+                        'KS': ['kati', 'kusini'],
+                        'KP': ['wete', 'micheweni'],
+                        'SP': ['chake_chake', 'mkoani']
+                    };
+
+                    function filterNomDistricts() {
+                        var selectedVal = nomRegionSelect.value; // The value is the Code
+                        var validDistricts = regionDistrictMap[selectedVal] || [];
+
+                        // Clear and Rebuild
+                        var currentVal = nomDistrictSelect.value;
+                        nomDistrictSelect.innerHTML = ''; // clear
+                        
+                        // Always add default Select option
+                        var defaultOpt = document.createElement('option');
+                        defaultOpt.value = "";
+                        defaultOpt.text = "Select";
+                        nomDistrictSelect.appendChild(defaultOpt);
+
+                        allNomDistricts.forEach(function(d) {
+                            if (d.value === "") return; // Skip original default
+
+                            // Filter logic: match district code in valid list
+                            if (!selectedVal || validDistricts.includes(d.dCode)) {
+                                var opt = document.createElement('option');
+                                opt.value = d.value;
+                                opt.text = d.text;
+                                opt.setAttribute('data-district-code', d.dCode);
+                                if (d.value === currentVal) opt.selected = true;
+                                nomDistrictSelect.appendChild(opt);
+                            }
+                        });
+                    }
+
+                    nomRegionSelect.addEventListener('change', filterNomDistricts);
+                    
+                    // Trigger initial
+                    if (nomRegionSelect.value) {
+                        filterNomDistricts();
+                    }
+
+                } catch (e) {
+                    console.error("Nominee filter error", e);
+                }
+            });
+        </script>
+    </template>
+
+    <!-- Base template for Pension tab - Inherited by both forms -->
+    <template id="individual_pension_tab_fragment">
+        <div class="accordion-item" style="border-top: 1px solid #dee2e6;">
+            <h2 class="accordion-header">
+                <button
+                    class="accordion-button card-header form-card-header collapsed"
+                    style="padding:15px;font-weight:500;"
+                    id="pension_header"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#pension_info"
+                    aria-expanded="false"
+                    aria-controls="pension_info">Pension Information</button>
+            </h2>
+        </div>
+        <div class="card-body" style="padding: 0px;">
+            <div
+                class="s_website_form_rows collapse"
+                id="pension_info"
+                data-bs-parent="#accordion"
+            >
+                <div class="row mem-ind-row" style="padding: 20px;">
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="other_pension">
+                                <span class="s_website_form_label_content" style="color: #666666;">Are you receiving any other pension?</span>
+                            </label>
+                            <select id="other_pension" name="other_pension" class="form-select">
+                                <option value="">Select</option>
+                                <option value="yes" t-att-selected="beneficiary.other_pension == 'yes' if beneficiary else False">Yes</option>
+                                <option value="no" t-att-selected="beneficiary.other_pension == 'no' if beneficiary else False">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="scheme_name">
+                                <span class="s_website_form_label_content" style="color: #666666;">If Yes, which scheme</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="scheme_name"
+                                name="scheme_name"
+                                class="form-control"
+                                placeholder="Enter Scheme Name"
+                                t-att-value="beneficiary.scheme_name if beneficiary else ''"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!-- Base template for Payment Preference tab - Inherited by both forms -->
+    <template id="individual_payment_tab_fragment">
+        <div class="accordion-item" style="border-top: 1px solid #dee2e6;">
+            <h2 class="accordion-header">
+                <button
+                    class="accordion-button card-header form-card-header collapsed"
+                    style="padding:15px;font-weight:500;"
+                    id="payment_header"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#payment_info"
+                    aria-expanded="false"
+                    aria-controls="payment_info">Payment Preference</button>
+            </h2>
+        </div>
+        <div class="card-body" style="padding: 0px;">
+            <div
+                class="s_website_form_rows collapse"
+                id="payment_info"
+                data-bs-parent="#accordion"
+            >
+                <div class="row mem-ind-row" style="padding: 20px;">
+                    <!-- Payment Mode (Col 1) -->
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="payment_mode">
+                                <span class="s_website_form_label_content" style="color: #666666;">Preferred Payment Method</span>
+                            </label>
+                            <select id="payment_mode" name="payment_mode" class="form-select">
+                                <option value="">Select</option>
+                                <option value="bank" t-att-selected="beneficiary.payment_mode == 'bank' if beneficiary else False">Bank</option>
+                                <option value="mobile_wallet" t-att-selected="beneficiary.payment_mode == 'mobile_wallet' if beneficiary else False">Mobile Wallet</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Fields Wrapper (occupies remaining 2/3rds) -->
+                    <!-- Bank Fields -->
+                    <div class="col-lg-8" id="bank_fields" t-att-style="'display: block;' if beneficiary and beneficiary.payment_mode == 'bank' else 'display: none;'">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="s_website_form_field mb-3">
+                                    <label class="s_website_form_label" for="bank_name">
+                                        <span class="s_website_form_label_content" style="color: #666666;">Bank Name</span>
+                                    </label>
+                                    <input type="text" id="bank_name" name="bank_name" class="form-control" t-att-value="beneficiary.bank_name if beneficiary else ''"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="s_website_form_field mb-3">
+                                    <label class="s_website_form_label" for="account_num">
+                                        <span class="s_website_form_label_content" style="color: #666666;">Account Number</span>
+                                    </label>
+                                    <input type="text" id="account_num" name="account_num" class="form-control" t-att-value="beneficiary.account_num if beneficiary else ''"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="s_website_form_field mb-3">
+                                    <label class="s_website_form_label" for="account_name">
+                                        <span class="s_website_form_label_content" style="color: #666666;">Account Name</span>
+                                    </label>
+                                    <input type="text" id="account_name" name="account_name" class="form-control" t-att-value="beneficiary.account_name if beneficiary else ''"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Wallet Fields -->
+                    <div class="col-lg-8" id="wallet_fields" t-att-style="'display: block;' if beneficiary and beneficiary.payment_mode == 'mobile_wallet' else 'display: none;'">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="s_website_form_field mb-3">
+                                    <label class="s_website_form_label" for="mobile_wallet">
+                                        <span class="s_website_form_label_content" style="color: #666666;">Mobile Wallet Number</span>
+                                    </label>
+                                    <input type="text" id="mobile_wallet" name="mobile_wallet" class="form-control" t-att-value="beneficiary.mobile_wallet if beneficiary else ''"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Simple Script to toggle fields -->
+        <script type="text/javascript">
+            document.getElementById('payment_mode').addEventListener('change', function() {
+                var bankFields = document.getElementById('bank_fields');
+                var walletFields = document.getElementById('wallet_fields');
+                bankFields.style.display = (this.value === 'bank') ? 'block' : 'none';
+                walletFields.style.display = (this.value === 'mobile_wallet') ? 'block' : 'none';
+            });
+        </script>
+    </template>
+
+    <!-- Base template for Attachments tab -->
+    <template id="individual_attachments_tab_fragment">
+        <div class="accordion-item" style="border-top: 1px solid #dee2e6;">
+            <h2 class="accordion-header">
+                <button
+                    class="accordion-button card-header form-card-header collapsed"
+                    style="padding:15px;font-weight:500;"
+                    id="attachments_header"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#attachments_info"
+                    aria-expanded="false"
+                    aria-controls="attachments_info">Attachments</button>
+            </h2>
+        </div>
+        <div class="card-body" style="padding: 0px;">
+            <div
+                class="s_website_form_rows collapse"
+                id="attachments_info"
+                data-bs-parent="#accordion"
+            >
+                <div class="row mem-ind-row" style="padding: 20px;">
+                    <!-- Beneficiary Photo -->
+                    <div class="col-lg-6">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="beneficiary_image">
+                                <span class="s_website_form_label_content" style="color: #666666;">Beneficiary Photo</span>
+                            </label>
+                            <div class="input-group">
+                                <input type="file" id="beneficiary_image" name="beneficiary_image" class="form-control" accept="image/*" capture="camera"/>
+                                <button class="btn btn-outline-secondary open-cam" type="button" data-field="beneficiary_image">
+                                    <i class="fa fa-camera"/> Capture
+                                </button>
+                            </div>
+                            <t t-if="beneficiary and beneficiary.beneficiary_image">
+                                <div class="mt-2 text-center">
+                                    <img t-att-src="image_data_uri(beneficiary.beneficiary_image)" style="max-height: 150px; border: 1px solid #ddd; padding: 5px; border-radius: 4px;"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                    <!-- Nominee Photo -->
+                    <div class="col-lg-6">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_image">
+                                <span class="s_website_form_label_content" style="color: #666666;">Relative / Nominee Photo</span>
+                            </label>
+                            <div class="input-group">
+                                <input type="file" id="nominee_image" name="nominee_image" class="form-control" accept="image/*" capture="camera"/>
+                                <button class="btn btn-outline-secondary open-cam" type="button" data-field="nominee_image">
+                                    <i class="fa fa-camera"/> Capture
+                                </button>
+                            </div>
+                            <t t-if="beneficiary and beneficiary.nominee_image">
+                                <div class="mt-2 text-center">
+                                    <img t-att-src="image_data_uri(beneficiary.nominee_image)" style="max-height: 100px; border: 1px solid #ddd; padding: 5px; border-radius: 4px;"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+                    <!-- Zan ID Photo -->
+                    <div class="col-lg-6">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="zan_image">
+                                <span class="s_website_form_label_content" style="color: #666666;">Zan ID Photo</span>
+                            </label>
+                            <div class="input-group">
+                                <input type="file" id="zan_image" name="zan_image" class="form-control" accept="image/*" capture="camera"/>
+                                <button class="btn btn-outline-secondary open-cam" type="button" data-field="zan_image">
+                                    <i class="fa fa-camera"/> Capture
+                                </button>
+                            </div>
+                            <t t-if="beneficiary and beneficiary.zan_image">
+                                <div class="mt-2 text-center">
+                                    <img t-att-src="image_data_uri(beneficiary.zan_image)" style="max-height: 100px; border: 1px solid #ddd; padding: 5px; border-radius: 4px;"/>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Webcam Capture Modal -->
+                <div class="modal fade" id="webcamModal" tabindex="-1" aria-labelledby="webcamModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="webcamModalLabel">Capture Photo</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body text-center">
+                                <video id="webcamVideo" autoplay="true" playsinline="true" style="width: 100%; max-height: 400px; background: #000; border-radius: 8px;"/>
+                                <canvas id="webcamCanvas" style="display:none;"/>
+                            </div>
+                            <div class="modal-footer justify-content-center">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <button type="button" id="snapPhoto" class="btn btn-primary">
+                                    <i class="fa fa-camera"/> Take Photo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script type="text/javascript">
+                    (function() {
+                        var currentFieldId = null;
+                        var stream = null;
+                        var video = document.getElementById('webcamVideo');
+                        var canvas = document.getElementById('webcamCanvas');
+                        var webcamModalElem = document.getElementById('webcamModal');
+                        
+                        // Initialize bootstrap modal if it exists
+                        var modal = null;
+                        if (typeof bootstrap !== 'undefined' &amp;&amp; bootstrap.Modal) {
+                            modal = new bootstrap.Modal(webcamModalElem);
+                        }
+
+                        document.querySelectorAll('.open-cam').forEach(function(btn) {
+                            btn.addEventListener('click', function() {
+                                currentFieldId = this.getAttribute('data-field');
+                                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+                                    .then(function(s) {
+                                        stream = s;
+                                        video.srcObject = stream;
+                                        if (modal) modal.show();
+                                        else if (window.jQuery &amp;&amp; $(webcamModalElem).modal) $(webcamModalElem).modal('show');
+                                        else alert("Capture started. Please position yourself.");
+                                    })
+                                    .catch(function(err) {
+                                        alert("Could not access camera: " + err);
+                                    });
+                            });
+                        });
+
+                        document.getElementById('snapPhoto').addEventListener('click', function() {
+                            canvas.width = video.videoWidth;
+                            canvas.height = video.videoHeight;
+                            canvas.getContext('2d').drawImage(video, 0, 0);
+                            
+                            canvas.toBlob(function(blob) {
+                                var file = new File([blob], currentFieldId + ".jpg", { type: "image/jpeg" });
+                                var container = new DataTransfer();
+                                container.items.add(file);
+                                document.getElementById(currentFieldId).files = container.files;
+                                
+                                // Stop stream and hide
+                                stopCamera();
+                                if (modal) modal.hide();
+                                else if (window.jQuery &amp;&amp; $(webcamModalElem).modal) $(webcamModalElem).modal('hide');
+                            }, 'image/jpeg');
+                        });
+
+                        function stopCamera() {
+                            if (stream) {
+                                stream.getTracks().forEach(function(track) { track.stop(); });
+                                stream = null;
+                            }
+                        }
+
+                        if (webcamModalElem) {
+                            webcamModalElem.addEventListener('hidden.bs.modal', function () {
+                                stopCamera();
+                            });
+                        }
+                    })();
+                </script>
+            </div>
+        </div>
+    </template>
+
+    <!-- Beneficiary Details Fields Fragment -->
+    <template id="beneficiary_details_fields_fragment">
+        <!-- Row 1: Zan ID, First Name, Last Name -->
+        <div class="row mem-ind-row" style="padding: 20px;">
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="benf_zan_id">
+                        <span class="s_website_form_label_content" style="color: #666666;">Zan ID</span>
+                        <span class="s_website_form_mark">*</span>
                     </label>
-                    <select
-                            id="education_level"
-                            name="education_level"
-                            class="form-select"
-                            t-att-value="beneficiary.education_level"
-                        >
+                    <div class="input-group">
+                        <input type="text" id="benf_zan_id" name="benf_zan_id" class="form-control" maxlength="9" minlength="9" required="1" t-att-value="beneficiary.benf_zan_id if beneficiary else ''"/>
+                        <button class="btn btn-outline-primary" type="button" id="zan_id_search">
+                            <i class="fa fa-search"/> Search
+                        </button>
+                    </div>
+                    <div id="zan_id_lookup_status" class="mt-1" style="font-size: 0.8rem; display: none;"></div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="given_name">
+                        <span class="s_website_form_label_content" style="color: #666666;">First Name</span>
+                        <span class="s_website_form_mark">*</span>
+                    </label>
+                    <input type="text" id="given_name" name="given_name" class="form-control" t-att-value="beneficiary.given_name if beneficiary else ''" required="1"/>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="family_name">
+                        <span class="s_website_form_label_content" style="color: #666666;">Last Name</span>
+                        <span class="s_website_form_mark">*</span>
+                    </label>
+                    <input type="text" id="family_name" name="family_name" class="form-control" t-att-value="beneficiary.family_name if beneficiary else ''" required="1"/>
+                </div>
+            </div>
+        </div>
 
-                        <option value="" t-att-selected="not beneficiary.education_level">Select</option>
-                        <option
-                                value="primary"
-                                t-att-selected="beneficiary.education_level == 'primary'"
-                            >Primary</option>
-                        <option
-                                value="secondary"
-                                t-att-selected="beneficiary.education_level == 'secondary'"
-                            >Secondary</option>
-                        <option
-                                value="higher_secondary"
-                                t-att-selected="beneficiary.education_level == 'higher_secondary'"
-                            >Higher Secondary</option>
-                        <option
-                                value="bachelors"
-                                t-att-selected="beneficiary.education_level == 'bachelors'"
-                            >Bachelors</option>
-                        <option
-                                value="masters"
-                                t-att-selected="beneficiary.education_level == 'masters'"
-                            >Masters</option>
+        <!-- Row 2: DOB, Gender, Mobile -->
+        <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="birthdate">
+                        <span class="s_website_form_label_content" style="color: #666666;">Date of Birth</span>
+                    </label>
+                    <input type="date" id="birthdate" name="birthdate" class="form-control date-picker" t-att-value="beneficiary.birthdate if beneficiary else ''"/>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="gender">
+                        <span class="s_website_form_label_content" style="color: #666666;">Gender</span>
+                        <span class="s_website_form_mark">*</span>
+                    </label>
+                    <select id="gender" name="gender" class="form-select" required="1">
+                        <option value="">Select</option>
+                        <t t-foreach="gender" t-as="g">
+                            <option t-att-value="g.value" t-att-selected="beneficiary and beneficiary.gender == g.value">
+                                <t t-esc="g.code"/>
+                            </option>
+                        </t>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="mobile">
+                        <span class="s_website_form_label_content" style="color: #666666;">Mobile</span>
+                    </label>
+                    <input type="tel" id="mobile" name="mobile" class="form-control" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" t-att-value="beneficiary.phone_number_ids[0].phone_no if beneficiary and beneficiary.phone_number_ids else ''"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 3: House & Street, Shehia (Ward), PO Code -->
+        <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="street">
+                        <span class="s_website_form_label_content" style="color: #666666;">House &amp; Street</span>
+                    </label>
+                    <input type="text" id="street" name="street" class="form-control" t-att-value="beneficiary.street if beneficiary else ''"/>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="street2">
+                        <span class="s_website_form_label_content" style="color: #666666;">Shehia (Ward)</span>
+                    </label>
+                    <input type="text" id="street2" name="street2" class="form-control" t-att-value="beneficiary.street2 if beneficiary else ''"/>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="benf_post_code">
+                        <span class="s_website_form_label_content" style="color: #666666;">PO BOX / Post code</span>
+                    </label>
+                    <input type="text" id="benf_post_code" name="benf_post_code" class="form-control" t-att-value="beneficiary.benf_post_code if beneficiary else ''"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 4: Region, District, Disability -->
+        <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="ben_region">
+                        <span class="s_website_form_label_content" style="color: #666666;">Region</span>
+                    </label>
+                    <select id="ben_region" name="region" class="form-select">
+                        <option value="">Select</option>
+                        <t t-foreach="regions" t-as="r">
+                            <option t-att-value="r.id" t-att-selected="beneficiary and beneficiary.region.id == r.id" t-att-data-region-code="r.code">
+                                <t t-esc="r.name"/>
+                            </option>
+                        </t>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="ben_district">
+                        <span class="s_website_form_label_content" style="color: #666666;">District</span>
+                    </label>
+                    <select id="ben_district" name="district" class="form-select">
+                        <option value="">Select</option>
+                        <t t-foreach="districts" t-as="d">
+                            <option t-att-value="d.id" t-att-selected="beneficiary and beneficiary.district.id == d.id" t-att-data-district-code="d.code">
+                                <t t-esc="d.name"/>
+                            </option>
+                        </t>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="disability">
+                        <span class="s_website_form_label_content" style="color: #666666;">Disability Status</span>
+                    </label>
+                    <select id="disability" name="disability" class="form-select">
+                        <option value="">Select</option>
+                        <option value="yes" t-att-selected="beneficiary and beneficiary.disability == 'yes'">Yes</option>
+                        <option value="no" t-att-selected="beneficiary and beneficiary.disability == 'no'">No</option>
                     </select>
                 </div>
             </div>
         </div>
+        
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function() {
+                var searchBtn = document.getElementById('zan_id_search');
+                var zanInput = document.getElementById('benf_zan_id');
+                var statusDiv = document.getElementById('zan_id_lookup_status');
 
-        <div class="row">
-            <!-- Employment Status Field -->
-            <div class="col-lg-6">
-                <div class="s_website_form_field">
-                    <label class="s_website_form_label" for="employment_status">
-                        <span
-                                class="s_website_form_label_content"
-                                style="color: #666666;"
-                            >Employment Status</span>
+                if (searchBtn) {
+                    searchBtn.addEventListener('click', function() {
+                        var zanId = zanInput.value;
+                        if (!zanId) {
+                            alert("Please enter a Zan ID");
+                            return;
+                        }
+
+                        statusDiv.innerText = "Searching...";
+                        statusDiv.style.color = "blue";
+                        statusDiv.style.display = "block";
+
+                        fetch('/portal/registration/zan_id_lookup', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                params: {
+                                    zan_id: zanId
+                                }
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.result &amp;&amp; data.result.status === 'SUCCESS') {
+                                var result = data.result;
+                                
+                                // Helper to safe set value
+                                function setVal(id, val) {
+                                    var el = document.getElementById(id);
+                                    if (el) el.value = val || '';
+                                }
+
+                                // Helper to safe set Select and trigger change
+                                function setSelect(id, val) {
+                                    var el = document.getElementById(id);
+                                    if (el &amp;&amp; val) {
+                                        el.value = val;
+                                        el.dispatchEvent(new Event('change'));
+                                    }
+                                }
+                                
+                                // Helper to set image
+                                function setImg(id, b64) {
+                                    if (!b64) return;
+                                    var el = document.getElementById(id);
+                                    if (!el) return;
+                                    var container = el.closest('.s_website_form_field');
+                                    var img = container.querySelector('img');
+                                    if (!img) {
+                                        var div = document.createElement('div');
+                                        div.className = "mt-2 text-center";
+                                        img = document.createElement('img');
+                                        img.style.maxHeight = "150px";
+                                        img.style.border = "1px solid #ddd";
+                                        img.style.padding = "5px";
+                                        img.style.borderRadius = "4px";
+                                        div.appendChild(img);
+                                        container.appendChild(div);
+                                    }
+                                    // Basic guess for standard Odoo images
+                                    img.src = "data:image/png;base64," + b64;
+                                }
+
+                                // 1. Basic Details
+                                setVal('given_name', result.firstname);
+                                setVal('family_name', result.lastname);
+                                setVal('birthdate', result.dob);
+                                setVal('gender', result.gender);
+                                setVal('mobile', result.mobile);
+                                
+                                // 2. Address and Location
+                                setVal('street', result.street);
+                                setVal('street2', result.street2);
+                                setVal('benf_post_code', result.benf_post_code);
+                                setSelect('ben_region', result.region);
+                                // Timeout to allow region change to populate districts
+                                setTimeout(() => {
+                                    setVal('ben_district', result.district);
+                                }, 100);
+                                setVal('disability', result.disability);
+                                
+                                // 3. Allowance and Insurance
+                                setVal('is_receiving_allowance', result.is_receiving_allowance);
+                                setVal('has_health_insurance', result.has_health_insurance);
+                                setSelect('other_id_available', result.other_id_available);
+                                setSelect('other_id_type', result.other_id_type);
+                                setVal('other_id_name', result.other_id_name);
+                                setVal('other_id_number', result.other_id_number);
+                                
+                                // 4. Nominee
+                                setVal('nominee_zanid', result.nominee_zanid);
+                                setVal('nominee_first_name', result.nominee_first_name);
+                                setVal('nominee_last_name', result.nominee_last_name);
+                                setVal('nominee_gender', result.nominee_gender);
+                                setVal('nominee_rel_benf', result.nominee_rel_benf);
+                                setVal('nominee_mobile', result.nominee_mobile);
+                                setSelect('nominee_region', result.nominee_region);
+                                setTimeout(() => {
+                                    setVal('nominee_district', result.nominee_district);
+                                }, 100);
+                                setVal('nominee_shehia', result.nominee_shehia);
+                                setVal('nominee_house_street', result.nominee_house_street);
+                                
+                                // 5. Pension
+                                setSelect('other_pension', result.other_pension);
+                                setVal('scheme_name', result.scheme_name);
+                                
+                                // 6. Payment
+                                setSelect('payment_mode', result.payment_mode);
+                                setVal('bank_name', result.bank_name);
+                                setVal('account_num', result.account_num);
+                                setVal('account_name', result.account_name);
+                                setVal('mobile_wallet', result.mobile_wallet);
+
+                                // 7. Attachments
+                                setImg('beneficiary_image', result.beneficiary_image);
+                                setImg('nominee_image', result.nominee_image);
+                                setImg('zan_image', result.zan_image);
+                                
+                                statusDiv.innerText = "Found!";
+                                statusDiv.style.color = "green";
+                                var submitBtn = document.getElementById('beneficiary_submit');
+                                if (submitBtn) submitBtn.disabled = false;
+                            } else if (data.result &amp;&amp; data.result.status === 'ALREADY_EXISTS') {
+                                statusDiv.innerText = data.result.message;
+                                statusDiv.style.color = "red";
+                                var submitBtn = document.getElementById('beneficiary_submit');
+                                if (submitBtn) submitBtn.disabled = true;
+                                // Do not auto-fill
+                            } else if (data.result &amp;&amp; data.result.status === 'NOT_ELIGIBLE') {
+                                statusDiv.innerText = data.result.message;
+                                statusDiv.style.color = "red";
+                                var submitBtn = document.getElementById('beneficiary_submit');
+                                if (submitBtn) submitBtn.disabled = true;
+                            } else {
+                                statusDiv.innerText = (data.result &amp;&amp; data.result.message) || "Not found";
+                                statusDiv.style.color = "red";
+                                var submitBtn = document.getElementById('beneficiary_submit');
+                                if (submitBtn) submitBtn.disabled = false; // Enable if not found (allow manual?)
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            statusDiv.innerText = "Error searching Zan ID";
+                            statusDiv.style.color = "red";
+                        });
+                    });
+                }
+            });
+        </script>
+        
+
+
+        <!-- Row 5: Allowance, Health Insurance, Other ID -->
+        <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="is_receiving_allowance">
+                        <span class="s_website_form_label_content" style="color: #666666;">Are you receiving 5000 allowance from district council? (Below 70 years)</span>
                     </label>
-                    <select
-                            id="employment_status"
-                            name="employment_status"
-                            class="form-select"
-                            t-att-value="beneficiary.employment_status"
-                        >
-
-
-                        <option value="" t-att-selected="not beneficiary.employment_status">Select</option>
-                        <option
-                                value="employed_full"
-                                t-att-selected="beneficiary.employment_status == 'employed_full'"
-                            >Employed - Full Time</option>
-                        <option
-                                value="employed_part"
-                                t-att-selected="beneficiary.employment_status == 'employed_part'"
-                            >Employed - Part Time</option>
-                        <option
-                                value="self_employed"
-                                t-att-selected="beneficiary.employment_status == 'self_employed'"
-                            >Self-employed</option>
-                        <option
-                                value="unemployed"
-                                t-att-selected="beneficiary.employment_status == 'unemployed'"
-                            >Unemployed</option>
+                    <select id="is_receiving_allowance" name="is_receiving_allowance" class="form-select">
+                        <option value="">Select</option>
+                        <option value="yes" t-att-selected="beneficiary and beneficiary.is_receiving_allowance == 'yes'">Yes</option>
+                        <option value="no" t-att-selected="beneficiary and beneficiary.is_receiving_allowance == 'no'">No</option>
                     </select>
                 </div>
             </div>
-
-            <!-- Marital Status Field -->
-            <div class="col-lg-6">
-                <div class="s_website_form_field">
-                    <label class="s_website_form_label" for="marital_status">
-                        <span
-                                class="s_website_form_label_content"
-                                style="color: #666666;"
-                            >Marital Status</span>
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="has_health_insurance">
+                        <span class="s_website_form_label_content" style="color: #666666;">Covered with any health insurance scheme?</span>
                     </label>
-                    <select id="marital_status" name="marital_status" class="form-select">
-
-                        <option value="" t-att-selected="not beneficiary.marital_status">Select</option>
-                        <option
-                                value="single"
-                                t-att-selected="beneficiary.marital_status == 'single'"
-                            >Single</option>
-                        <option
-                                value="married"
-                                t-att-selected="beneficiary.marital_status == 'married'"
-                            >Married</option>
-                        <option
-                                value="divorced"
-                                t-att-selected="beneficiary.marital_status == 'divorced'"
-                            >Divorced</option>
+                    <select id="has_health_insurance" name="has_health_insurance" class="form-select">
+                        <option value="">Select</option>
+                        <option value="yes" t-att-selected="beneficiary and beneficiary.has_health_insurance == 'yes'">Yes</option>
+                        <option value="no" t-att-selected="beneficiary and beneficiary.has_health_insurance == 'no'">No</option>
                     </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="other_id_available">
+                        <span class="s_website_form_label_content" style="color: #666666;">Do you have other ID?</span>
+                    </label>
+                    <select id="other_id_available" name="other_id_available" class="form-select">
+                        <option value="">Select</option>
+                        <option value="yes" t-att-selected="beneficiary and beneficiary.other_id_available == 'yes'">Yes</option>
+                        <option value="no" t-att-selected="beneficiary and beneficiary.other_id_available == 'no'">No</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- Dynamic Other ID Fields (Merged into same row) -->
+            <div class="col-lg-4 other_id_part" t-att-style="'display: block;' if beneficiary and beneficiary.other_id_available == 'yes' else 'display: none;'">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="other_id_type">
+                        <span class="s_website_form_label_content" style="color: #666666;">If Yes, what type of ID</span>
+                    </label>
+                    <select id="other_id_type" name="other_id_type" class="form-select">
+                        <option value="">Select</option>
+                        <option value="national_id" t-att-selected="beneficiary and beneficiary.other_id_type == 'national_id'">National ID</option>
+                        <option value="passport" t-att-selected="beneficiary and beneficiary.other_id_type == 'passport'">Passport</option>
+                        <option value="driving_licence" t-att-selected="beneficiary and beneficiary.other_id_type == 'driving_licence'">Driving Licence</option>
+                        <option value="voter_id" t-att-selected="beneficiary and beneficiary.other_id_type == 'voter_id'">Voter ID</option>
+                        <option value="other" t-att-selected="beneficiary and beneficiary.other_id_type == 'other'">Other</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-lg-4 other_id_part" t-att-style="'display: block;' if beneficiary and beneficiary.other_id_available == 'yes' else 'display: none;'">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="other_id_name">
+                        <span class="s_website_form_label_content" style="color: #666666;">The other ID</span>
+                    </label>
+                    <input type="text" id="other_id_name" name="other_id_name" class="form-control" t-att-value="beneficiary.other_id_name if beneficiary else ''"/>
+                </div>
+            </div>
+            <div class="col-lg-4 other_id_part" t-att-style="'display: block;' if beneficiary and beneficiary.other_id_available == 'yes' else 'display: none;'">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="other_id_number">
+                        <span class="s_website_form_label_content" style="color: #666666;">Alternative ID number</span>
+                    </label>
+                    <input type="text" id="other_id_number" name="other_id_number" class="form-control" t-att-value="beneficiary.other_id_number if beneficiary else ''"/>
                 </div>
             </div>
         </div>
+        
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function() {
+                try {
+                    // Try by ID first, then by name as fallback
+                    var regionSelect = document.getElementById('ben_region') || document.querySelector('select[name="region"]');
+                    var districtSelect = document.getElementById('ben_district') || document.querySelector('select[name="district"]');
+                    
+                    if (!regionSelect || !districtSelect) {
+                        console.error("Region or District elements NOT FOUND.");
+                        return;
+                    }
+
+                    // Clone allowed options (simple way in vanilla)
+                    var allDistricts = Array.from(districtSelect.options).map(function(opt) {
+                        return { 
+                            text: opt.text, 
+                            value: opt.value, 
+                            dCode: opt.getAttribute('data-district-code') 
+                        };
+                    });
+                    
+                    var regionDistrictMap = {
+                        'mjini_magharibi': ['mjini_magharibi_a', 'magharibi_b', 'mjini'],
+                        'kaskazini_unguja': ['kaskazini_a', 'kaskazini_b'],
+                        'kusini_unguja': ['kati', 'kusini'],
+                        'kaskazini_pemba': ['wete', 'micheweni'],
+                        'kusini_pemba': ['chake_chake', 'mkoani'],
+                        // Fallback
+                        'MJ': ['mjini_magharibi_a', 'magharibi_b', 'mjini'],
+                        'KU': ['kaskazini_a', 'kaskazini_b'],
+                        'KS': ['kati', 'kusini'],
+                        'KP': ['wete', 'micheweni'],
+                        'SP': ['chake_chake', 'mkoani']
+                    };
+
+                    function filterDistricts() {
+                        var selectedOpt = regionSelect.options[regionSelect.selectedIndex];
+                        if (!selectedOpt) return;
+                        
+                        var selectedCode = selectedOpt.getAttribute('data-region-code');
+                        var validDistricts = regionDistrictMap[selectedCode] || [];
+
+                        // Clear and Rebuild
+                        var currentVal = districtSelect.value;
+                        districtSelect.innerHTML = ''; // clear
+                        
+                        allDistricts.forEach(function(d) {
+                            // Logic: Show if no region selected OR d.value is empty (Select) OR code is valid
+                            if (!selectedCode || d.value === "" || validDistricts.includes(d.dCode)) {
+                                var opt = document.createElement('option');
+                                opt.value = d.value;
+                                opt.text = d.text;
+                                opt.setAttribute('data-district-code', d.dCode);
+                                if (d.value === currentVal) opt.selected = true;
+                                districtSelect.appendChild(opt);
+                            }
+                        });
+                    }
+
+                    regionSelect.addEventListener('change', filterDistricts);
+                    
+                    // Trigger initial
+                    if (regionSelect.value) {
+                        filterDistricts();
+                    }
+
+                } catch (e) {
+                    console.error(e);
+                }
+            });
+        </script>
+
+        
+        
+        <script type="text/javascript">
+            document.addEventListener("DOMContentLoaded", function() {
+                var otherIdSelect = document.getElementById('other_id_available');
+                if(otherIdSelect){
+                    otherIdSelect.addEventListener('change', function() {
+                        var parts = document.querySelectorAll('.other_id_part');
+                        parts.forEach(function(el) {
+                            el.style.display = (otherIdSelect.value === 'yes') ? 'block' : 'none';
+                        });
+                    });
+                }
+            });
+        </script>
+    </template>
+
+
+    <!-- Unified Form Extensions -->
+    <template id="social_registry_model_individual_update_form_extension" inherit_id="g2p_registration_portal_base.individual_update_form_template">
+        <!-- Change Label to Beneficiary Details -->
+        <xpath expr="//button[@id='household_header']" position="replace">
+            <button
+                class="accordion-button card-header form-card-header"
+                style="padding:15px;font-weight:500;"
+                id="household_header"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#demographic"
+                aria-expanded="true"
+                aria-controls="demographic"
+            >
+               Beneficiary Details
+            </button>
+        </xpath>
+        <!-- Add Demographic Fields -->
+        <xpath expr="//div[@id='demographic']" position="replace">
+            <div class="s_website_form_rows collapse show" id="demographic" data-bs-parent="#accordion">
+                <t t-call="g2p_social_registry_model.beneficiary_details_fields_fragment">
+                    <t t-set="beneficiary" t-value="beneficiary"/>
+                </t>
+            </div>
+        </xpath>
+        <!-- Rename Page Title -->
+        <xpath expr="//h5[@class='all-title']" position="replace">
+            <h5 class="all-title">Update Beneficiary</h5>
+        </xpath>
+        <!-- Rename Breadcrumb -->
+        <xpath expr="//ol[hasclass('breadcrumb')]/li[last()]" position="replace">
+            <li class="breadcrumb-item active breadcrumb-update-beneficiary" aria-current="page">Update Beneficiary</li>
+        </xpath>
+        <xpath expr="//li[contains(@class, 'breadcrumb-item')]/a[contains(@href, '/portal/registration/individual')]" position="replace">
+            <a href="/portal/registration/individual">Beneficiary</a>
+        </xpath>
+        <!-- Add Tabs -->
+        <xpath expr="//div[hasclass('card-footer')]" position="before">
+            <t t-call="g2p_social_registry_model.individual_nominee_tab_fragment">
+                <t t-set="beneficiary" t-value="beneficiary"/>
+            </t>
+            <t t-call="g2p_social_registry_model.individual_pension_tab_fragment">
+                <t t-set="beneficiary" t-value="beneficiary"/>
+            </t>
+            <t t-call="g2p_social_registry_model.individual_payment_tab_fragment">
+                <t t-set="beneficiary" t-value="beneficiary"/>
+            </t>
+            <t t-call="g2p_social_registry_model.individual_attachments_tab_fragment">
+                <t t-set="beneficiary" t-value="beneficiary"/>
+            </t>
         </xpath>
     </template>
 
-    <!-- Registrant Form Template -->
-    <template
-        id="social_registry_model_individual_registrant_form_template"
-        name="Social Registry Model Individual Registrant Form"
-        inherit_id="g2p_registration_portal_base.individual_registrant_form_template"
-    >
-        <xpath expr="//div[@id='demographic']" position="inside">
-            <div class="row">
-            <!-- Address Field -->
-            <div class="col-lg-6">
-                <div class="s_website_form_field">
-                    <label class="s_website_form_label" for="address">
-                        <span class="s_website_form_label_content" style="color: #666666;">Address</span>
-                    </label>
-                    <textarea
-                            id="address"
-                            name="address"
-                            class="form-control"
-                            rows="2"
-                            cols="10"
-                            placeholder="Enter Address"
-                        />
-
-                </div>
+    <template id="social_registry_model_individual_registrant_form_extension" inherit_id="g2p_registration_portal_base.individual_registrant_form_template">
+        <!-- Change Label to Beneficiary Details -->
+        <xpath expr="//button[@id='household_header']" position="replace">
+            <button
+                class="accordion-button card-header form-card-header"
+                style="padding:15px;font-weight:500;"
+                id="household_header"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#demographic"
+                aria-expanded="true"
+                aria-controls="demographic"
+            >
+               Beneficiary Details
+            </button>
+        </xpath>
+        <!-- Add Demographic Fields -->
+        <xpath expr="//div[@id='demographic']" position="replace">
+            <div class="s_website_form_rows collapse show" id="demographic" data-bs-parent="#accordion">
+                <t t-call="g2p_social_registry_model.beneficiary_details_fields_fragment">
+                    <t t-set="beneficiary" t-value="False"/>
+                </t>
             </div>
+        </xpath>
+        <!-- Rename Page Title -->
+        <xpath expr="//h5[@class='all-title']" position="replace">
+            <h5 class="all-title">Create New Beneficiary</h5>
+        </xpath>
+        <!-- Rename Breadcrumb -->
+        <xpath expr="//ol[hasclass('breadcrumb')]/li[last()]" position="replace">
+            <li class="breadcrumb-item active" aria-current="page">Create New Beneficiary</li>
+        </xpath>
+        <xpath expr="//li[contains(@class, 'breadcrumb-item')]/a[contains(@href, '/portal/registration/individual')]" position="replace">
+            <a href="/portal/registration/individual">Beneficiary</a>
+        </xpath>
+        <!-- Add Tabs -->
+        <xpath expr="//div[hasclass('card-footer')]" position="before">
+            <t t-call="g2p_social_registry_model.individual_nominee_tab_fragment">
+                <t t-set="beneficiary" t-value="False"/>
+            </t>
+            <t t-call="g2p_social_registry_model.individual_pension_tab_fragment">
+                <t t-set="beneficiary" t-value="False"/>
+            </t>
+            <t t-call="g2p_social_registry_model.individual_payment_tab_fragment">
+                <t t-set="beneficiary" t-value="False"/>
+            </t>
+            <t t-call="g2p_social_registry_model.individual_attachments_tab_fragment">
+                <t t-set="beneficiary" t-value="False"/>
+            </t>
+        </xpath>
+    </template>
 
-            <!-- Occupation Field -->
-            <div class="col-lg-6">
-                <div class="s_website_form_field">
-                    <label class="s_website_form_label" for="occupation">
-                        <span class="s_website_form_label_content" style="color: #666666;">Occupation</span>
-                    </label>
-                    <input
-                            type="text"
-                            id="occupation"
-                            name="occupation"
-                            class="form-control"
-                            placeholder="Enter Occupation"
-                        />
-                </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <!-- Income Field -->
-            <div class="col-lg-6">
-                <div class="s_website_form_field">
-                    <label class="s_website_form_label" for="income">
-                        <span class="s_website_form_label_content" style="color: #666666;">Income</span>
-                    </label>
-                    <input
-                            type="number"
-                            id="income"
-                            name="income"
-                            class="form-control"
-                            placeholder="Enter Income"
-                            step="1000"
-                        />
-                </div>
-            </div>
+    <!-- New Template for Adding View Button to List View -->
+    <template id="individual_list_inherit_add_view_button" inherit_id="g2p_registration_portal_base.individual_list">
+        <xpath expr="//table//tbody//td[last()]" position="inside">
+            <a t-attf-href="/portal/registration/individual/view/{{ group.id }}" class="btn btn-secondary btn-sm" style="margin-right: 5px;">
+                View
+            </a>
+        </xpath>
+    </template>
 
-            <!-- Education Level Field -->
-            <div class="col-lg-6">
-                <div class="s_website_form_field">
-                    <label class="s_website_form_label" for="education_level">
-                        <span
-                                class="s_website_form_label_content"
-                                style="color: #666666;"
-                            >Education Level</span>
-                    </label>
-                    <select id="education_level" name="education_level" class="form-select">
-                        <option value="">Select</option>
-                        <option value="primary">Primary</option>
-                        <option value="secondary">Secondary</option>
-                        <option value="higher_secondary">Higher Secondary</option>
-                        <option value="bachelors">Bachelors</option>
-                        <option value="masters">Masters</option>
-                    </select>
+    <!-- New Template for Read-Only Individual Details -->
+    <template id="individual_view_details_readonly" inherit_id="g2p_social_registry_model.social_registry_model_individual_update_form_extension" primary="True">
+        <xpath expr="//h5[@class='all-title']" position="replace">
+            <h5 class="all-title">Beneficiary Details</h5>
+        </xpath>
+        <xpath expr="//ol[hasclass('breadcrumb')]/li[last()]" position="replace">
+            <li class="breadcrumb-item active" aria-current="page">View Beneficiary</li>
+        </xpath>
+        <xpath expr="//li[contains(@class, 'breadcrumb-item')]/a[contains(@href, '/portal/registration/individual')]" position="replace">
+            <a href="/portal/registration/individual">Beneficiary</a>
+        </xpath>
+        
+        <!-- Replace the demographic div content entirely to avoid XPath issues with t-call -->
+        <xpath expr="//div[@id='demographic']" position="replace">
+            <div class="s_website_form_rows collapse show" id="demographic" data-bs-parent="#accordion">
+                <!-- Row 1: Zan ID, First Name, Last Name -->
+                <div class="row mem-ind-row" style="padding: 20px;">
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="benf_zan_id">
+                                <span class="s_website_form_label_content" style="color: #666666;">Zan ID</span>
+                                <span class="s_website_form_mark">*</span>
+                            </label>
+                            <input type="text" id="benf_zan_id" name="benf_zan_id" class="form-control" maxlength="9" minlength="9" required="1" t-att-value="beneficiary.benf_zan_id if beneficiary else ''"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="given_name">
+                                <span class="s_website_form_label_content" style="color: #666666;">First Name</span>
+                                <span class="s_website_form_mark">*</span>
+                            </label>
+                            <input type="text" id="given_name" name="given_name" class="form-control" t-att-value="beneficiary.given_name if beneficiary else ''" required="1"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="family_name">
+                                <span class="s_website_form_label_content" style="color: #666666;">Last Name</span>
+                                <span class="s_website_form_mark">*</span>
+                            </label>
+                            <input type="text" id="family_name" name="family_name" class="form-control" t-att-value="beneficiary.family_name if beneficiary else ''" required="1"/>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
 
-        <div class="row">
-            <!-- Employment Status Field -->
-            <div class="col-lg-6">
-                <div class="s_website_form_field">
-                    <label class="s_website_form_label" for="employment_status">
-                        <span
-                                class="s_website_form_label_content"
-                                style="color: #666666;"
-                            >Employment Status</span>
-                    </label>
-                    <select id="employment_status" name="employment_status" class="form-select">
-                        <option value="">Select</option>
-                        <option value="employed_full">Employed - Full Time</option>
-                        <option value="employed_part">Employed - Part Time</option>
-                        <option value="self_employed">Self-employed</option>
-                        <option value="unemployed">Unemployed</option>
-                    </select>
+                <!-- Row 2: DOB, Gender, Mobile -->
+                <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="birthdate">
+                                <span class="s_website_form_label_content" style="color: #666666;">Date of Birth</span>
+                            </label>
+                            <input type="date" id="birthdate" name="birthdate" class="form-control date-picker" t-att-value="beneficiary.birthdate if beneficiary else ''"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="gender">
+                                <span class="s_website_form_label_content" style="color: #666666;">Gender</span>
+                                <span class="s_website_form_mark">*</span>
+                            </label>
+                            <select id="gender" name="gender" class="form-select" required="1">
+                                <option value="">Select</option>
+                                <t t-foreach="gender" t-as="g">
+                                    <option t-att-value="g.value" t-att-selected="beneficiary and beneficiary.gender == g.value">
+                                        <t t-esc="g.code"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="mobile">
+                                <span class="s_website_form_label_content" style="color: #666666;">Mobile</span>
+                            </label>
+                            <input type="tel" id="mobile" name="mobile" class="form-control" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" t-att-value="beneficiary.phone_number_ids[0].phone_no if beneficiary and beneficiary.phone_number_ids else ''"/>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Marital Status Field -->
-            <div class="col-lg-6">
-                <div class="s_website_form_field">
-                    <label class="s_website_form_label" for="marital_status">
-                        <span
-                                class="s_website_form_label_content"
-                                style="color: #666666;"
-                            >Marital Status</span>
-                    </label>
-                    <select id="marital_status" name="marital_status" class="form-select">
-                        <option value="">Select</option>
-                        <option value="single">Single</option>
-                        <option value="married">Married</option>
-                        <option value="divorced">Divorced</option>
-                    </select>
+                <!-- Row 3: ADDRESS (Combined) & POST CODE -->
+                <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+                    <div class="col-lg-8">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="address">
+                                <span class="s_website_form_label_content" style="color: #666666;">Address</span>
+                            </label>
+                            <input type="text" id="address" name="address" class="form-control" t-att-value="beneficiary.address if beneficiary else ''" disabled="disabled" style="background-color: #e9ecef;"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="benf_post_code">
+                                <span class="s_website_form_label_content" style="color: #666666;">PO BOX / Post code</span>
+                            </label>
+                            <input type="text" id="benf_post_code" name="benf_post_code" class="form-control" t-att-value="beneficiary.benf_post_code if beneficiary else ''"/>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- Row 4: Region, District, Disability -->
+                <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="ben_region">
+                                <span class="s_website_form_label_content" style="color: #666666;">Region</span>
+                            </label>
+                            <select id="ben_region" name="region" class="form-select">
+                                <option value="">Select</option>
+                                <t t-foreach="regions" t-as="r">
+                                    <option t-att-value="r.id" t-att-selected="beneficiary and beneficiary.region.id == r.id" t-att-data-region-code="r.code">
+                                        <t t-esc="r.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="ben_district">
+                                <span class="s_website_form_label_content" style="color: #666666;">District</span>
+                            </label>
+                            <select id="ben_district" name="district" class="form-select">
+                                <option value="">Select</option>
+                                <t t-foreach="districts" t-as="d">
+                                    <option t-att-value="d.id" t-att-selected="beneficiary and beneficiary.district.id == d.id" t-att-data-district-code="d.code">
+                                        <t t-esc="d.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="disability">
+                                <span class="s_website_form_label_content" style="color: #666666;">Disability Status</span>
+                            </label>
+                            <select id="disability" name="disability" class="form-select">
+                                <option value="">Select</option>
+                                <option value="yes" t-att-selected="beneficiary and beneficiary.disability == 'yes'">Yes</option>
+                                <option value="no" t-att-selected="beneficiary and beneficiary.disability == 'no'">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Row 5: Allowance, Health Insurance, Other ID -->
+                <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="is_receiving_allowance">
+                                <span class="s_website_form_label_content" style="color: #666666;">Are you receiving 5000 allowance from district council? (Below 70 years)</span>
+                            </label>
+                            <select id="is_receiving_allowance" name="is_receiving_allowance" class="form-select">
+                                <option value="">Select</option>
+                                <option value="yes" t-att-selected="beneficiary and beneficiary.is_receiving_allowance == 'yes'">Yes</option>
+                                <option value="no" t-att-selected="beneficiary and beneficiary.is_receiving_allowance == 'no'">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="has_health_insurance">
+                                <span class="s_website_form_label_content" style="color: #666666;">Covered with any health insurance scheme?</span>
+                            </label>
+                            <select id="has_health_insurance" name="has_health_insurance" class="form-select">
+                                <option value="">Select</option>
+                                <option value="yes" t-att-selected="beneficiary and beneficiary.has_health_insurance == 'yes'">Yes</option>
+                                <option value="no" t-att-selected="beneficiary and beneficiary.has_health_insurance == 'no'">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="other_id_available">
+                                <span class="s_website_form_label_content" style="color: #666666;">Do you have other ID?</span>
+                            </label>
+                            <select id="other_id_available" name="other_id_available" class="form-select">
+                                <option value="">Select</option>
+                                <option value="yes" t-att-selected="beneficiary and beneficiary.other_id_available == 'yes'">Yes</option>
+                                <option value="no" t-att-selected="beneficiary and beneficiary.other_id_available == 'no'">No</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Dynamic Other ID Fields (Merged into same row) -->
+                    <div class="col-lg-4 other_id_part" t-att-style="'display: block;' if beneficiary and beneficiary.other_id_available == 'yes' else 'display: none;'">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="other_id_type">
+                                <span class="s_website_form_label_content" style="color: #666666;">If Yes, what type of ID</span>
+                            </label>
+                            <select id="other_id_type" name="other_id_type" class="form-select">
+                                <option value="">Select</option>
+                                <option value="national_id" t-att-selected="beneficiary and beneficiary.other_id_type == 'national_id'">National ID</option>
+                                <option value="passport" t-att-selected="beneficiary and beneficiary.other_id_type == 'passport'">Passport</option>
+                                <option value="driving_licence" t-att-selected="beneficiary and beneficiary.other_id_type == 'driving_licence'">Driving Licence</option>
+                                <option value="voter_id" t-att-selected="beneficiary and beneficiary.other_id_type == 'voter_id'">Voter ID</option>
+                                <option value="other" t-att-selected="beneficiary and beneficiary.other_id_type == 'other'">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 other_id_part" t-att-style="'display: block;' if beneficiary and beneficiary.other_id_available == 'yes' else 'display: none;'">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="other_id_name">
+                                <span class="s_website_form_label_content" style="color: #666666;">The other ID</span>
+                            </label>
+                            <input type="text" id="other_id_name" name="other_id_name" class="form-control" t-att-value="beneficiary.other_id_name if beneficiary else ''"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 other_id_part" t-att-style="'display: block;' if beneficiary and beneficiary.other_id_available == 'yes' else 'display: none;'">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="other_id_number">
+                                <span class="s_website_form_label_content" style="color: #666666;">Alternative ID number</span>
+                            </label>
+                            <input type="text" id="other_id_number" name="other_id_number" class="form-control" t-att-value="beneficiary.other_id_number if beneficiary else ''"/>
+                        </div>
+                    </div>
+                </div>
+                
+                <script type="text/javascript">
+                    document.addEventListener("DOMContentLoaded", function() {
+                        try {
+                            // Try by ID first, then by name as fallback
+                            var regionSelect = document.getElementById('ben_region') || document.querySelector('select[name="region"]');
+                            var districtSelect = document.getElementById('ben_district') || document.querySelector('select[name="district"]');
+                            
+                            if (!regionSelect || !districtSelect) {
+                                console.error("Region or District elements NOT FOUND.");
+                                return;
+                            }
+
+                            // Clone allowed options (simple way in vanilla)
+                            var allDistricts = Array.from(districtSelect.options).map(function(opt) {
+                                return { 
+                                    text: opt.text, 
+                                    value: opt.value, 
+                                    dCode: opt.getAttribute('data-district-code') 
+                                };
+                            });
+                            
+                            var regionDistrictMap = {
+                                'mjini_magharibi': ['mjini_magharibi_a', 'magharibi_b', 'mjini'],
+                                'kaskazini_unguja': ['kaskazini_a', 'kaskazini_b'],
+                                'kusini_unguja': ['kati', 'kusini'],
+                                'kaskazini_pemba': ['wete', 'micheweni'],
+                                'kusini_pemba': ['chake_chake', 'mkoani'],
+                                // Fallback
+                                'MJ': ['mjini_magharibi_a', 'magharibi_b', 'mjini'],
+                                'KU': ['kaskazini_a', 'kaskazini_b'],
+                                'KS': ['kati', 'kusini'],
+                                'KP': ['wete', 'micheweni'],
+                                'SP': ['chake_chake', 'mkoani']
+                            };
+
+                            function filterDistricts() {
+                                var selectedOpt = regionSelect.options[regionSelect.selectedIndex];
+                                if (!selectedOpt) return;
+                                
+                                var selectedCode = selectedOpt.getAttribute('data-region-code');
+                                var validDistricts = regionDistrictMap[selectedCode] || [];
+
+                                // Clear and Rebuild
+                                var currentVal = districtSelect.value;
+                                districtSelect.innerHTML = ''; // clear
+                                
+                                allDistricts.forEach(function(d) {
+                                    // Logic: Show if no region selected OR d.value is empty (Select) OR code is valid
+                                    if (!selectedCode || d.value === "" || validDistricts.includes(d.dCode)) {
+                                        var opt = document.createElement('option');
+                                        opt.value = d.value;
+                                        opt.text = d.text;
+                                        opt.setAttribute('data-district-code', d.dCode);
+                                        if (d.value === currentVal) opt.selected = true;
+                                        districtSelect.appendChild(opt);
+                                    }
+                                });
+                            }
+
+                            regionSelect.addEventListener('change', filterDistricts);
+                            
+                            // Trigger initial
+                            if (regionSelect.value) {
+                                filterDistricts();
+                            }
+
+                        } catch (e) {
+                            console.error(e);
+                        }
+                    });
+                </script>
+
+                
+                
+                <script type="text/javascript">
+                    document.addEventListener("DOMContentLoaded", function() {
+                        var otherIdSelect = document.getElementById('other_id_available');
+                        if(otherIdSelect){
+                            otherIdSelect.addEventListener('change', function() {
+                                var parts = document.querySelectorAll('.other_id_part');
+                                parts.forEach(function(el) {
+                                    el.style.display = (otherIdSelect.value === 'yes') ? 'block' : 'none';
+                                });
+                            });
+                        }
+                    });
+                </script>
             </div>
-        </div>
+        </xpath>
+
+        <!-- Hide Submit/Cancel Buttons and disable inputs using JS -->
+        <xpath expr="//div[hasclass('card-footer')]" position="replace">
+            <div class="card-footer text-end p-4">
+                <a t-attf-href="/portal/registration/individual" class="btn btn-secondary">Back to List</a>
+            </div>
+            <script type="text/javascript">
+                document.addEventListener("DOMContentLoaded", function() {
+                    // Disable all form inputs
+                    var inputs = document.querySelectorAll('input, select, textarea');
+                    for (var i = 0; i &lt; inputs.length; i++) {
+                        inputs[i].disabled = true;
+                        inputs[i].style.backgroundColor = "#e9ecef"; // Bootstrap disabled gray
+                        inputs[i].removeAttribute('required');
+                    }
+
+                    // Hide camera buttons
+                    var camButtons = document.querySelectorAll('.open-cam');
+                    for (var j = 0; j &lt; camButtons.length; j++) {
+                        camButtons[j].style.display = 'none';
+                    }
+                });
+            </script>
         </xpath>
     </template>
 

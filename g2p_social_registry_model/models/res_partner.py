@@ -2,6 +2,7 @@
 import logging
 
 from odoo import fields, models
+from odoo.addons.g2p_document_field.image_field import DocumentImageField
 
 _logger = logging.getLogger(__name__)
 
@@ -115,3 +116,41 @@ class G2PResPartnerInherited(models.Model):
     sanitation_condition = fields.Selection([("yes", "Yes"), ("no", "No")])
     water_access = fields.Selection([("yes", "Yes"), ("no", "No")])
     electricity_access = fields.Selection([("yes", "Yes"), ("no", "No")])
+
+    #######################################################
+    #####               Attachment Fields             #####
+    #######################################################
+
+    nominee_image = DocumentImageField(
+        string="Relative / Nominee Photo",
+        documents_field="supporting_documents_ids",
+        get_tags_func="_get_nominee_image_tags",
+        get_storage_backend_func="get_registry_documents_store",
+        max_width=1024,
+        max_height=1024,
+    )
+    zan_image = DocumentImageField(
+        string="Zan ID Photo",
+        documents_field="supporting_documents_ids",
+        get_tags_func="_get_zan_image_tags",
+        get_storage_backend_func="get_registry_documents_store",
+        max_width=1024,
+        max_height=1024,
+    )
+    beneficiary_image = DocumentImageField(
+        string="Beneficiary Photo",
+        documents_field="supporting_documents_ids",
+        get_tags_func="_get_beneficiary_image_tags",
+        get_storage_backend_func="get_registry_documents_store",
+        max_width=1024,
+        max_height=1024,
+    )
+
+    def _get_nominee_image_tags(self):
+        return self.env["g2p.document.tag"].sudo().get_or_create_tag_from_name("Nominee Photo")
+
+    def _get_zan_image_tags(self):
+        return self.env["g2p.document.tag"].sudo().get_or_create_tag_from_name("Zan ID Photo")
+
+    def _get_beneficiary_image_tags(self):
+        return self.env["g2p.document.tag"].sudo().get_or_create_tag_from_name("Beneficiary Photo")

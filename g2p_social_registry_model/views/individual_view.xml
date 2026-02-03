@@ -9,9 +9,9 @@
         <field name="inherit_id" ref="g2p_registry_individual.view_individuals_form" />
         <field name="arch" type="xml">
             <xpath expr="//field[@name='income']" position="after">
-                <field name="marital_status" />
-                <field name="employment_status" />
-                <field name="education_level" />
+                <field name="marital_status" invisible="1"/>
+                <field name="employment_status" invisible="1"/>
+                <field name="education_level" invisible="1"/>
             </xpath>
         </field>
     </record>

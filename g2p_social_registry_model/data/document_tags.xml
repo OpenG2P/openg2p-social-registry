@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Using function instead of record to avoid UniqueViolation if tags already exist -->
+        <function model="g2p.document.tag" name="get_or_create_tag_from_name">
+            <value>Nominee Photo</value>
+        </function>
+        <function model="g2p.document.tag" name="get_or_create_tag_from_name">
+            <value>Zan ID Photo</value>
+        </function>
+        <function model="g2p.document.tag" name="get_or_create_tag_from_name">
+            <value>Beneficiary Photo</value>
+        </function>
+    </data>
+</odoo>

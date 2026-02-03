@@ -1,0 +1,26 @@
+<odoo>
+    <!-- 
+    <record id="view_partner_attachments_form_inherited" model="ir.ui.view">
+        <field name="name">res.partner.attachments.form.inherited</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="g2p_registry_individual.view_individuals_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Attachments">
+                    <group>
+                        <group>
+                            <field name="beneficiary_image" widget="image"/>
+                        </group>
+                        <group>
+                            <field name="nominee_image" widget="image"/>
+                        </group>
+                        <group>
+                            <field name="zan_image" widget="image"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+    -->
+</odoo>

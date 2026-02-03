@@ -1,0 +1,531 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* g2p_social_registry_model
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-02-02 00:00+0000\n"
+"PO-Revision-Date: 2026-02-02 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__num_preg_lact_women
+msgid "Pregnant & Lactating Women"
+msgstr "Wanawake Wajawazito na Wanaonyonyesha"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__num_malnourished_children
+msgid "Malnourished Children Under 5"
+msgstr "Watoto Wenye Utapiamlo Chini ya Miaka 5"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__num_disabled
+msgid "No. of member with Disability"
+msgstr "Idadi ya wanachama wenye Ulemavu"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__type_of_disability__visual_impairment
+msgid "Visual Impairment"
+msgstr "Ulemavu wa kuona"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__type_of_disability__hearing_impairment
+msgid "Hearing Impairment"
+msgstr "Ulemavu wa kusikia"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__type_of_disability__physical_disability
+msgid "Physical Disability"
+msgstr "Ulemavu wa kimwili"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__type_of_disability__cognitive_disability
+msgid "Cognitive Disability"
+msgstr "Ulemavu wa akili"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__caste_ethnic_group
+msgid "Caste/Ethnic Group"
+msgstr "Tabaka/Kikundi cha Kikabila"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__belong_to_protected_groups
+msgid "Belong to any protected groups?"
+msgstr "Je, unaingia katika vikundi vilivyolindwa?"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__other_vulnerable_status
+msgid "Under any other vulnerable status?"
+msgstr "Je, una hali nyingine yoyote ya hatari?"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__education_level
+msgid "Education Level"
+msgstr "Kiwango cha Elimu"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__education_level__primary
+msgid "Primary"
+msgstr "Msingi"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__education_level__secondary
+msgid "Secondary"
+msgstr "Sekondari"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__education_level__bachelors
+msgid "Bachelors"
+msgstr "Shahada ya kwanza"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__education_level__masters
+msgid "Masters"
+msgstr "Shahada ya uzamili"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__employment_status
+msgid "Employment Status"
+msgstr "Hali ya Ajira"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__employment_status__unemployed
+msgid "Unemployed"
+msgstr "Huna kazi"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__marital_status
+msgid "Marital Status"
+msgstr "Hali ya Ndoa"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__marital_status__single
+msgid "Single"
+msgstr "Hujaolewa/Hujaoa"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__marital_status__married
+msgid "Married"
+msgstr "Umeoa/Umeolewa"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__marital_status__divorced
+msgid "divorced"
+msgstr "umeachika/mmetengana"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__income_sources
+msgid "Sources of Income"
+msgstr "Vyanzo vya Mapato"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__income_sources__agriculture
+msgid "Agriculture"
+msgstr "Kilimo"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__income_sources__business
+msgid "Business"
+msgstr "Biashara"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__owns_two_wheeler
+msgid "Owns a Two-Wheeler"
+msgstr "Anamiliki Pikipiki"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__owns_house
+msgid "Owns a House"
+msgstr "Anamiliki Nyumba"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__housing_type
+msgid "Type of Housing"
+msgstr "Aina ya Nyumba"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__housing_type__permanent
+msgid "Permanent"
+msgstr "Ya kudumu"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__housing_type__temporary
+msgid "Temporary"
+msgstr "Ya muda"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__beneficiary_image
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+msgid "Beneficiary Photo"
+msgstr "Picha ya Mfaidika"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__zan_image
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+msgid "Zan ID Photo"
+msgstr "Picha ya Zan ID"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__belong_to_protected_groups__yes
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__other_vulnerable_status__yes
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__owns_two_wheeler__yes
+msgid "Yes"
+msgstr "Ndiyo"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__belong_to_protected_groups__no
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__other_vulnerable_status__no
+#: model:ir.model.fields,selection:g2p_social_registry_model.selection__res_partner__owns_two_wheeler__no
+msgid "No"
+msgstr "Hapana"
+
+#. module: g2p_social_registry_model
+msgid "Beneficiary Details"
+msgstr "Maelezo ya Mfaidika"
+
+#. module: g2p_social_registry_model
+msgid "Create New Beneficiary"
+msgstr "Unda Mfaidika Mpya"
+
+#. module: g2p_social_registry_model
+msgid "Update Beneficiary"
+msgstr "Sasisha Mfaidika"
+
+#. module: g2p_social_registry_model
+msgid "View Beneficiary"
+msgstr "Angalia Mfaidika"
+
+#. module: g2p_social_registry_model
+msgid "Beneficiary"
+msgstr "Mfaidika"
+
+#. module: g2p_social_registry_model
+msgid "Zan ID"
+msgstr "Zan ID"
+
+#. module: g2p_social_registry_model
+msgid "First Name"
+msgstr "Jina la Kwanza"
+
+#. module: g2p_social_registry_model
+msgid "Last Name"
+msgstr "Jina la Ukoo"
+
+#. module: g2p_social_registry_model
+msgid "Date of Birth"
+msgstr "Tarehe ya Kuzaliwa"
+
+#. module: g2p_social_registry_model
+msgid "Gender"
+msgstr "Jinsia"
+
+#. module: g2p_social_registry_model
+msgid "Mobile"
+msgstr "Simu ya Mkononi"
+
+#. module: g2p_social_registry_model
+msgid "House & Street"
+msgstr "Nyumba na Mtaa"
+
+#. module: g2p_social_registry_model
+msgid "Shehia (Ward)"
+msgstr "Shehia (Wadi)"
+
+#. module: g2p_social_registry_model
+msgid "PO BOX / Post code"
+msgstr "Sanduku la Posta / Postikodi"
+
+#. module: g2p_social_registry_model
+msgid "Region"
+msgstr "Mkoa"
+
+#. module: g2p_social_registry_model
+msgid "District"
+msgstr "Wilaya"
+
+#. module: g2p_social_registry_model
+msgid "Disability Status"
+msgstr "Hali ya Ulemavu"
+
+#. module: g2p_social_registry_model
+msgid "Select"
+msgstr "Chagua"
+
+#. module: g2p_social_registry_model
+msgid "Nominee Details"
+msgstr "Maelezo ya Nominee/Mteule"
+
+#. module: g2p_social_registry_model
+msgid "Pension Information"
+msgstr "Taarifa za Pensheni"
+
+#. module: g2p_social_registry_model
+msgid "Payment Preference"
+msgstr "Upendeleo wa Malipo"
+
+#. module: g2p_social_registry_model
+msgid "Attachments"
+msgstr "Viambatisho"
+
+#. module: g2p_social_registry_model
+msgid "Relationship with beneficiary"
+msgstr "Uhusiano na mfaidika"
+
+#. module: g2p_social_registry_model
+msgid "Wife"
+msgstr "Mke"
+
+#. module: g2p_social_registry_model
+msgid "Husband"
+msgstr "Mume"
+
+#. module: g2p_social_registry_model
+msgid "Son"
+msgstr "Mtoto wa kiume"
+
+#. module: g2p_social_registry_model
+msgid "Daughter"
+msgstr "Mtoto wa kike"
+
+#. module: g2p_social_registry_model
+msgid "Grandchild"
+msgstr "Mjukuu"
+
+#. module: g2p_social_registry_model
+msgid "Mobile Number"
+msgstr "Namba ya Simu"
+
+#. module: g2p_social_registry_model
+msgid "Are you receiving any other pension?"
+msgstr "Je, unapokea pensheni nyingine yoyote?"
+
+#. module: g2p_social_registry_model
+msgid "If Yes, which scheme"
+msgstr "Kama Ndiyo, mpango gani?"
+
+#. module: g2p_social_registry_model
+msgid "Preferred Payment Method"
+msgstr "Njia ya Malipo Inayopendelewa"
+
+#. module: g2p_social_registry_model
+msgid "Bank"
+msgstr "Benki"
+
+#. module: g2p_social_registry_model
+msgid "Mobile Wallet"
+msgstr "Pochi ya Simu"
+
+#. module: g2p_social_registry_model
+msgid "Bank Name"
+msgstr "Jina la Benki"
+
+#. module: g2p_social_registry_model
+msgid "Account Number"
+msgstr "Namba ya Akaunti"
+
+#. module: g2p_social_registry_model
+msgid "Account Name"
+msgstr "Jina la Akaunti"
+
+#. module: g2p_social_registry_model
+msgid "Mobile Wallet Number"
+msgstr "Namba ya Pochi ya Simu"
+
+#. module: g2p_social_registry_model
+msgid "Relative / Nominee Photo"
+msgstr "Picha ya Ndugu / Nominee"
+
+#. module: g2p_social_registry_model
+msgid "Capture Photo"
+msgstr "Piga Picha"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+msgid "Take Photo"
+msgstr "Chukua Picha"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+msgid "Capture"
+msgstr "Piga"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+msgid "Enter Zan ID"
+msgstr "Ingiza Zan ID"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+msgid "Enter Nominee First Name"
+msgstr "Ingiza Jina la Kwanza la Nominee"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+msgid "Enter Nominee Last Name"
+msgstr "Ingiza Jina la Ukoo la Nominee"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+msgid "Enter Nominee Mobile Number"
+msgstr "Ingiza Namba ya Simu ya Nominee"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+msgid "Enter Shehia"
+msgstr "Ingiza Shehia"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+msgid "Enter House & Street"
+msgstr "Ingiza Nyumba na Mtaa"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+msgid "Enter Scheme Name"
+msgstr "Ingiza Jina la Mpango"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "Other"
+msgstr "Nyingine"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Zan ID</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Zan ID</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">First Name</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Jina la Kwanza</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Last Name</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Jina la Ukoo</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Date of Birth</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Tarehe ya Kuzaliwa</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Gender</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Jinsia</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Mobile</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Simu ya Mkononi</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">House &amp; Street</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Nyumba na Mtaa</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Shehia (Ward)</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Shehia (Wadi)</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">PO BOX / Post code</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Sanduku la Posta / Postikodi</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Region</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Mkoa</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">District</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Wilaya</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Disability Status</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Hali ya Ulemavu</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Are you receiving 5000 allowance from district council? (Below 70 years)</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Je, unapokea posho ya 5000 kutoka halmashauri ya wilaya? (Chini ya miaka 70)</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Covered with any health insurance scheme?</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Je, umefunikwa na mpango wowote wa bima ya afya?</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Do you have other ID?</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Je, una kitambulisho kingine?</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">If Yes, what type of ID</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Kama Ndiyo, aina gani ya kitambulisho?</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">The other ID</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Kile kitambulisho kingine</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Alternative ID number</span>"
+msgstr "<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Namba mbadala ya kitambulisho</span>"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_registrant_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_registration_portal_base.individual_update_form_template
+msgid "<span class=\"mx-1\"/>"
+msgstr "<span class=\"mx-1\"/>"
