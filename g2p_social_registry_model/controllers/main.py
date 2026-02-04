@@ -96,22 +96,22 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                 data = {
                     "status": "ALREADY_EXISTS_BUT_FILL",
                     "message": "Nominee already exists in the system.",
-                    "nominee_first_name": p.given_name or "",
-                    "nominee_last_name": p.family_name or "",
+                    "nominee_first_name": p.nominee_first_name or "",
+                    "nominee_last_name": p.nominee_last_name or "",
                     # Map Gender (System uses 'male'/'female', check standard)
-                    "nominee_gender": p.gender or "", 
-                    "nominee_mobile": p.phone or "",
+                    "nominee_gender": p.nominee_gender or "", 
+                    "nominee_mobile": p.nominee_mobile or "",
                     # Address mapping - assuming simple mapping for now
-                    "nominee_house_street": p.street or "",
-                    "nominee_shehia": p.street2 or "",
+                    "nominee_house_street": p.nominee_house_street or "",
+                    "nominee_shehia": p.nominee_shehia or "",
                      # Region/District need codes or IDs? The frontend expects values that match the select options (usually IDs or Codes).
                      # In main.py individual_update, we see p.region.id is used.
                      # But in the frontend JS, it sets values.
                      # Let's send both or send what works. The prev mock API sent Codes probably?
                      # Mock API returned "region": "MJ", "district": "mjini" (codes).
                      # So we should send Codes if possible.
-                    "nominee_region": p.region.code if p.region else "",
-                    "nominee_district": p.district.code if p.district else "",
+                    "nominee_region": p.nominee_region or "",
+                    "nominee_district": p.nominee_district or "",
                     "nominee_rel_benf": p.nominee_rel_benf or "",
                 }
                 return data
