@@ -29,17 +29,23 @@
                                 <span class="s_website_form_label_content" style="color: #666666;">Zan ID</span>
                                 <span class="s_website_form_mark">*</span>
                             </label>
-                            <input
-                                type="text"
-                                id="nominee_zanid"
-                                name="nominee_zanid"
-                                class="form-control"
-                                placeholder="Enter Zan ID"
-                                maxlength="9"
-                                minlength="9"
-                                required="1"
-                                t-att-value="beneficiary.nominee_zanid if beneficiary else ''"
-                            />
+                            <div class="input-group">
+                                <input
+                                    type="text"
+                                    id="nominee_zanid"
+                                    name="nominee_zanid"
+                                    class="form-control"
+                                    placeholder="Enter Zan ID"
+                                    maxlength="9"
+                                    minlength="9"
+                                    required="1"
+                                    t-att-value="beneficiary.nominee_zanid if beneficiary else ''"
+                                />
+                                <button class="btn btn-outline-primary" type="button" id="nominee_zan_id_search">
+                                    <i class="fa fa-search"/> Search
+                                </button>
+                            </div>
+                            <div id="nominee_zan_id_lookup_status" class="mt-1" style="font-size: 0.8rem; display: none;"></div>
                         </div>
                     </div>
                     <div class="col-lg-4">
@@ -269,6 +275,88 @@
 
                 } catch (e) {
                     console.error("Nominee filter error", e);
+                }
+            });
+
+            document.addEventListener("DOMContentLoaded", function() {
+                var searchBtn = document.getElementById('nominee_zan_id_search');
+                var zanInput = document.getElementById('nominee_zanid');
+                var statusDiv = document.getElementById('nominee_zan_id_lookup_status');
+
+                if (searchBtn) {
+                    searchBtn.addEventListener('click', function() {
+                        var zanId = zanInput.value;
+                        if (!zanId) {
+                            alert("Please enter a Nominee Zan ID");
+                            return;
+                        }
+
+                        statusDiv.innerText = "Searching...";
+                        statusDiv.style.color = "blue";
+                        statusDiv.style.display = "block";
+
+                        fetch('/portal/registration/nominee_zan_id_lookup', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({
+                                params: {
+                                    nominee_zanid: zanId
+                                }
+                            })
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            var result = data.result;
+                            if (result &amp;&amp; (result.status === 'SUCCESS' || result.status === 'ALREADY_EXISTS_BUT_FILL')) {
+                                
+                                if (result.status === 'ALREADY_EXISTS_BUT_FILL') {
+                                    statusDiv.innerText = result.message;
+                                    statusDiv.style.color = "orange";
+                                } else {
+                                    statusDiv.innerText = "Found!";
+                                    statusDiv.style.color = "green";
+                                }
+
+                                // Helper to safe set value
+                                function setVal(id, val) {
+                                    var el = document.getElementById(id);
+                                    if (el) el.value = val || '';
+                                }
+                                function setSelect(id, val) {
+                                    var el = document.getElementById(id);
+                                    if (el &amp;&amp; val) {
+                                        el.value = val;
+                                        el.dispatchEvent(new Event('change'));
+                                    }
+                                }
+
+                                setVal('nominee_first_name', result.nominee_first_name);
+                                setVal('nominee_last_name', result.nominee_last_name);
+                                setVal('nominee_gender', result.nominee_gender);
+                                setVal('nominee_mobile', result.nominee_mobile);
+                                setVal('nominee_house_street', result.nominee_house_street);
+                                setVal('nominee_shehia', result.nominee_shehia);
+                                setSelect('nominee_rel_benf', result.nominee_rel_benf);
+                                
+                                setSelect('nominee_region', result.nominee_region);
+                                // Timeout for district
+                                setTimeout(() => {
+                                    setSelect('nominee_district', result.nominee_district);
+                                }, 100);
+
+                            } else {
+                                statusDiv.innerText = (result &amp;&amp; result.message) || "Not found";
+                                statusDiv.style.color = "red";
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            statusDiv.innerText = "Error searching Nominee Zan ID";
+                            statusDiv.style.color = "red";
+                        });
+                    });
                 }
             });
         </script>

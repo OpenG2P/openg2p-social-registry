@@ -75,6 +75,77 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
         except Exception as e:
             return {"status": "ERROR", "message": str(e)}
 
+    @http.route("/portal/registration/nominee_zan_id_lookup", type="json", auth="user", csrf=False)
+    def nominee_zan_id_lookup(self, nominee_zanid):
+        if not nominee_zanid:
+            return {"status": "ERROR", "message": "Zan ID is required"}
+
+        # 1. Check in database
+        id_type = request.env["g2p.id.type"].sudo().search([("name", "=", "Nominee Zanzibar ID")], limit=1)
+        
+        if id_type:
+            reg_id = (
+                request.env["g2p.reg.id"]
+                .sudo()
+                .search([("id_type", "=", id_type.id), ("value", "=", nominee_zanid.strip())], limit=1)
+            )
+
+            if reg_id and reg_id.partner_id:
+                p = reg_id.partner_id
+                # Prepare data from existing partner
+                data = {
+                    "status": "ALREADY_EXISTS_BUT_FILL",
+                    "message": "Nominee already exists in the system.",
+                    "nominee_first_name": p.given_name or "",
+                    "nominee_last_name": p.family_name or "",
+                    # Map Gender (System uses 'male'/'female', check standard)
+                    "nominee_gender": p.gender or "", 
+                    "nominee_mobile": p.phone or "",
+                    # Address mapping - assuming simple mapping for now
+                    "nominee_house_street": p.street or "",
+                    "nominee_shehia": p.street2 or "",
+                     # Region/District need codes or IDs? The frontend expects values that match the select options (usually IDs or Codes).
+                     # In main.py individual_update, we see p.region.id is used.
+                     # But in the frontend JS, it sets values.
+                     # Let's send both or send what works. The prev mock API sent Codes probably?
+                     # Mock API returned "region": "MJ", "district": "mjini" (codes).
+                     # So we should send Codes if possible.
+                    "nominee_region": p.region.code if p.region else "",
+                    "nominee_district": p.district.code if p.district else "",
+                    "nominee_rel_benf": p.nominee_rel_benf or "",
+                }
+                return data
+
+        # 2. Call Mock API
+        try:
+            response = requests.get("https://mocki.io/v1/4661e182-00d4-4f26-a450-e4e96a7cc075", timeout=10)
+            if response.status_code == 200:
+                data = response.json()
+                if data.get("status") == "SUCCESS":
+                    # Map Mock API fields to Nominee Fields
+                    # Mock: firstname, lastname, gender, mobile, street, street2...
+                    mapped_data = {
+                        "status": "SUCCESS",
+                        "message": "Found!",
+                        "nominee_first_name": data.get("firstname", ""),
+                        "nominee_last_name": data.get("lastname", ""),
+                        "nominee_gender": data.get("gender", "").lower(),
+                        "nominee_mobile": data.get("mobile", ""),
+                        "nominee_house_street": data.get("street", ""),
+                        "nominee_shehia": data.get("street2", ""),
+                        "nominee_rel_benf": data.get("relationship", ""),
+                        # Mock API might return 'region'/'district' keys.
+                        "nominee_region": data.get("region", ""),
+                        "nominee_district": data.get("district", ""),
+                    }
+                    return mapped_data
+                else:
+                    return {"status": "NOT_FOUND", "message": "Nominee Zan ID not found in external registry"}
+            else:
+                return {"status": "ERROR", "message": f"External API error: {response.status_code}"}
+        except Exception as e:
+            return {"status": "ERROR", "message": str(e)}
+
     @http.route(
         ["/portal/registration/group/create/submit"],
         type="http",
