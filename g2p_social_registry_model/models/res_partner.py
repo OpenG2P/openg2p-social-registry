@@ -146,6 +146,8 @@ class G2PResPartnerInherited(models.Model):
         max_height=1024,
     )
 
+    other_id_type_id = fields.Many2one("g2p.id.type", string="If Yes, what type of ID")
+
     def _get_nominee_image_tags(self):
         return self.env["g2p.document.tag"].sudo().get_or_create_tag_from_name("Nominee Photo")
 

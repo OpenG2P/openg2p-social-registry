@@ -21,9 +21,9 @@
             <xpath expr="//label[@for='tags_ids']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
-            <xpath expr="//field[@name='phone_number_ids']" position="attributes">
+            <!-- <xpath expr="//field[@name='phone_number_ids']" position="attributes">
                 <attribute name="invisible">1</attribute>
-            </xpath>
+            </xpath> -->
             <xpath expr="//field[@name='civil_status']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
@@ -45,9 +45,9 @@
             <xpath expr="//page[@name='groups']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
-            <xpath expr="//page[@name='ids']" position="attributes">
+            <!-- <xpath expr="//page[@name='ids']" position="attributes">
                 <attribute name="invisible">1</attribute>
-            </xpath>
+            </xpath> -->
             <xpath expr="//page[@name='relationships']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>

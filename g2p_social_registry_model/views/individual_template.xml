@@ -23,7 +23,7 @@
                 data-bs-parent="#accordion"
             >
                 <div class="row mem-ind-row" style="padding: 20px;">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="nominee_zanid">
                                 <span class="s_website_form_label_content" style="color: #666666;">Zan ID</span>
@@ -48,32 +48,57 @@
                             <div id="nominee_zan_id_lookup_status" class="mt-1" style="font-size: 0.8rem; display: none;"></div>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="nominee_first_name">
                                 <span class="s_website_form_label_content" style="color: #666666;">First Name</span>
+                                <span class="s_website_form_mark">*</span>
                             </label>
                             <input
                                 type="text"
                                 id="nominee_first_name"
                                 name="nominee_first_name"
                                 class="form-control"
-                                placeholder="Enter Nominee First Name"
+                                required="1"
+                                minlength="2"
+                                pattern="[A-Za-z]+"
+                                oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')"
                                 t-att-value="beneficiary.nominee_first_name if beneficiary else ''"
                             />
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_middle_name">
+                                <span class="s_website_form_label_content" style="color: #666666;">Middle Name</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="nominee_middle_name"
+                                name="nominee_middle_name"
+                                class="form-control"
+                                minlength="2"
+                                pattern="[A-Za-z]+"
+                                oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')"
+                                t-att-value="beneficiary.nominee_middle_name if beneficiary else ''"
+                            />
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="nominee_last_name">
-                                <span class="s_website_form_label_content" style="color: #666666;">Last Name</span>
+                                <span class="s_website_form_label_content" style="color: #666666;">Surname</span>
+                                <span class="s_website_form_mark">*</span>
                             </label>
                             <input
                                 type="text"
                                 id="nominee_last_name"
                                 name="nominee_last_name"
                                 class="form-control"
-                                placeholder="Enter Nominee Last Name"
+                                required="1"
+                                minlength="2"
+                                pattern="[A-Za-z]+"
+                                oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')"
                                 t-att-value="beneficiary.nominee_last_name if beneficiary else ''"
                             />
                         </div>
@@ -117,16 +142,18 @@
                             <label class="s_website_form_label" for="nominee_mobile">
                                 <span class="s_website_form_label_content" style="color: #666666;">Mobile Number</span>
                             </label>
-                            <input
-                                type="tel"
-                                id="nominee_mobile"
-                                name="nominee_mobile"
-                                class="form-control"
-                                placeholder="Enter Nominee Mobile Number"
-                                maxlength="10"
-                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
-                                t-att-value="beneficiary.nominee_mobile if beneficiary else ''"
-                            />
+                            <div class="input-group">
+                                <span class="input-group-text" id="nominee-mobile-addon">+255</span>
+                                <input type="tel" id="nominee_mobile_visual" class="form-control" maxlength="9"
+                                       oninput="
+                                           this.value = this.value.replace(/[^0-9]/g, '');
+                                           var fullVal = '+255' + this.value;
+                                           document.getElementById('nominee_mobile').value = fullVal;
+                                       " 
+                                       t-att-value="(beneficiary.nominee_mobile[4:] if beneficiary and beneficiary.nominee_mobile and beneficiary.nominee_mobile.startswith('+255') else (beneficiary.nominee_mobile[3:] if beneficiary and beneficiary.nominee_mobile and beneficiary.nominee_mobile.startswith('255') else (beneficiary.nominee_mobile[1:] if beneficiary and beneficiary.nominee_mobile and beneficiary.nominee_mobile.startswith('0') else (beneficiary.nominee_mobile if beneficiary and beneficiary.nominee_mobile else ''))))"
+                                />
+                                <input type="hidden" id="nominee_mobile" name="nominee_mobile" t-att-value="beneficiary.nominee_mobile if beneficiary else ''"/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -136,8 +163,9 @@
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="nominee_region">
                                 <span class="s_website_form_label_content" style="color: #666666;">Region</span>
+                                <span class="s_website_form_mark">*</span>
                             </label>
-                            <select id="nominee_region" name="nominee_region" class="form-select">
+                            <select id="nominee_region" name="nominee_region" class="form-select" required="1">
                                 <option value="">Select</option>
                                 <t t-foreach="regions" t-as="r">
                                     <!-- Use code for value as defined in model selection -->
@@ -152,12 +180,13 @@
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="nominee_district">
                                 <span class="s_website_form_label_content" style="color: #666666;">District</span>
+                                <span class="s_website_form_mark">*</span>
                             </label>
-                            <select id="nominee_district" name="nominee_district" class="form-select">
+                            <select id="nominee_district" name="nominee_district" class="form-select" required="1">
                                 <option value="">Select</option>
                                 <t t-foreach="districts" t-as="d">
                                     <!-- Use code for value, and add data-district-code using 'code' as well -->
-                                    <option t-att-value="d.code" t-att-selected="beneficiary.nominee_district == d.code if beneficiary else False" t-att-data-district-code="d.code">
+                                    <option t-att-value="d.code" t-att-selected="beneficiary.nominee_district == d.code if beneficiary else False" t-att-data-district-code="d.code" t-att-data-region-code="d.province_id.code">
                                         <t t-esc="d.name" />
                                     </option>
                                 </t>
@@ -166,33 +195,53 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_post_code">
+                                <span class="s_website_form_label_content" style="color: #666666;">PO BOX / Post code</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="nominee_post_code"
+                                name="nominee_post_code"
+                                class="form-control"
+                                minlength="6"
+                                maxlength="6"
+                                pattern="[0-9]*"
+                                oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+                                t-att-value="beneficiary.nominee_post_code if beneficiary else ''"
+                            />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="nominee_shehia">
                                 <span class="s_website_form_label_content" style="color: #666666;">Shehia (Ward)</span>
+                                <span class="s_website_form_mark">*</span>
                             </label>
                             <input
                                 type="text"
                                 id="nominee_shehia"
                                 name="nominee_shehia"
                                 class="form-control"
-                                placeholder="Enter Shehia"
+                                required="1"
                                 t-att-value="beneficiary.nominee_shehia if beneficiary else ''"
                             />
                         </div>
                     </div>
-                </div>
-
-                <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
-                    <div class="col-lg-12">
+                    <div class="col-lg-4">
                          <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="nominee_house_street">
                                 <span class="s_website_form_label_content" style="color: #666666;">House &amp; Street</span>
+                                <span class="s_website_form_mark">*</span>
                             </label>
                             <input
                                 type="text"
                                 id="nominee_house_street"
                                 name="nominee_house_street"
                                 class="form-control"
-                                placeholder="Enter House &amp; Street"
+                                required="1"
                                 t-att-value="beneficiary.nominee_house_street if beneficiary else ''"
                             />
                         </div>
@@ -216,30 +265,13 @@
                         return { 
                             text: opt.text, 
                             value: opt.value, 
-                            dCode: opt.getAttribute('data-district-code') 
+                            dCode: opt.getAttribute('data-district-code'),
+                            regionCode: opt.getAttribute('data-region-code')
                         };
                     });
                     
-                    // Reusing the same map structure.
-                    // Ideally this should be a shared global or injected via a common asset,
-                    // but for now extending the template with local scope.
-                    var regionDistrictMap = {
-                        'mjini_magharibi': ['mjini_magharibi_a', 'magharibi_b', 'mjini'],
-                        'kaskazini_unguja': ['kaskazini_a', 'kaskazini_b'],
-                        'kusini_unguja': ['kati', 'kusini'],
-                        'kaskazini_pemba': ['wete', 'micheweni'],
-                        'kusini_pemba': ['chake_chake', 'mkoani'],
-                        // Fallback
-                        'MJ': ['mjini_magharibi_a', 'magharibi_b', 'mjini'],
-                        'KU': ['kaskazini_a', 'kaskazini_b'],
-                        'KS': ['kati', 'kusini'],
-                        'KP': ['wete', 'micheweni'],
-                        'SP': ['chake_chake', 'mkoani']
-                    };
-
                     function filterNomDistricts() {
                         var selectedVal = nomRegionSelect.value; // The value is the Code
-                        var validDistricts = regionDistrictMap[selectedVal] || [];
 
                         // Clear and Rebuild
                         var currentVal = nomDistrictSelect.value;
@@ -255,11 +287,12 @@
                             if (d.value === "") return; // Skip original default
 
                             // Filter logic: match district code in valid list
-                            if (!selectedVal || validDistricts.includes(d.dCode)) {
+                            if (!selectedVal || d.regionCode === selectedVal) {
                                 var opt = document.createElement('option');
                                 opt.value = d.value;
                                 opt.text = d.text;
                                 opt.setAttribute('data-district-code', d.dCode);
+                                opt.setAttribute('data-region-code', d.regionCode);
                                 if (d.value === currentVal) opt.selected = true;
                                 nomDistrictSelect.appendChild(opt);
                             }
@@ -406,7 +439,6 @@
                                 id="scheme_name"
                                 name="scheme_name"
                                 class="form-control"
-                                placeholder="Enter Scheme Name"
                                 t-att-value="beneficiary.scheme_name if beneficiary else ''"
                             />
                         </div>
@@ -537,16 +569,17 @@
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="beneficiary_image">
                                 <span class="s_website_form_label_content" style="color: #666666;">Beneficiary Photo</span>
+                                <span class="s_website_form_mark">*</span>
                             </label>
                             <div class="input-group">
-                                <input type="file" id="beneficiary_image" name="beneficiary_image" class="form-control" accept="image/*" capture="camera"/>
+                                <input type="file" id="beneficiary_image" name="beneficiary_image" class="form-control" accept="image/*" capture="camera" t-att-required="'1' if not beneficiary or not beneficiary.image_1920 else None"/>
                                 <button class="btn btn-outline-secondary open-cam" type="button" data-field="beneficiary_image">
                                     <i class="fa fa-camera"/> Capture
                                 </button>
                             </div>
-                            <t t-if="beneficiary and beneficiary.beneficiary_image">
+                            <t t-if="beneficiary and beneficiary.image_1920">
                                 <div class="mt-2 text-center">
-                                    <img t-att-src="image_data_uri(beneficiary.beneficiary_image)" style="max-height: 150px; border: 1px solid #ddd; padding: 5px; border-radius: 4px;"/>
+                                    <img t-att-src="image_data_uri(beneficiary.image_1920)" style="max-height: 150px; border: 1px solid #ddd; padding: 5px; border-radius: 4px;"/>
                                 </div>
                             </t>
                         </div>
@@ -557,9 +590,10 @@
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="nominee_image">
                                 <span class="s_website_form_label_content" style="color: #666666;">Relative / Nominee Photo</span>
+                                <span class="s_website_form_mark">*</span>
                             </label>
                             <div class="input-group">
-                                <input type="file" id="nominee_image" name="nominee_image" class="form-control" accept="image/*" capture="camera"/>
+                                <input type="file" id="nominee_image" name="nominee_image" class="form-control" accept="image/*" capture="camera" t-att-required="'1' if not beneficiary or not beneficiary.nominee_image else None"/>
                                 <button class="btn btn-outline-secondary open-cam" type="button" data-field="nominee_image">
                                     <i class="fa fa-camera"/> Capture
                                 </button>
@@ -578,9 +612,10 @@
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="zan_image">
                                 <span class="s_website_form_label_content" style="color: #666666;">Zan ID Photo</span>
+                                <span class="s_website_form_mark">*</span>
                             </label>
                             <div class="input-group">
-                                <input type="file" id="zan_image" name="zan_image" class="form-control" accept="image/*" capture="camera"/>
+                                <input type="file" id="zan_image" name="zan_image" class="form-control" accept="image/*" capture="camera" t-att-required="'1' if not beneficiary or not beneficiary.zan_image else None"/>
                                 <button class="btn btn-outline-secondary open-cam" type="button" data-field="zan_image">
                                     <i class="fa fa-camera"/> Capture
                                 </button>
@@ -685,9 +720,9 @@
 
     <!-- Beneficiary Details Fields Fragment -->
     <template id="beneficiary_details_fields_fragment">
-        <!-- Row 1: Zan ID, First Name, Last Name -->
+        <!-- Row 1: Zan ID, First Name, Middle Name, Headline (Surname) -->
         <div class="row mem-ind-row" style="padding: 20px;">
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="s_website_form_field mb-3">
                     <label class="s_website_form_label" for="benf_zan_id">
                         <span class="s_website_form_label_content" style="color: #666666;">Zan ID</span>
@@ -702,22 +737,30 @@
                     <div id="zan_id_lookup_status" class="mt-1" style="font-size: 0.8rem; display: none;"></div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
                 <div class="s_website_form_field mb-3">
                     <label class="s_website_form_label" for="given_name">
                         <span class="s_website_form_label_content" style="color: #666666;">First Name</span>
                         <span class="s_website_form_mark">*</span>
                     </label>
-                    <input type="text" id="given_name" name="given_name" class="form-control" t-att-value="beneficiary.given_name if beneficiary else ''" required="1"/>
+                    <input type="text" id="given_name" name="given_name" class="form-control" t-att-value="beneficiary.given_name if beneficiary else ''" required="1" minlength="2" pattern="[A-Za-z]+" oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')"/>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-3">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="middle_name">
+                        <span class="s_website_form_label_content" style="color: #666666;">Middle Name</span>
+                    </label>
+                    <input type="text" id="middle_name" name="middle_name" class="form-control" t-att-value="beneficiary.middle_name if beneficiary else ''" minlength="2" pattern="[A-Za-z]+" oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')"/>
+                </div>
+            </div>
+            <div class="col-lg-3">
                 <div class="s_website_form_field mb-3">
                     <label class="s_website_form_label" for="family_name">
-                        <span class="s_website_form_label_content" style="color: #666666;">Last Name</span>
+                        <span class="s_website_form_label_content" style="color: #666666;">Surname</span>
                         <span class="s_website_form_mark">*</span>
                     </label>
-                    <input type="text" id="family_name" name="family_name" class="form-control" t-att-value="beneficiary.family_name if beneficiary else ''" required="1"/>
+                    <input type="text" id="family_name" name="family_name" class="form-control" t-att-value="beneficiary.family_name if beneficiary else ''" required="1" minlength="2" pattern="[A-Za-z]+" oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')"/>
                 </div>
             </div>
         </div>
@@ -753,7 +796,18 @@
                     <label class="s_website_form_label" for="mobile">
                         <span class="s_website_form_label_content" style="color: #666666;">Mobile</span>
                     </label>
-                    <input type="tel" id="mobile" name="mobile" class="form-control" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" t-att-value="beneficiary.phone_number_ids[0].phone_no if beneficiary and beneficiary.phone_number_ids else ''"/>
+                    <div class="input-group">
+                        <span class="input-group-text" id="mobile-addon">+255</span>
+                        <input type="tel" id="mobile_visual" class="form-control" maxlength="9" 
+                               oninput="
+                                   this.value = this.value.replace(/[^0-9]/g, '');
+                                   var fullVal = '+255' + this.value;
+                                   document.getElementById('mobile').value = fullVal;
+                               " 
+                               t-att-value="(beneficiary.phone_number_ids[0].phone_no[4:] if beneficiary and beneficiary.phone_number_ids and beneficiary.phone_number_ids[0].phone_no.startswith('+255') else (beneficiary.phone_number_ids[0].phone_no[3:] if beneficiary and beneficiary.phone_number_ids and beneficiary.phone_number_ids[0].phone_no.startswith('255') else (beneficiary.phone_number_ids[0].phone_no[1:] if beneficiary and beneficiary.phone_number_ids and beneficiary.phone_number_ids[0].phone_no.startswith('0') else (beneficiary.phone_number_ids[0].phone_no if beneficiary and beneficiary.phone_number_ids else ''))))"
+                        />
+                        <input type="hidden" id="mobile" name="mobile" t-att-value="beneficiary.phone_number_ids[0].phone_no if beneficiary and beneficiary.phone_number_ids else ''"/>
+                    </div>
                 </div>
             </div>
         </div>
@@ -764,24 +818,27 @@
                 <div class="s_website_form_field mb-3">
                     <label class="s_website_form_label" for="street">
                         <span class="s_website_form_label_content" style="color: #666666;">House &amp; Street</span>
+                        <span class="s_website_form_mark">*</span>
                     </label>
-                    <input type="text" id="street" name="street" class="form-control" t-att-value="beneficiary.street if beneficiary else ''"/>
+                    <input type="text" id="street" name="street" class="form-control" required="1" t-att-value="beneficiary.street if beneficiary else ''"/>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="s_website_form_field mb-3">
                     <label class="s_website_form_label" for="street2">
                         <span class="s_website_form_label_content" style="color: #666666;">Shehia (Ward)</span>
+                        <span class="s_website_form_mark">*</span>
                     </label>
-                    <input type="text" id="street2" name="street2" class="form-control" t-att-value="beneficiary.street2 if beneficiary else ''"/>
+                    <input type="text" id="street2" name="street2" class="form-control" required="1" t-att-value="beneficiary.street2 if beneficiary else ''"/>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="s_website_form_field mb-3">
                     <label class="s_website_form_label" for="benf_post_code">
                         <span class="s_website_form_label_content" style="color: #666666;">PO BOX / Post code</span>
+                        <span class="s_website_form_mark">*</span>
                     </label>
-                    <input type="text" id="benf_post_code" name="benf_post_code" class="form-control" t-att-value="beneficiary.benf_post_code if beneficiary else ''"/>
+                    <input type="text" id="benf_post_code" name="benf_post_code" class="form-control" required="1" pattern="[0-9]*" minlength="6" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '')" t-att-value="beneficiary.benf_post_code if beneficiary else ''"/>
                 </div>
             </div>
         </div>
@@ -792,8 +849,9 @@
                 <div class="s_website_form_field mb-3">
                     <label class="s_website_form_label" for="ben_region">
                         <span class="s_website_form_label_content" style="color: #666666;">Region</span>
+                        <span class="s_website_form_mark">*</span>
                     </label>
-                    <select id="ben_region" name="region" class="form-select">
+                    <select id="ben_region" name="region" class="form-select" required="1">
                         <option value="">Select</option>
                         <t t-foreach="regions" t-as="r">
                             <option t-att-value="r.id" t-att-selected="beneficiary and beneficiary.region.id == r.id" t-att-data-region-code="r.code">
@@ -807,11 +865,12 @@
                 <div class="s_website_form_field mb-3">
                     <label class="s_website_form_label" for="ben_district">
                         <span class="s_website_form_label_content" style="color: #666666;">District</span>
+                        <span class="s_website_form_mark">*</span>
                     </label>
-                    <select id="ben_district" name="district" class="form-select">
+                    <select id="ben_district" name="district" class="form-select" required="1">
                         <option value="">Select</option>
                         <t t-foreach="districts" t-as="d">
-                            <option t-att-value="d.id" t-att-selected="beneficiary and beneficiary.district.id == d.id" t-att-data-district-code="d.code">
+                            <option t-att-value="d.id" t-att-selected="beneficiary and beneficiary.district.id == d.id" t-att-data-district-code="d.code" t-att-data-region-id="d.province_id.id">
                                 <t t-esc="d.name"/>
                             </option>
                         </t>
@@ -868,8 +927,34 @@
                                 
                                 // Helper to safe set value
                                 function setVal(id, val) {
-                                    var el = document.getElementById(id);
-                                    if (el) el.value = val || '';
+                                    if (id === 'mobile' || id === 'nominee_mobile') {
+                                        var rawVal = val || '';
+                                        // Strip prefix for visual input
+                                        var visualVal = rawVal;
+                                        if (visualVal.startsWith('+255')) {
+                                            visualVal = visualVal.substring(4);
+                                        } else if (visualVal.startsWith('255')) {
+                                            visualVal = visualVal.substring(3);
+                                        } else if (visualVal.startsWith('0')) {
+                                            visualVal = visualVal.substring(1);
+                                        }
+                                        
+                                        var visualEl = document.getElementById(id + '_visual');
+                                        if (visualEl) visualEl.value = visualVal;
+                                        
+                                        // Ensure hidden input has full +255 format if not empty
+                                        var hiddenVal = rawVal;
+                                        if (rawVal &amp;&amp; !rawVal.startsWith('+255')) {
+                                             if (rawVal.startsWith('255')) hiddenVal = '+' + rawVal;
+                                             else if (rawVal.startsWith('0')) hiddenVal = '+255' + rawVal.substring(1);
+                                             else hiddenVal = '+255' + rawVal;
+                                        }
+                                        var hiddenEl = document.getElementById(id);
+                                        if (hiddenEl) hiddenEl.value = hiddenVal;
+                                    } else {
+                                        var el = document.getElementById(id);
+                                        if (el) el.value = val || '';
+                                    }
                                 }
 
                                 // Helper to safe set Select and trigger change
@@ -905,6 +990,7 @@
 
                                 // 1. Basic Details
                                 setVal('given_name', result.firstname);
+                                setVal('middle_name', result.middle_name);
                                 setVal('family_name', result.lastname);
                                 setVal('birthdate', result.dob);
                                 setVal('gender', result.gender);
@@ -940,6 +1026,7 @@
                                 setTimeout(() => {
                                     setVal('nominee_district', result.nominee_district);
                                 }, 100);
+                                setVal('nominee_post_code', result.nominee_post_code);
                                 setVal('nominee_shehia', result.nominee_shehia);
                                 setVal('nominee_house_street', result.nominee_house_street);
                                 
@@ -978,7 +1065,7 @@
                                 statusDiv.innerText = (data.result &amp;&amp; data.result.message) || "Not found";
                                 statusDiv.style.color = "red";
                                 var submitBtn = document.getElementById('beneficiary_submit');
-                                if (submitBtn) submitBtn.disabled = false; // Enable if not found (allow manual?)
+                                if (submitBtn) submitBtn.disabled = true;
                             }
                         })
                         .catch(error => {
@@ -1019,51 +1106,7 @@
                     </select>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="s_website_form_field mb-3">
-                    <label class="s_website_form_label" for="other_id_available">
-                        <span class="s_website_form_label_content" style="color: #666666;">Do you have other ID?</span>
-                    </label>
-                    <select id="other_id_available" name="other_id_available" class="form-select">
-                        <option value="">Select</option>
-                        <option value="yes" t-att-selected="beneficiary and beneficiary.other_id_available == 'yes'">Yes</option>
-                        <option value="no" t-att-selected="beneficiary and beneficiary.other_id_available == 'no'">No</option>
-                    </select>
-                </div>
-            </div>
-            
-            <!-- Dynamic Other ID Fields (Merged into same row) -->
-            <div class="col-lg-4 other_id_part" t-att-style="'display: block;' if beneficiary and beneficiary.other_id_available == 'yes' else 'display: none;'">
-                <div class="s_website_form_field mb-3">
-                    <label class="s_website_form_label" for="other_id_type">
-                        <span class="s_website_form_label_content" style="color: #666666;">If Yes, what type of ID</span>
-                    </label>
-                    <select id="other_id_type" name="other_id_type" class="form-select">
-                        <option value="">Select</option>
-                        <option value="national_id" t-att-selected="beneficiary and beneficiary.other_id_type == 'national_id'">National ID</option>
-                        <option value="passport" t-att-selected="beneficiary and beneficiary.other_id_type == 'passport'">Passport</option>
-                        <option value="driving_licence" t-att-selected="beneficiary and beneficiary.other_id_type == 'driving_licence'">Driving Licence</option>
-                        <option value="voter_id" t-att-selected="beneficiary and beneficiary.other_id_type == 'voter_id'">Voter ID</option>
-                        <option value="other" t-att-selected="beneficiary and beneficiary.other_id_type == 'other'">Other</option>
-                    </select>
-                </div>
-            </div>
-            <div class="col-lg-4 other_id_part" t-att-style="'display: block;' if beneficiary and beneficiary.other_id_available == 'yes' else 'display: none;'">
-                <div class="s_website_form_field mb-3">
-                    <label class="s_website_form_label" for="other_id_name">
-                        <span class="s_website_form_label_content" style="color: #666666;">The other ID</span>
-                    </label>
-                    <input type="text" id="other_id_name" name="other_id_name" class="form-control" t-att-value="beneficiary.other_id_name if beneficiary else ''"/>
-                </div>
-            </div>
-            <div class="col-lg-4 other_id_part" t-att-style="'display: block;' if beneficiary and beneficiary.other_id_available == 'yes' else 'display: none;'">
-                <div class="s_website_form_field mb-3">
-                    <label class="s_website_form_label" for="other_id_number">
-                        <span class="s_website_form_label_content" style="color: #666666;">Alternative ID number</span>
-                    </label>
-                    <input type="text" id="other_id_number" name="other_id_number" class="form-control" t-att-value="beneficiary.other_id_number if beneficiary else ''"/>
-                </div>
-            </div>
+
         </div>
         
         <script type="text/javascript">
@@ -1083,42 +1126,34 @@
                         return { 
                             text: opt.text, 
                             value: opt.value, 
-                            dCode: opt.getAttribute('data-district-code') 
+                            dCode: opt.getAttribute('data-district-code'),
+                            regionId: opt.getAttribute('data-region-id')
                         };
                     });
                     
-                    var regionDistrictMap = {
-                        'mjini_magharibi': ['mjini_magharibi_a', 'magharibi_b', 'mjini'],
-                        'kaskazini_unguja': ['kaskazini_a', 'kaskazini_b'],
-                        'kusini_unguja': ['kati', 'kusini'],
-                        'kaskazini_pemba': ['wete', 'micheweni'],
-                        'kusini_pemba': ['chake_chake', 'mkoani'],
-                        // Fallback
-                        'MJ': ['mjini_magharibi_a', 'magharibi_b', 'mjini'],
-                        'KU': ['kaskazini_a', 'kaskazini_b'],
-                        'KS': ['kati', 'kusini'],
-                        'KP': ['wete', 'micheweni'],
-                        'SP': ['chake_chake', 'mkoani']
-                    };
-
                     function filterDistricts() {
-                        var selectedOpt = regionSelect.options[regionSelect.selectedIndex];
-                        if (!selectedOpt) return;
+                        var selectedVal = regionSelect.value; // ID
                         
-                        var selectedCode = selectedOpt.getAttribute('data-region-code');
-                        var validDistricts = regionDistrictMap[selectedCode] || [];
-
                         // Clear and Rebuild
                         var currentVal = districtSelect.value;
                         districtSelect.innerHTML = ''; // clear
                         
+                        // Always add default Select option
+                        var defaultOpt = document.createElement('option');
+                        defaultOpt.value = "";
+                        defaultOpt.text = "Select";
+                        districtSelect.appendChild(defaultOpt);
+
                         allDistricts.forEach(function(d) {
-                            // Logic: Show if no region selected OR d.value is empty (Select) OR code is valid
-                            if (!selectedCode || d.value === "" || validDistricts.includes(d.dCode)) {
+                            if (d.value === "") return; // Skip original default
+                            
+                            // Logic: Show if no region selected OR d.regionId matches selectedVal
+                            if (!selectedVal || d.regionId === selectedVal) {
                                 var opt = document.createElement('option');
                                 opt.value = d.value;
                                 opt.text = d.text;
                                 opt.setAttribute('data-district-code', d.dCode);
+                                opt.setAttribute('data-region-id', d.regionId);
                                 if (d.value === currentVal) opt.selected = true;
                                 districtSelect.appendChild(opt);
                             }
@@ -1140,19 +1175,7 @@
 
         
         
-        <script type="text/javascript">
-            document.addEventListener("DOMContentLoaded", function() {
-                var otherIdSelect = document.getElementById('other_id_available');
-                if(otherIdSelect){
-                    otherIdSelect.addEventListener('change', function() {
-                        var parts = document.querySelectorAll('.other_id_part');
-                        parts.forEach(function(el) {
-                            el.style.display = (otherIdSelect.value === 'yes') ? 'block' : 'none';
-                        });
-                    });
-                }
-            });
-        </script>
+
     </template>
 
 
@@ -1271,6 +1294,28 @@
         </xpath>
     </template>
 
+    <!-- Rename Table Headers and Merge Name Columns -->
+    <template id="individual_list_inherit_header_rename" inherit_id="g2p_registration_portal_base.individual_list">
+        <!-- Header: Rename 'Name' to 'Name' (effectively keep position) and Remove 'Last name' -->
+        <xpath expr="//table//thead//tr//th[2]" position="replace">
+            <th>Name</th>
+        </xpath>
+        <xpath expr="//table//thead//tr//th[3]" position="replace">
+            <!-- Remove Last Name header -->
+        </xpath>
+
+        <!-- Body: Merge names into one column and remove Last Name column -->
+        <xpath expr="//table//tbody//tr//td[2]" position="replace">
+            <td style="color:#1e40af; font: normal normal 600 13px/16px Inter;">
+                <span t-out="group.family_name"/>, <span t-out="group.given_name"/>
+                <t t-if="group.middle_name"> <span t-out="group.middle_name"/></t>
+            </td>
+        </xpath>
+        <xpath expr="//table//tbody//tr//td[3]" position="replace">
+            <!-- Remove Last Name cell -->
+        </xpath>
+    </template>
+
     <!-- New Template for Read-Only Individual Details -->
     <template id="individual_view_details_readonly" inherit_id="g2p_social_registry_model.social_registry_model_individual_update_form_extension" primary="True">
         <xpath expr="//h5[@class='all-title']" position="replace">
@@ -1286,9 +1331,9 @@
         <!-- Replace the demographic div content entirely to avoid XPath issues with t-call -->
         <xpath expr="//div[@id='demographic']" position="replace">
             <div class="s_website_form_rows collapse show" id="demographic" data-bs-parent="#accordion">
-                <!-- Row 1: Zan ID, First Name, Last Name -->
+                <!-- Row 1: Zan ID, First Name, Middle Name, Surname -->
                 <div class="row mem-ind-row" style="padding: 20px;">
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="benf_zan_id">
                                 <span class="s_website_form_label_content" style="color: #666666;">Zan ID</span>
@@ -1297,7 +1342,7 @@
                             <input type="text" id="benf_zan_id" name="benf_zan_id" class="form-control" maxlength="9" minlength="9" required="1" t-att-value="beneficiary.benf_zan_id if beneficiary else ''"/>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="given_name">
                                 <span class="s_website_form_label_content" style="color: #666666;">First Name</span>
@@ -1306,10 +1351,18 @@
                             <input type="text" id="given_name" name="given_name" class="form-control" t-att-value="beneficiary.given_name if beneficiary else ''" required="1"/>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="middle_name">
+                                <span class="s_website_form_label_content" style="color: #666666;">Middle Name</span>
+                            </label>
+                            <input type="text" id="middle_name" name="middle_name" class="form-control" t-att-value="beneficiary.middle_name if beneficiary else ''"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-3">
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="family_name">
-                                <span class="s_website_form_label_content" style="color: #666666;">Last Name</span>
+                                <span class="s_website_form_label_content" style="color: #666666;">Surname</span>
                                 <span class="s_website_form_mark">*</span>
                             </label>
                             <input type="text" id="family_name" name="family_name" class="form-control" t-att-value="beneficiary.family_name if beneficiary else ''" required="1"/>
@@ -1348,7 +1401,18 @@
                             <label class="s_website_form_label" for="mobile">
                                 <span class="s_website_form_label_content" style="color: #666666;">Mobile</span>
                             </label>
-                            <input type="tel" id="mobile" name="mobile" class="form-control" maxlength="10" oninput="this.value = this.value.replace(/[^0-9]/g, '')" t-att-value="beneficiary.phone_number_ids[0].phone_no if beneficiary and beneficiary.phone_number_ids else ''"/>
+                            <div class="input-group">
+                                <span class="input-group-text" id="mobile-addon">+255</span>
+                                <input type="tel" id="mobile_visual" class="form-control" maxlength="9" 
+                                       oninput="
+                                           this.value = this.value.replace(/[^0-9]/g, '');
+                                           var fullVal = '+255' + this.value;
+                                           document.getElementById('mobile').value = fullVal;
+                                       " 
+                                       t-att-value="(beneficiary.phone_number_ids[0].phone_no[4:] if beneficiary and beneficiary.phone_number_ids and beneficiary.phone_number_ids[0].phone_no.startswith('+255') else (beneficiary.phone_number_ids[0].phone_no[3:] if beneficiary and beneficiary.phone_number_ids and beneficiary.phone_number_ids[0].phone_no.startswith('255') else (beneficiary.phone_number_ids[0].phone_no[1:] if beneficiary and beneficiary.phone_number_ids and beneficiary.phone_number_ids[0].phone_no.startswith('0') else (beneficiary.phone_number_ids[0].phone_no if beneficiary and beneficiary.phone_number_ids else ''))))"
+                                />
+                                <input type="hidden" id="mobile" name="mobile" t-att-value="beneficiary.phone_number_ids[0].phone_no if beneficiary and beneficiary.phone_number_ids else ''"/>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1368,7 +1432,7 @@
                             <label class="s_website_form_label" for="benf_post_code">
                                 <span class="s_website_form_label_content" style="color: #666666;">PO BOX / Post code</span>
                             </label>
-                            <input type="text" id="benf_post_code" name="benf_post_code" class="form-control" t-att-value="beneficiary.benf_post_code if beneficiary else ''"/>
+                            <input type="text" id="benf_post_code" name="benf_post_code" class="form-control" minlength="6" maxlength="6" pattern="[0-9]*" oninput="this.value = this.value.replace(/[^0-9]/g, '')" t-att-value="beneficiary.benf_post_code if beneficiary else ''"/>
                         </div>
                     </div>
                 </div>
@@ -1398,7 +1462,7 @@
                             <select id="ben_district" name="district" class="form-select">
                                 <option value="">Select</option>
                                 <t t-foreach="districts" t-as="d">
-                                    <option t-att-value="d.id" t-att-selected="beneficiary and beneficiary.district.id == d.id" t-att-data-district-code="d.code">
+                                    <option t-att-value="d.id" t-att-selected="beneficiary and beneficiary.district.id == d.id" t-att-data-district-code="d.code" t-att-data-region-id="d.province_id.id">
                                         <t t-esc="d.name"/>
                                     </option>
                                 </t>
@@ -1445,51 +1509,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="s_website_form_field mb-3">
-                            <label class="s_website_form_label" for="other_id_available">
-                                <span class="s_website_form_label_content" style="color: #666666;">Do you have other ID?</span>
-                            </label>
-                            <select id="other_id_available" name="other_id_available" class="form-select">
-                                <option value="">Select</option>
-                                <option value="yes" t-att-selected="beneficiary and beneficiary.other_id_available == 'yes'">Yes</option>
-                                <option value="no" t-att-selected="beneficiary and beneficiary.other_id_available == 'no'">No</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <!-- Dynamic Other ID Fields (Merged into same row) -->
-                    <div class="col-lg-4 other_id_part" t-att-style="'display: block;' if beneficiary and beneficiary.other_id_available == 'yes' else 'display: none;'">
-                        <div class="s_website_form_field mb-3">
-                            <label class="s_website_form_label" for="other_id_type">
-                                <span class="s_website_form_label_content" style="color: #666666;">If Yes, what type of ID</span>
-                            </label>
-                            <select id="other_id_type" name="other_id_type" class="form-select">
-                                <option value="">Select</option>
-                                <option value="national_id" t-att-selected="beneficiary and beneficiary.other_id_type == 'national_id'">National ID</option>
-                                <option value="passport" t-att-selected="beneficiary and beneficiary.other_id_type == 'passport'">Passport</option>
-                                <option value="driving_licence" t-att-selected="beneficiary and beneficiary.other_id_type == 'driving_licence'">Driving Licence</option>
-                                <option value="voter_id" t-att-selected="beneficiary and beneficiary.other_id_type == 'voter_id'">Voter ID</option>
-                                <option value="other" t-att-selected="beneficiary and beneficiary.other_id_type == 'other'">Other</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 other_id_part" t-att-style="'display: block;' if beneficiary and beneficiary.other_id_available == 'yes' else 'display: none;'">
-                        <div class="s_website_form_field mb-3">
-                            <label class="s_website_form_label" for="other_id_name">
-                                <span class="s_website_form_label_content" style="color: #666666;">The other ID</span>
-                            </label>
-                            <input type="text" id="other_id_name" name="other_id_name" class="form-control" t-att-value="beneficiary.other_id_name if beneficiary else ''"/>
-                        </div>
-                    </div>
-                    <div class="col-lg-4 other_id_part" t-att-style="'display: block;' if beneficiary and beneficiary.other_id_available == 'yes' else 'display: none;'">
-                        <div class="s_website_form_field mb-3">
-                            <label class="s_website_form_label" for="other_id_number">
-                                <span class="s_website_form_label_content" style="color: #666666;">Alternative ID number</span>
-                            </label>
-                            <input type="text" id="other_id_number" name="other_id_number" class="form-control" t-att-value="beneficiary.other_id_number if beneficiary else ''"/>
-                        </div>
-                    </div>
+
                 </div>
                 
                 <script type="text/javascript">
@@ -1509,42 +1529,27 @@
                                 return { 
                                     text: opt.text, 
                                     value: opt.value, 
-                                    dCode: opt.getAttribute('data-district-code') 
+                                    dCode: opt.getAttribute('data-district-code'),
+                                    regionId: opt.getAttribute('data-region-id')
                                 };
                             });
                             
-                            var regionDistrictMap = {
-                                'mjini_magharibi': ['mjini_magharibi_a', 'magharibi_b', 'mjini'],
-                                'kaskazini_unguja': ['kaskazini_a', 'kaskazini_b'],
-                                'kusini_unguja': ['kati', 'kusini'],
-                                'kaskazini_pemba': ['wete', 'micheweni'],
-                                'kusini_pemba': ['chake_chake', 'mkoani'],
-                                // Fallback
-                                'MJ': ['mjini_magharibi_a', 'magharibi_b', 'mjini'],
-                                'KU': ['kaskazini_a', 'kaskazini_b'],
-                                'KS': ['kati', 'kusini'],
-                                'KP': ['wete', 'micheweni'],
-                                'SP': ['chake_chake', 'mkoani']
-                            };
-
                             function filterDistricts() {
-                                var selectedOpt = regionSelect.options[regionSelect.selectedIndex];
-                                if (!selectedOpt) return;
+                                var selectedVal = regionSelect.value; // ID
                                 
-                                var selectedCode = selectedOpt.getAttribute('data-region-code');
-                                var validDistricts = regionDistrictMap[selectedCode] || [];
-
                                 // Clear and Rebuild
                                 var currentVal = districtSelect.value;
                                 districtSelect.innerHTML = ''; // clear
                                 
                                 allDistricts.forEach(function(d) {
                                     // Logic: Show if no region selected OR d.value is empty (Select) OR code is valid
-                                    if (!selectedCode || d.value === "" || validDistricts.includes(d.dCode)) {
+                                    // Note: selectedVal is string, regionId is string.
+                                    if (!selectedVal || d.value === "" || d.regionId === selectedVal) {
                                         var opt = document.createElement('option');
                                         opt.value = d.value;
                                         opt.text = d.text;
                                         opt.setAttribute('data-district-code', d.dCode);
+                                        opt.setAttribute('data-region-id', d.regionId);
                                         if (d.value === currentVal) opt.selected = true;
                                         districtSelect.appendChild(opt);
                                     }
@@ -1566,19 +1571,7 @@
 
                 
                 
-                <script type="text/javascript">
-                    document.addEventListener("DOMContentLoaded", function() {
-                        var otherIdSelect = document.getElementById('other_id_available');
-                        if(otherIdSelect){
-                            otherIdSelect.addEventListener('change', function() {
-                                var parts = document.querySelectorAll('.other_id_part');
-                                parts.forEach(function(el) {
-                                    el.style.display = (otherIdSelect.value === 'yes') ? 'block' : 'none';
-                                });
-                            });
-                        }
-                    });
-                </script>
+
             </div>
         </xpath>
 

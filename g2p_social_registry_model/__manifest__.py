@@ -19,7 +19,6 @@
         "g2p_registry_documents",
         "g2p_document_field",
         "social_registry_custom_fields",
-        "individual_id",
     ],
     "data": [
         "views/group_view.xml",

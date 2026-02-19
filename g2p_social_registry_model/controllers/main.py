@@ -34,16 +34,54 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                 "message": "Beneficiary with this Zan ID already exists in the system."
             }
 
-        # 2. Call Mock API
+        # 2. Call External API
         try:
-            #response = requests.get("https://mocki.io/v1/78b26feb-48cd-47bf-bf52-70129f35d549", timeout=10) #age less than 69
-            response = requests.get("https://mocki.io/v1/0b022420-8bd4-4227-8456-4132a6a1e298", timeout=10)
+            url = "https://mock-api.credissuer.com/validate-zan"
+            payload = {"zan_id": zan_id}
+            response = requests.post(url, json=payload, timeout=10)
+
             if response.status_code == 200:
-                data = response.json()
-                if data.get("status") == "SUCCESS":
-                    # For mock purpose, we assume the API returns the data for the requested ID
-                    if "gender" in data:
-                        data["gender"] = data["gender"].lower()
+                result = response.json()
+                status = result.get("status")
+
+                if status and status.lower() == "success":
+                    api_data = result.get("data", {})
+                    
+
+                    street2 = api_data.get("ward_name", "")
+                    
+                    # Gender Lookup
+                    gender_str = api_data.get("gender", "")
+                    gender_val = ""
+                    if gender_str:
+                        # Try exact or case-insensitive match on code, value, or name
+                        domain = ['|', ('code', '=ilike', gender_str), ('value', '=ilike', gender_str)]
+                        found = request.env["gender.type"].sudo().search(domain, limit=1)
+                        if found:
+                            gender_val = found.value
+                        else:
+                            # Fallback standard assumptions
+                            if gender_str.lower() in ['female', 'f', 'woman']:
+                                gender_val = 'female'
+                            elif gender_str.lower() in ['male', 'm', 'man']:
+                                gender_val = 'male'
+                            else:
+                                gender_val = gender_str
+                    
+                    data = {
+                        "status": "SUCCESS",
+                        "firstname": api_data.get("first_name", ""),
+                        "lastname": api_data.get("surname", ""),
+                        "middle_name": api_data.get("middle_name", ""),
+                        "dob": api_data.get("dob", ""),
+                        "gender": gender_val,
+                        "mobile": api_data.get("mobile_number", ""),
+                        "street": api_data.get("address", ""),
+                        "street2": street2,
+                        "benf_post_code": api_data.get("po_box", ""),
+                        # "region": api_data.get("region", ""), # API doesn't return region
+                        # "district": api_data.get("district", ""), # API doesn't return district
+                    }
 
                     # Age Validation
                     dob_str = data.get("dob")
@@ -64,14 +102,14 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                             if age < 69:
                                 return {
                                     "status": "NOT_ELIGIBLE", 
-                                    "message": f"Not eligible for the pension program. Age is {age}, but must be 69+."
+                                    "message": f"The citizen is not eligible for ZUPS scheme!. Age is  {age}, but must be 69+."
                                 }
 
                     return data
                 else:
                     return {"status": "NOT_FOUND", "message": "Zan ID not found in external registry"}
             else:
-                return {"status": "ERROR", "message": f"External API error: {response.status_code}"}
+                return {"status": "ERROR", "message": f"ZAN ID does not exist in eGAZ system, Please try with a Valid ZAN ID!"}
         except Exception as e:
             return {"status": "ERROR", "message": str(e)}
 
@@ -81,40 +119,40 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
             return {"status": "ERROR", "message": "Zan ID is required"}
 
         # 1. Check in database
-        id_type = request.env["g2p.id.type"].sudo().search([("name", "=", "Nominee Zanzibar ID")], limit=1)
+        # id_type = request.env["g2p.id.type"].sudo().search([("name", "=", "Nominee Zanzibar ID")], limit=1)
         
-        if id_type:
-            reg_id = (
-                request.env["g2p.reg.id"]
-                .sudo()
-                .search([("id_type", "=", id_type.id), ("value", "=", nominee_zanid.strip())], limit=1)
-            )
+        # if id_type:
+        #     reg_id = (
+        #         request.env["g2p.reg.id"]
+        #         .sudo()
+        #         .search([("id_type", "=", id_type.id), ("value", "=", nominee_zanid.strip())], limit=1)
+        #     )
 
-            if reg_id and reg_id.partner_id:
-                p = reg_id.partner_id
-                # Prepare data from existing partner
-                data = {
-                    "status": "ALREADY_EXISTS_BUT_FILL",
-                    "message": "Nominee already exists in the system.",
-                    "nominee_first_name": p.nominee_first_name or "",
-                    "nominee_last_name": p.nominee_last_name or "",
-                    # Map Gender (System uses 'male'/'female', check standard)
-                    "nominee_gender": p.nominee_gender or "", 
-                    "nominee_mobile": p.nominee_mobile or "",
-                    # Address mapping - assuming simple mapping for now
-                    "nominee_house_street": p.nominee_house_street or "",
-                    "nominee_shehia": p.nominee_shehia or "",
-                     # Region/District need codes or IDs? The frontend expects values that match the select options (usually IDs or Codes).
-                     # In main.py individual_update, we see p.region.id is used.
-                     # But in the frontend JS, it sets values.
-                     # Let's send both or send what works. The prev mock API sent Codes probably?
-                     # Mock API returned "region": "MJ", "district": "mjini" (codes).
-                     # So we should send Codes if possible.
-                    "nominee_region": p.nominee_region or "",
-                    "nominee_district": p.nominee_district or "",
-                    "nominee_rel_benf": p.nominee_rel_benf or "",
-                }
-                return data
+        #     if reg_id and reg_id.partner_id:
+        #         p = reg_id.partner_id
+        #         # Prepare data from existing partner
+        #         data = {
+        #             "status": "ALREADY_EXISTS_BUT_FILL",
+        #             "message": "Nominee already exists in the system.",
+        #             "nominee_first_name": p.nominee_first_name or "",
+        #             "nominee_last_name": p.nominee_last_name or "",
+        #             # Map Gender (System uses 'male'/'female', check standard)
+        #             "nominee_gender": p.nominee_gender or "", 
+        #             "nominee_mobile": p.nominee_mobile or "",
+        #             # Address mapping - assuming simple mapping for now
+        #             "nominee_house_street": p.nominee_house_street or "",
+        #             "nominee_shehia": p.nominee_shehia or "",
+        #              # Region/District need codes or IDs? The frontend expects values that match the select options (usually IDs or Codes).
+        #              # In main.py individual_update, we see p.region.id is used.
+        #              # But in the frontend JS, it sets values.
+        #              # Let's send both or send what works. The prev mock API sent Codes probably?
+        #              # Mock API returned "region": "MJ", "district": "mjini" (codes).
+        #              # So we should send Codes if possible.
+        #             "nominee_region": p.nominee_region or "",
+        #             "nominee_district": p.nominee_district or "",
+        #             "nominee_rel_benf": p.nominee_rel_benf or "",
+        #         }
+        #         return data
 
         # 2. Call Mock API
         try:
@@ -137,6 +175,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                         # Mock API might return 'region'/'district' keys.
                         "nominee_region": data.get("region", ""),
                         "nominee_district": data.get("district", ""),
+                        "nominee_post_code": data.get("postcode", ""),
                     }
                     return mapped_data
                 else:
@@ -282,9 +321,10 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
         regions = list(unique_regions_map.values())
 
         districts = request.env["g2p.district"].sudo().search([])
+        id_types = request.env["g2p.id.type"].sudo().search([])
         return request.render(
             "g2p_registration_portal_base.individual_registrant_form_template",
-            {"gender": gender, "regions": regions, "districts": districts},
+            {"gender": gender, "regions": regions, "districts": districts, "id_types": id_types},
         )
 
     @http.route(
@@ -306,6 +346,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
             regions = list(unique_regions_map.values())
 
             districts = request.env["g2p.district"].sudo().search([])
+            id_types = request.env["g2p.id.type"].sudo().search([])
             beneficiary = request.env["res.partner"].sudo().browse(_id)
             if not beneficiary:
                 return request.render(
@@ -320,6 +361,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                     "gender": gender,
                     "regions": regions,
                     "districts": districts,
+                    "id_types": id_types,
                 },
             )
         except Exception:
@@ -353,6 +395,9 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
 
             # Fetch Districts
             districts = request.env["g2p.district"].sudo().search([])
+            
+            # Fetch ID Types
+            id_types = request.env["g2p.id.type"].sudo().search([])
 
             # Fetch Beneficiary
             beneficiary = request.env["res.partner"].sudo().browse(_id)
@@ -370,6 +415,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                     "gender": gender,
                     "regions": regions,
                     "districts": districts,
+                    "id_types": id_types,
                 },
             )
 
@@ -384,32 +430,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
 
     def _get_reg_ids_command(self, kw):
         reg_ids = []
-        if kw.get("other_id_available") == "yes":
-            other_id_type_code = kw.get("other_id_type")
-            other_id_number = kw.get("other_id_number")
 
-            if other_id_type_code and other_id_number:
-                # Simple mapping from form values to likely DB names
-                type_map = {
-                    "national_id": "National ID",
-                    "passport": "Passport",
-                    "driving_licence": "Driving Licence",
-                    "voter_id": "Voter ID",
-                    "other": "Other",
-                }
-                # Try mapped name, else fallback to code
-                search_name = type_map.get(other_id_type_code, other_id_type_code)
-
-                # Search for ID Type (case insensitive)
-                id_type = request.env["g2p.id.type"].sudo().search([("name", "=ilike", search_name)], limit=1)
-
-                if id_type:
-                    reg_ids.append((0, 0, {
-                        "id_type": id_type.id,
-                        "value": other_id_number,
-                        "status": "valid",
-                        "description": kw.get("other_id_name")
-                    }))
 
         # Zanzibar ID
         if kw.get("benf_zan_id"):
@@ -448,6 +469,8 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                 name += kw.get("family_name") + ", "
             if kw.get("given_name"):
                 name += kw.get("given_name") + " "
+            if kw.get("middle_name"):
+                name += kw.get("middle_name") + " "
             if kw.get("addl_name"):
                 name += kw.get("addl_name") + " "
             if kw.get("birthdate") == "":
@@ -457,6 +480,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
 
             data = {
                 "given_name": kw.get("given_name"),
+                "middle_name": kw.get("middle_name"),
                 "addl_name": kw.get("addl_name"),
                 "family_name": kw.get("family_name"),
                 "name": name.strip(),
@@ -475,6 +499,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                 "marital_status": kw.get("marital_status"),
                 # Nominee Info
                 "nominee_first_name": kw.get("nominee_first_name"),
+                "nominee_middle_name": kw.get("nominee_middle_name"),
                 "nominee_last_name": kw.get("nominee_last_name"),
                 "nominee_mobile": kw.get("nominee_mobile"),
                 "nominee_gender": kw.get("nominee_gender"),
@@ -484,6 +509,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                 "nominee_shehia": kw.get("nominee_shehia"),
                 "nominee_region": kw.get("nominee_region"),
                 "nominee_district": kw.get("nominee_district"),
+                "nominee_post_code": kw.get("nominee_post_code"),
                 # Pension Info
                 "other_pension": kw.get("other_pension"),
                 "scheme_name": kw.get("scheme_name"),
@@ -504,11 +530,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                 "disability": kw.get("disability"),
                 "is_receiving_allowance": kw.get("is_receiving_allowance"),
                 "has_health_insurance": kw.get("has_health_insurance"),
-                # Other ID (Flat fields kept for view compatibility)
-                "other_id_available": kw.get("other_id_available"),
-                "other_id_type": kw.get("other_id_type"),
-                "other_id_name": kw.get("other_id_name"),
-                "other_id_number": kw.get("other_id_number"),
+
             }
 
             # Add reg_ids logic
@@ -521,7 +543,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
             if kw.get("zan_image"):
                 data["zan_image"] = base64.b64encode(kw.get("zan_image").read())
             if kw.get("beneficiary_image"):
-                data["beneficiary_image"] = base64.b64encode(kw.get("beneficiary_image").read())
+                data["image_1920"] = base64.b64encode(kw.get("beneficiary_image").read())
 
             partner = request.env["res.partner"].sudo().create(data)
             if kw.get("mobile"):
@@ -529,6 +551,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                     {
                         "partner_id": partner.id,
                         "phone_no": kw.get("mobile"),
+                        "country_id": request.env.ref("base.tz").id,
                     }
                 )
                 # Sync phone field for list view
@@ -559,6 +582,8 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                     name += kw.get("family_name") + ", "
                 if kw.get("given_name"):
                     name += kw.get("given_name") + " "
+                if kw.get("middle_name"):
+                    name += kw.get("middle_name") + " "
                 if kw.get("addl_name"):
                     name += kw.get("addl_name") + " "
                 if kw.get("birthdate") == "":
@@ -568,6 +593,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
 
                 vals = {
                     "given_name": kw.get("given_name"),
+                    "middle_name": kw.get("middle_name"),
                     "addl_name": kw.get("addl_name"),
                     "family_name": kw.get("family_name"),
                     "name": name,
@@ -583,6 +609,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                     "marital_status": kw.get("marital_status"),
                     # Nominee Info
                     "nominee_first_name": kw.get("nominee_first_name"),
+                    "nominee_middle_name": kw.get("nominee_middle_name"),
                     "nominee_last_name": kw.get("nominee_last_name"),
                     "nominee_mobile": kw.get("nominee_mobile"),
                     "nominee_gender": kw.get("nominee_gender"),
@@ -592,6 +619,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                     "nominee_shehia": kw.get("nominee_shehia"),
                     "nominee_region": kw.get("nominee_region"),
                     "nominee_district": kw.get("nominee_district"),
+                    "nominee_post_code": kw.get("nominee_post_code"),
                     # Pension Info
                     "other_pension": kw.get("other_pension"),
                     "scheme_name": kw.get("scheme_name"),
@@ -607,56 +635,16 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                     "region": int(kw.get("region")) if kw.get("region") else False,
                     "district": int(kw.get("district")) if kw.get("district") else False,
                     "benf_post_code": kw.get("benf_post_code"),
-                    "benf_post_code": kw.get("benf_post_code"),
                     # "benf_zan_id" removed (stored in reg_ids)
                     "disability": kw.get("disability"),
                     "is_receiving_allowance": kw.get("is_receiving_allowance"),
                     "has_health_insurance": kw.get("has_health_insurance"),
-                    # Other ID (Flat fields kept for view compatibility)
-                    "other_id_available": kw.get("other_id_available"),
-                    "other_id_type": kw.get("other_id_type"),
-                    "other_id_name": kw.get("other_id_name"),
-                    "other_id_number": kw.get("other_id_number"),
+
                 }
 
                 # ID Handling Logic
                 reg_ids_commands = []
-                if kw.get("other_id_available") == "yes":
-                    other_id_type_code = kw.get("other_id_type")
-                    other_id_number = kw.get("other_id_number")
 
-                    if other_id_type_code and other_id_number:
-                        type_map = {
-                            "national_id": "National ID",
-                            "passport": "Passport",
-                            "driving_licence": "Driving Licence",
-                            "voter_id": "Voter ID",
-                            "other": "Other",
-                        }
-                        search_name = type_map.get(other_id_type_code, other_id_type_code)
-                        id_type = request.env["g2p.id.type"].sudo().search([("name", "=ilike", search_name)], limit=1)
-
-                        if id_type:
-                            # Check if member already has this ID type
-                            existing_id = member.reg_ids.filtered(lambda r: r.id_type.id == id_type.id)
-                            
-                            vals_id = {
-                                "value": other_id_number,
-                                "status": "valid",
-                                "description": kw.get("other_id_name")
-                            }
-
-                            if existing_id:
-                                # Update existing ID if value changed or just update metadata
-                                # Using (1, id, values) for update
-                                reg_ids_commands.append((1, existing_id[0].id, vals_id))
-                            else:
-                                # Create new ID
-                                # Using (0, 0, values) for create
-                                reg_ids_commands.append((0, 0, {
-                                    "id_type": id_type.id,
-                                    **vals_id
-                                }))
 
                 # Zanzibar ID
                 if kw.get("benf_zan_id"):
@@ -698,6 +686,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                                 {
                                     "partner_id": member.id,
                                     "phone_no": kw.get("mobile"),
+                                    "country_id": request.env.ref("base.tz").id,
                                 }
                             )
                     else:
@@ -706,6 +695,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                             {
                                 "partner_id": member.id,
                                 "phone_no": kw.get("mobile"),
+                                "country_id": request.env.ref("base.tz").id,
                             }
                         )
                     
@@ -717,7 +707,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                 if kw.get("zan_image"):
                     member.sudo().write({"zan_image": base64.b64encode(kw.get("zan_image").read())})
                 if kw.get("beneficiary_image"):
-                    member.sudo().write({"beneficiary_image": base64.b64encode(kw.get("beneficiary_image").read())})
+                    member.sudo().write({"image_1920": base64.b64encode(kw.get("beneficiary_image").read())})
             return request.redirect("/portal/registration/individual")
 
         except Exception as e:

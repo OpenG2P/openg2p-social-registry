@@ -1051,3 +1051,89 @@ msgstr ""
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__marital_status__divorced
 msgid "divorced"
 msgstr ""
+
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_extension
+msgid "Create New Beneficiary"
+msgstr "Unda Mfaidika Mpya"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid "Beneficiary"
+msgstr "Mnufaika"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid "Beneficiary Details"
+msgstr "Maelezo ya Mfaidika"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_extension
+msgid "Beneficiary Details"
+msgstr "Maelezo ya Mfaidika"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid "View Beneficiary"
+msgstr "Angalia Mfaidika"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_list_inherit_add_view_button
+msgid "View"
+msgstr "Angalia"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_extension
+msgid "Beneficiary"
+msgstr "Mnufaika"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_extension
+msgid "Beneficiary Details"
+msgstr "Maelezo ya Mfaidika"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid "Nominee Details"
+msgstr "Maelezo ya Mteule"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
+msgid "Pension Information"
+msgstr "Taarifa za Pensheni"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_payment_tab_fragment
+msgid "Payment Preference"
+msgstr "Upendeleo wa Malipo"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_attachments_tab_fragment
+msgid "Attachments"
+msgstr "Viambatisho"
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.individual_attachments_tab_fragment
+msgid "Beneficiary Photo"
+msgstr "Picha ya Mfaidika"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_extension
+msgid "Update Beneficiary"
+msgstr "Sasisha Mfaidika"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_extension
+msgid "Beneficiary Details"
+msgstr "Maelezo ya Mfaidika"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+msgid "Search"
+msgstr "Namba ya Zan"
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_extension
+msgid "Beneficiary"
+msgstr "Mnufaika"
