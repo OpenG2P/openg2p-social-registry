@@ -10,7 +10,7 @@ _logger = logging.getLogger(__name__)
 class ResPartner(models.Model):
     _inherit = "res.partner"
 
-    region = fields.Many2one("g2p.region")
+    region = fields.Many2one("g2p.region", tracking=True)
     unique_id = fields.Char(string="Unique ID", index=True)
 
     _sql_constraints = [

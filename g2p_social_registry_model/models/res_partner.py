@@ -2,6 +2,7 @@
 import logging
 
 from odoo import fields, models
+from odoo.tools import Markup
 from odoo.addons.g2p_document_field.image_field import DocumentImageField
 
 _logger = logging.getLogger(__name__)
@@ -9,6 +10,28 @@ _logger = logging.getLogger(__name__)
 
 class G2PResPartnerInherited(models.Model):
     _inherit = "res.partner"
+
+    def write(self, vals):
+        # Odoo doesn't support standard tracking for binary fields.
+        # We manually log image updates to provide the requested history.
+        image_fields = {
+            'beneficiary_image': 'Beneficiary Photo',
+            'nominee_image': 'Relative / Nominee Photo',
+            'zan_image': 'Zan ID Photo'
+        }
+        for rec in self:
+            changes = []
+            for field, label in image_fields.items():
+                if field in vals:
+                    # We log that it was updated without comparing content
+                    # to maintain performance and avoid binary tracking errors.
+                    changes.append(f"<li>{label} updated</li>")
+            
+            if changes:
+                msg = f"<ul>{''.join(changes)}</ul>"
+                rec.message_post(body=Markup(msg))
+        
+        return super(G2PResPartnerInherited, self).write(vals)
 
     #######################################################
     #####          Social Status Information          #####

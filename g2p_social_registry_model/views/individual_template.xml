@@ -729,8 +729,8 @@
                         <span class="s_website_form_mark">*</span>
                     </label>
                     <div class="input-group">
-                        <input type="text" id="benf_zan_id" name="benf_zan_id" class="form-control" maxlength="9" minlength="9" required="1" t-att-value="beneficiary.benf_zan_id if beneficiary else ''"/>
-                        <button class="btn btn-outline-primary" type="button" id="zan_id_search">
+                        <input type="text" id="benf_zan_id" name="benf_zan_id" class="form-control" maxlength="9" minlength="9" required="1" t-att-value="beneficiary.benf_zan_id if beneficiary else ''" t-att-readonly="'readonly' if beneficiary else None"/>
+                        <button class="btn btn-outline-primary" type="button" id="zan_id_search" t-if="not beneficiary">
                             <i class="fa fa-search"/> Search
                         </button>
                     </div>
@@ -743,7 +743,7 @@
                         <span class="s_website_form_label_content" style="color: #666666;">First Name</span>
                         <span class="s_website_form_mark">*</span>
                     </label>
-                    <input type="text" id="given_name" name="given_name" class="form-control" t-att-value="beneficiary.given_name if beneficiary else ''" required="1" minlength="2" pattern="[A-Za-z]+" oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')"/>
+                    <input type="text" id="given_name" name="given_name" class="form-control" t-att-value="beneficiary.given_name if beneficiary else ''" required="1" minlength="2" pattern="[A-Za-z]+" oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')" t-att-readonly="'readonly' if beneficiary else None"/>
                 </div>
             </div>
             <div class="col-lg-3">
@@ -751,7 +751,7 @@
                     <label class="s_website_form_label" for="middle_name">
                         <span class="s_website_form_label_content" style="color: #666666;">Middle Name</span>
                     </label>
-                    <input type="text" id="middle_name" name="middle_name" class="form-control" t-att-value="beneficiary.middle_name if beneficiary else ''" minlength="2" pattern="[A-Za-z]+" oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')"/>
+                    <input type="text" id="middle_name" name="middle_name" class="form-control" t-att-value="beneficiary.middle_name if beneficiary else ''" minlength="2" pattern="[A-Za-z]+" oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')" t-att-readonly="'readonly' if beneficiary else None"/>
                 </div>
             </div>
             <div class="col-lg-3">
@@ -760,7 +760,7 @@
                         <span class="s_website_form_label_content" style="color: #666666;">Surname</span>
                         <span class="s_website_form_mark">*</span>
                     </label>
-                    <input type="text" id="family_name" name="family_name" class="form-control" t-att-value="beneficiary.family_name if beneficiary else ''" required="1" minlength="2" pattern="[A-Za-z]+" oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')"/>
+                    <input type="text" id="family_name" name="family_name" class="form-control" t-att-value="beneficiary.family_name if beneficiary else ''" required="1" minlength="2" pattern="[A-Za-z]+" oninput="this.value = this.value.replace(/[^a-zA-Z]/g, '')" t-att-readonly="'readonly' if beneficiary else None"/>
                 </div>
             </div>
         </div>
@@ -772,7 +772,7 @@
                     <label class="s_website_form_label" for="birthdate">
                         <span class="s_website_form_label_content" style="color: #666666;">Date of Birth</span>
                     </label>
-                    <input type="date" id="birthdate" name="birthdate" class="form-control date-picker" t-att-value="beneficiary.birthdate if beneficiary else ''"/>
+                    <input type="date" id="birthdate" name="birthdate" class="form-control date-picker" t-att-value="beneficiary.birthdate if beneficiary else ''" t-att-readonly="'readonly' if beneficiary else None"/>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -781,7 +781,7 @@
                         <span class="s_website_form_label_content" style="color: #666666;">Gender</span>
                         <span class="s_website_form_mark">*</span>
                     </label>
-                    <select id="gender" name="gender" class="form-select" required="1">
+                    <select id="gender" name="gender" class="form-select" required="1" t-att-disabled="'disabled' if beneficiary else None">
                         <option value="">Select</option>
                         <t t-foreach="gender" t-as="g">
                             <option t-att-value="g.value" t-att-selected="beneficiary and beneficiary.gender == g.value">
@@ -789,6 +789,7 @@
                             </option>
                         </t>
                     </select>
+                    <input type="hidden" name="gender" t-att-value="beneficiary.gender" t-if="beneficiary"/>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -804,9 +805,9 @@
                                    var fullVal = '+255' + this.value;
                                    document.getElementById('mobile').value = fullVal;
                                " 
-                               t-att-value="(beneficiary.phone_number_ids[0].phone_no[4:] if beneficiary and beneficiary.phone_number_ids and beneficiary.phone_number_ids[0].phone_no.startswith('+255') else (beneficiary.phone_number_ids[0].phone_no[3:] if beneficiary and beneficiary.phone_number_ids and beneficiary.phone_number_ids[0].phone_no.startswith('255') else (beneficiary.phone_number_ids[0].phone_no[1:] if beneficiary and beneficiary.phone_number_ids and beneficiary.phone_number_ids[0].phone_no.startswith('0') else (beneficiary.phone_number_ids[0].phone_no if beneficiary and beneficiary.phone_number_ids else ''))))"
+                               t-att-value="(beneficiary.beneficiary_phone_number_ids[0].phone_no[4:] if beneficiary and beneficiary.beneficiary_phone_number_ids and beneficiary.beneficiary_phone_number_ids[0].phone_no.startswith('+255') else (beneficiary.beneficiary_phone_number_ids[0].phone_no[3:] if beneficiary and beneficiary.beneficiary_phone_number_ids and beneficiary.beneficiary_phone_number_ids[0].phone_no.startswith('255') else (beneficiary.beneficiary_phone_number_ids[0].phone_no[1:] if beneficiary and beneficiary.beneficiary_phone_number_ids and beneficiary.beneficiary_phone_number_ids[0].phone_no.startswith('0') else (beneficiary.beneficiary_phone_number_ids[0].phone_no if beneficiary and beneficiary.beneficiary_phone_number_ids else ''))))"
                         />
-                        <input type="hidden" id="mobile" name="mobile" t-att-value="beneficiary.phone_number_ids[0].phone_no if beneficiary and beneficiary.phone_number_ids else ''"/>
+                        <input type="hidden" id="mobile" name="mobile" t-att-value="beneficiary.beneficiary_phone_number_ids[0].phone_no if beneficiary and beneficiary.beneficiary_phone_number_ids else ''"/>
                     </div>
                 </div>
             </div>

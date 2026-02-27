@@ -551,6 +551,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                     {
                         "partner_id": partner.id,
                         "phone_no": kw.get("mobile"),
+                        "phone_owner": "beneficiary",
                         "country_id": request.env.ref("base.tz").id,
                     }
                 )
@@ -577,70 +578,114 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
         try:
             member = request.env["res.partner"].sudo().browse(int(kw.get("group_id")))
             if member:
-                name = ""
-                if kw.get("family_name"):
-                    name += kw.get("family_name") + ", "
-                if kw.get("given_name"):
-                    name += kw.get("given_name") + " "
-                if kw.get("middle_name"):
-                    name += kw.get("middle_name") + " "
-                if kw.get("addl_name"):
-                    name += kw.get("addl_name") + " "
-                if kw.get("birthdate") == "":
-                    birthdate = False
-                else:
-                    birthdate = kw.get("birthdate")
-
-                vals = {
-                    "given_name": kw.get("given_name"),
-                    "middle_name": kw.get("middle_name"),
-                    "addl_name": kw.get("addl_name"),
-                    "family_name": kw.get("family_name"),
-                    "name": name,
-                    "birthdate": birthdate,
-                    "gender": kw.get("gender"),
-                    "email": kw.get("email"),
-                    "address": ", ".join(filter(None, [kw.get("street"), kw.get("street2")])),
-                    "occupation": kw.get("occupation"),
-                    "income": float(kw.get("income", 0.0)),
-                    # Household Details
-                    "education_level": kw.get("education_level"),
-                    "employment_status": kw.get("employment_status"),
-                    "marital_status": kw.get("marital_status"),
-                    # Nominee Info
-                    "nominee_first_name": kw.get("nominee_first_name"),
-                    "nominee_middle_name": kw.get("nominee_middle_name"),
-                    "nominee_last_name": kw.get("nominee_last_name"),
-                    "nominee_mobile": kw.get("nominee_mobile"),
-                    "nominee_gender": kw.get("nominee_gender"),
-                    # "nominee_zanid" removed (stored in reg_ids)
-                    "nominee_rel_benf": kw.get("nominee_rel_benf"),
-                    "nominee_house_street": kw.get("nominee_house_street"),
-                    "nominee_shehia": kw.get("nominee_shehia"),
-                    "nominee_region": kw.get("nominee_region"),
-                    "nominee_district": kw.get("nominee_district"),
-                    "nominee_post_code": kw.get("nominee_post_code"),
-                    # Pension Info
-                    "other_pension": kw.get("other_pension"),
-                    "scheme_name": kw.get("scheme_name"),
-                    # Payment Info
-                    "payment_mode": kw.get("payment_mode"),
-                    "bank_name": kw.get("bank_name"),
-                    "account_num": kw.get("account_num"),
-                    "account_name": kw.get("account_name"),
-                    "mobile_wallet": kw.get("mobile_wallet"),
-                    # New Fields
-                    "street": kw.get("street"),
-                    "street2": kw.get("street2"),
-                    "region": int(kw.get("region")) if kw.get("region") else False,
-                    "district": int(kw.get("district")) if kw.get("district") else False,
-                    "benf_post_code": kw.get("benf_post_code"),
-                    # "benf_zan_id" removed (stored in reg_ids)
-                    "disability": kw.get("disability"),
-                    "is_receiving_allowance": kw.get("is_receiving_allowance"),
-                    "has_health_insurance": kw.get("has_health_insurance"),
-
+                # Fields mapping from kw to vals
+                field_map = {
+                    "given_name": "given_name",
+                    "middle_name": "middle_name",
+                    "addl_name": "addl_name",
+                    "family_name": "family_name",
+                    "gender": "gender",
+                    "email": "email",
+                    "occupation": "occupation",
+                    "education_level": "education_level",
+                    "employment_status": "employment_status",
+                    "marital_status": "marital_status",
+                    "nominee_first_name": "nominee_first_name",
+                    "nominee_middle_name": "nominee_middle_name",
+                    "nominee_last_name": "nominee_last_name",
+                    "nominee_mobile": "nominee_mobile",
+                    "nominee_gender": "nominee_gender",
+                    "nominee_rel_benf": "nominee_rel_benf",
+                    "nominee_house_street": "nominee_house_street",
+                    "nominee_shehia": "nominee_shehia",
+                    "nominee_region": "nominee_region",
+                    "nominee_district": "nominee_district",
+                    "nominee_post_code": "nominee_post_code",
+                    "other_pension": "other_pension",
+                    "scheme_name": "scheme_name",
+                    "payment_mode": "payment_mode",
+                    "bank_name": "bank_name",
+                    "account_num": "account_num",
+                    "account_name": "account_name",
+                    "mobile_wallet": "mobile_wallet",
+                    "street": "street",
+                    "street2": "street2",
+                    "benf_post_code": "benf_post_code",
+                    "disability": "disability",
+                    "is_receiving_allowance": "is_receiving_allowance",
+                    "has_health_insurance": "has_health_insurance",
                 }
+
+                def normalize_space(text):
+                    if not isinstance(text, str):
+                        return text
+                    return " ".join(text.split()).strip()
+
+                vals = {}
+                for kw_key, val_key in field_map.items():
+                    if kw_key in kw:
+                        new_val = kw.get(kw_key)
+                        current_val = getattr(member, val_key)
+                        
+                        # Normalize comparisons: treat False, None, and empty string as equivalent for strings
+                        norm_current = normalize_space(current_val) if isinstance(current_val, str) else (current_val or False)
+                        norm_new = normalize_space(new_val) if isinstance(new_val, str) else (new_val or False)
+                        
+                        if norm_current != norm_new:
+                            vals[val_key] = new_val
+
+                # Special handling for birthdate
+                if "birthdate" in kw:
+                    new_birthdate = kw.get("birthdate") if kw.get("birthdate") != "" else False
+                    current_birthdate = member.birthdate or False
+                    if str(current_birthdate) != str(new_birthdate):
+                        vals["birthdate"] = new_birthdate
+
+                # Special handling for address (computed from street/street2)
+                if "street" in kw or "street2" in kw:
+                    street = kw.get("street") if "street" in kw else (member.street or "")
+                    street2 = kw.get("street2") if "street2" in kw else (member.street2 or "")
+                    new_address = ", ".join(filter(None, [street, street2]))
+                    if normalize_space(member.address) != normalize_space(new_address):
+                        vals["address"] = new_address
+
+                # Special handling for numeric fields
+                if "income" in kw:
+                    try:
+                        new_income = float(kw.get("income", 0.0))
+                        if member.income != new_income:
+                            vals["income"] = new_income
+                    except (ValueError, TypeError):
+                        pass
+
+                # Special handling for relational fields (M2O)
+                if "region" in kw:
+                    new_region = int(kw.get("region")) if kw.get("region") else False
+                    if (member.region.id if member.region else False) != new_region:
+                        vals["region"] = new_region
+                if "district" in kw:
+                    new_district = int(kw.get("district")) if kw.get("district") else False
+                    if (member.district.id if member.district else False) != new_district:
+                        vals["district"] = new_district
+
+                # Special handling for name construction and stripping whitespace
+                if any(k in kw for k in ["family_name", "given_name", "middle_name", "addl_name"]):
+                    f_name = kw.get("family_name") if "family_name" in kw else (member.family_name or "")
+                    g_name = kw.get("given_name") if "given_name" in kw else (member.given_name or "")
+                    m_name = kw.get("middle_name") if "middle_name" in kw else (member.middle_name or "")
+                    a_name = kw.get("addl_name") if "addl_name" in kw else (member.addl_name or "")
+                    
+                    # Construct and normalize the new name
+                    new_parts = []
+                    if f_name: new_parts.append(f_name + ",")
+                    if g_name: new_parts.append(g_name)
+                    if m_name: new_parts.append(m_name)
+                    if a_name: new_parts.append(a_name)
+                    new_name = " ".join(" ".join(new_parts).split()).strip()
+                    
+                    if normalize_space(member.name) != new_name:
+                        vals["name"] = new_name
+
 
                 # ID Handling Logic
                 reg_ids_commands = []
@@ -674,40 +719,59 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                 member.sudo().write(vals)
 
                 if kw.get("mobile"):
-                    # Check if the member already has a phone number
-                    existing_phone = member.phone_number_ids.filtered(lambda p: not p.disabled)
-                    if existing_phone:
-                        # If the number is different, disable the old one and create a new one
-                        if existing_phone[0].phone_no != kw.get("mobile"):
-                            existing_phone[0].write(
-                                {"disabled": fields.Datetime.now(), "disabled_by": request.env.user.id}
-                            )
-                            request.env["g2p.phone.number"].sudo().create(
-                                {
-                                    "partner_id": member.id,
-                                    "phone_no": kw.get("mobile"),
-                                    "country_id": request.env.ref("base.tz").id,
-                                }
-                            )
+                    phone_no = normalize_space(kw.get("mobile"))
+                    
+                    # 1. Disable all other active beneficiary phones for this partner
+                    other_beneficiary_phones = request.env["g2p.phone.number"].sudo().search([
+                        ("partner_id", "=", member.id),
+                        ("phone_owner", "in", ["beneficiary", False]), # Cover legacy/default cases
+                        ("phone_no", "!=", phone_no),
+                        ("disabled", "=", False)
+                    ])
+                    for p in other_beneficiary_phones:
+                        p.write({
+                            "disabled": fields.Datetime.now(),
+                            "disabled_by": request.env.user.id
+                        })
+                    
+                    # 2. Ensure the provided mobile number is active and owned by beneficiary
+                    phone_rec = (
+                        request.env["g2p.phone.number"]
+                        .sudo()
+                        .search(
+                            [
+                                ("partner_id", "=", member.id),
+                                ("phone_no", "=", phone_no),
+                                ("phone_owner", "=", "beneficiary"),
+                            ],
+                            limit=1
+                        )
+                    )
+                    if phone_rec:
+                        if phone_rec.disabled:
+                            phone_rec.write({"disabled": False, "disabled_by": False})
                     else:
-                        # If no phone number exists, create a new one
                         request.env["g2p.phone.number"].sudo().create(
                             {
                                 "partner_id": member.id,
-                                "phone_no": kw.get("mobile"),
+                                "phone_no": phone_no,
+                                "phone_owner": "beneficiary",
                                 "country_id": request.env.ref("base.tz").id,
                             }
                         )
-                    
-                    # Sync phone field for list view
-                    member.sudo().write({"phone": kw.get("mobile")})
-
+                        
+                    if normalize_space(member.phone) != phone_no:
+                        member.sudo().write({"phone": phone_no})
                 if kw.get("nominee_image"):
                     member.sudo().write({"nominee_image": base64.b64encode(kw.get("nominee_image").read())})
                 if kw.get("zan_image"):
                     member.sudo().write({"zan_image": base64.b64encode(kw.get("zan_image").read())})
                 if kw.get("beneficiary_image"):
-                    member.sudo().write({"image_1920": base64.b64encode(kw.get("beneficiary_image").read())})
+                    image_data = base64.b64encode(kw.get("beneficiary_image").read())
+                    member.sudo().write({
+                        "image_1920": image_data,
+                        "beneficiary_image": image_data
+                    })
             return request.redirect("/portal/registration/individual")
 
         except Exception as e:
