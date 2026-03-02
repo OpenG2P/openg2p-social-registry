@@ -355,7 +355,10 @@
                                 // Helper to safe set value
                                 function setVal(id, val) {
                                     var el = document.getElementById(id);
-                                    if (el) el.value = val || '';
+                                    if (el) {
+                                        el.value = val || '';
+                                        el.dispatchEvent(new Event('change'));
+                                    }
                                 }
                                 function setSelect(id, val) {
                                     var el = document.getElementById(id);
@@ -429,21 +432,171 @@
                             </select>
                         </div>
                     </div>
-                    <div class="col-lg-4">
+                    <div class="col-lg-4" id="scheme_name_container" t-att-style="'display: block;' if beneficiary and beneficiary.other_pension == 'yes' else 'display: none;'">
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="scheme_name">
                                 <span class="s_website_form_label_content" style="color: #666666;">If Yes, which scheme</span>
                             </label>
-                            <input
-                                type="text"
-                                id="scheme_name"
-                                name="scheme_name"
-                                class="form-control"
-                                t-att-value="beneficiary.scheme_name if beneficiary else ''"
-                            />
+                            
+                            <div class="dropdown custom-multi-select">
+                                <button class="btn btn-outline-secondary dropdown-toggle w-100 text-start d-flex justify-content-between align-items-center" 
+                                        type="button" id="schemeDropdown" data-bs-toggle="dropdown" aria-expanded="false" 
+                                        style="background-color: #fff; border: 1px solid #ced4da; font-size: 0.9rem; color: #495057;">
+                                    <span id="schemeSelectedText" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 90%;">Select Scheme</span>
+                                </button>
+                                <div class="dropdown-menu p-2" aria-labelledby="schemeDropdown" style="width: 100%; max-height: 350px; overflow-y: auto;">
+                                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                                        <button type="button" class="btn btn-sm btn-link p-0 text-decoration-none" id="selectAllSchemes" style="font-size: 0.8rem;">Select All</button>
+                                        <button type="button" class="btn btn-sm btn-link p-0 text-decoration-none text-danger" id="unselectAllSchemes" style="font-size: 0.8rem;">Unselect All</button>
+                                    </div>
+                                    <div class="form-check custom-check mb-1">
+                                        <input class="form-check-input scheme-checkbox" type="checkbox" value="ZSSF" id="scheme_zssf"/>
+                                        <label class="form-check-label" for="scheme_zssf">ZSSF (Zanzibar Social Security Fund)</label>
+                                    </div>
+                                    <div class="form-check custom-check mb-1">
+                                        <input class="form-check-input scheme-checkbox" type="checkbox" value="ZUPS" id="scheme_zups"/>
+                                        <label class="form-check-label" for="scheme_zups">ZUPS (Zanzibar Universal Pension Scheme)</label>
+                                    </div>
+                                    <div class="form-check custom-check mb-1">
+                                        <input class="form-check-input scheme-checkbox" type="checkbox" value="PSSSF" id="scheme_psssf"/>
+                                        <label class="form-check-label" for="scheme_psssf">PSSSF (Public Service Social Security Fund)</label>
+                                    </div>
+                                    <div class="form-check custom-check mb-1">
+                                        <input class="form-check-input scheme-checkbox" type="checkbox" value="NSSF" id="scheme_nssf"/>
+                                        <label class="form-check-label" for="scheme_nssf">NSSF (National Social Security Fund)</label>
+                                    </div>
+                                    <div class="form-check custom-check">
+                                        <input class="form-check-input scheme-checkbox" type="checkbox" value="Other" id="scheme_other"/>
+                                        <label class="form-check-label" for="scheme_other">Other</label>
+                                    </div>
+                                </div>
+                                <input type="hidden" name="scheme_name" id="scheme_name" t-att-value="beneficiary.scheme_name if beneficiary else ''"/>
+                            </div>
                         </div>
                     </div>
                 </div>
+                
+                <style type="text/css">
+                    .custom-multi-select .dropdown-toggle::after {
+                        margin-left: auto;
+                    }
+                    .custom-multi-select .dropdown-menu {
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                        border: 1px solid #dee2e6;
+                        border-radius: 8px;
+                        padding: 10px !important;
+                    }
+                    .custom-check {
+                        display: flex !important;
+                        align-items: center !important;
+                        margin-bottom: 8px;
+                        padding-left: 0 !important; /* Reset bootstrap padding */
+                    }
+                    .custom-check .form-check-input {
+                        margin: 0 10px 0 0 !important;
+                        float: none !important;
+                        width: 1.25rem;
+                        height: 1.25rem;
+                        cursor: pointer;
+                        flex-shrink: 0;
+                    }
+                    .custom-check .form-check-label {
+                        cursor: pointer;
+                        margin: 0;
+                        font-size: 0.9rem;
+                        line-height: 1.2;
+                        color: #495057;
+                        user-select: none;
+                    }
+                    .custom-check:hover {
+                        background-color: #f8f9fa;
+                        border-radius: 4px;
+                    }
+                </style>
+
+                <script type="text/javascript">
+                    document.addEventListener("DOMContentLoaded", function() {
+                        var otherPensionSelect = document.getElementById('other_pension');
+                        var schemeContainer = document.getElementById('scheme_name_container');
+                        var hiddenInput = document.getElementById('scheme_name');
+                        var checkboxes = document.querySelectorAll('.scheme-checkbox');
+                        var selectedText = document.getElementById('schemeSelectedText');
+                        
+                        // 1. Conditional Visibility
+                        if (otherPensionSelect) {
+                            otherPensionSelect.addEventListener('change', function() {
+                                if (this.value === 'yes') {
+                                    schemeContainer.style.display = 'block';
+                                } else {
+                                    schemeContainer.style.display = 'none';
+                                    // Optionally clear selection if "No" is selected
+                                    checkboxes.forEach(cb => cb.checked = false);
+                                    updateHiddenInput();
+                                }
+                            });
+                        }
+
+                        // 2. Multi-select logic
+                        function updateHiddenInput() {
+                            var selected = [];
+                            checkboxes.forEach(function(cb) {
+                                if (cb.checked) {
+                                    selected.push(cb.value);
+                                }
+                            });
+                            hiddenInput.value = selected.join(', ');
+                            
+                            if (selected.length === 0) {
+                                selectedText.innerText = 'Select Scheme';
+                            } else {
+                                selectedText.innerText = selected.join(', ');
+                            }
+                        }
+
+                        checkboxes.forEach(function(cb) {
+                            cb.addEventListener('change', updateHiddenInput);
+                        });
+
+                        // 3. Select All / Unselect All
+                        var selectAllBtn = document.getElementById('selectAllSchemes');
+                        var unselectAllBtn = document.getElementById('unselectAllSchemes');
+
+                        if (selectAllBtn) {
+                            selectAllBtn.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                checkboxes.forEach(cb => cb.checked = true);
+                                updateHiddenInput();
+                            });
+                        }
+
+                        if (unselectAllBtn) {
+                            unselectAllBtn.addEventListener('click', function(e) {
+                                e.preventDefault();
+                                checkboxes.forEach(cb => cb.checked = false);
+                                updateHiddenInput();
+                            });
+                        }
+
+                        // Prevent dropdown from closing when clicking checkboxes or links
+                        var dropdownMenu = document.querySelector('.custom-multi-select .dropdown-menu');
+                        if (dropdownMenu) {
+                            dropdownMenu.addEventListener('click', function(e) {
+                                e.stopPropagation();
+                            });
+                        }
+
+                        // Initialize based on existing value
+                        if (hiddenInput &amp;&amp; hiddenInput.value) {
+                            var vals = hiddenInput.value.split(',').map(s => s.trim());
+                            checkboxes.forEach(function(cb) {
+                                if (vals.includes(cb.value)) {
+                                    cb.checked = true;
+                                }
+                            });
+                            updateHiddenInput();
+                        }
+                    });
+                </script>
             </div>
         </div>
     </template>
@@ -953,8 +1106,11 @@
                                         var hiddenEl = document.getElementById(id);
                                         if (hiddenEl) hiddenEl.value = hiddenVal;
                                     } else {
-                                        var el = document.getElementById(id);
-                                        if (el) el.value = val || '';
+                                         var el = document.getElementById(id);
+                                        if (el) {
+                                            el.value = val || '';
+                                            el.dispatchEvent(new Event('change'));
+                                        }
                                     }
                                 }
 
@@ -1307,7 +1463,7 @@
 
         <!-- Body: Merge names into one column and remove Last Name column -->
         <xpath expr="//table//tbody//tr//td[2]" position="replace">
-            <td style="color:#1e40af; font: normal normal 600 13px/16px Inter;">
+            <td style="color:#1e40af; font: normal normal 600 13px/16px Inter;" data-search-field="name">
                 <span t-out="group.family_name"/>, <span t-out="group.given_name"/>
                 <t t-if="group.middle_name"> <span t-out="group.middle_name"/></t>
             </td>
@@ -1589,6 +1745,13 @@
                         inputs[i].disabled = true;
                         inputs[i].style.backgroundColor = "#e9ecef"; // Bootstrap disabled gray
                         inputs[i].removeAttribute('required');
+                    }
+
+                    // Disable custom dropdown buttons
+                    var dropdownButtons = document.querySelectorAll('.custom-multi-select .dropdown-toggle');
+                    for (var k = 0; k &lt; dropdownButtons.length; k++) {
+                        dropdownButtons[k].disabled = true;
+                        dropdownButtons[k].style.backgroundColor = "#e9ecef";
                     }
 
                     // Hide camera buttons
