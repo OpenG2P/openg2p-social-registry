@@ -386,12 +386,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
             gender = request.env["gender.type"].sudo().search([])
             
             # Fetch Regions
-            all_regions = request.env["g2p.region"].sudo().search([])
-            unique_regions_map = {}
-            for r in all_regions:
-                if r.name not in unique_regions_map:
-                    unique_regions_map[r.name] = r
-            regions = list(unique_regions_map.values())
+            regions = request.env["g2p.region"].sudo().search([])
 
             # Fetch Districts
             districts = request.env["g2p.district"].sudo().search([])

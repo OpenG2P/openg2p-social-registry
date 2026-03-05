@@ -45,7 +45,7 @@ class G2PDraftRecord(models.Model):
         selection=[
             ("draft", "Draft"),
             ("submitted", "Submitted"),
-            ("published", "Published"),
+            ("published", "Approved"),
             ("rejected", "Rejected"),
         ],
         default="draft",
@@ -171,7 +171,7 @@ class G2PDraftRecord(models.Model):
             for user in matching_users:
                 self.sudo().message_post(
                     body=_("Record has been published"),
-                    subject=_("Record Published"),
+                    subject=_("Record Approved"),
                     message_type="notification",
                     partner_ids=[user.partner_id.id],
                 )
@@ -321,7 +321,7 @@ class G2PRespartnerIntegration(models.Model):
         selection=[
             ("draft", "Draft"),
             ("submitted", "Submitted"),
-            ("published", "Published"),
+            ("published", "Approved"),
             ("rejected", "Rejected"),
         ],
         default="draft",

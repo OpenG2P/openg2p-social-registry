@@ -43,7 +43,7 @@
                 />
 
                 <button
-                    string="Publish"
+                    string="Approve"
                     invisible="state != 'submitted'"
                     type="object"
                     name="action_publish"
@@ -128,7 +128,7 @@
                     <button
                         class="btn btn-success"
                         name="action_publish"
-                        string="Publish"
+                        string="Approve"
                         type="object"
                         groups="g2p_draft_publish.group_int_approver,g2p_draft_publish.group_int_admin"
                     />
