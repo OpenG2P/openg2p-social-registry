@@ -1748,17 +1748,15 @@
                     }
 
                     // Disable custom dropdown buttons
-                    var dropdownButtons = document.querySelectorAll('.custom-multi-select .dropdown-toggle');
-                    for (var k = 0; k &lt; dropdownButtons.length; k++) {
-                        dropdownButtons[k].disabled = true;
-                        dropdownButtons[k].style.backgroundColor = "#e9ecef";
-                    }
+                    document.querySelectorAll('.custom-multi-select .dropdown-toggle').forEach(function(button) {
+                        button.disabled = true;
+                        button.style.backgroundColor = "#e9ecef";
+                    });
 
-                    // Hide camera buttons
-                    var camButtons = document.querySelectorAll('.open-cam');
-                    for (var j = 0; j &lt; camButtons.length; j++) {
-                        camButtons[j].style.display = 'none';
-                    }
+                    // Hide camera and search buttons
+                    document.querySelectorAll('.open-cam, #zan_id_search, #nominee_zan_id_search').forEach(function(button) {
+                        button.style.display = 'none';
+                    });
                 });
             </script>
         </xpath>
