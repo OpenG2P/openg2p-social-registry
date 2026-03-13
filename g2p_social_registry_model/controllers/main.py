@@ -1,6 +1,7 @@
 import logging
 import base64
 import requests
+import re
 from datetime import datetime, date
 
 from odoo import http, fields
@@ -12,6 +13,23 @@ _logger = logging.getLogger(__name__)
 
 
 class G2PSocialRegistryModel(G2PregistrationPortalBase):
+    def _validate_tz_phone(self, phone):
+        if not phone:
+            return None
+        # Normalize: strip +255 or 255 or leading 0
+        local = phone.strip()
+        if local.startswith('+255'):
+            local = local[4:]
+        elif local.startswith('255'):
+            local = local[3:]
+        elif local.startswith('0'):
+            local = local[1:]
+        
+        # Check if local is 9 digits starting with 6 or 7
+        if local and not re.match(r'^[67][0-9]{8}$', local):
+            return "Phone number must start with 6 or 7 after +255 and be 9 digits"
+        return None
+
     @http.route("/portal/registration/zan_id_lookup", type="json", auth="user", csrf=False)
     def zan_id_lookup(self, zan_id):
         if not zan_id:
@@ -458,6 +476,20 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
     )
     def individual_create_submit(self, **kw):
         try:
+            # Validate phone numbers before processing
+            phone_error = self._validate_tz_phone(kw.get("mobile"))
+            if phone_error:
+                return request.render(
+                    "g2p_registration_portal_base.error_template",
+                    {"error_message": f"Beneficiary Mobile: {phone_error}"},
+                )
+            nominee_phone_error = self._validate_tz_phone(kw.get("nominee_mobile"))
+            if nominee_phone_error:
+                return request.render(
+                    "g2p_registration_portal_base.error_template",
+                    {"error_message": f"Nominee Mobile: {nominee_phone_error}"},
+                )
+
             user = request.env.user
             name = ""
             if kw.get("family_name"):
@@ -571,6 +603,20 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
     )
     def update_individual_submit(self, **kw):
         try:
+            # Validate phone numbers
+            phone_error = self._validate_tz_phone(kw.get("mobile"))
+            if phone_error:
+                return request.render(
+                    "g2p_registration_portal_base.error_template",
+                    {"error_message": f"Beneficiary Mobile: {phone_error}"},
+                )
+            nominee_phone_error = self._validate_tz_phone(kw.get("nominee_mobile"))
+            if nominee_phone_error:
+                return request.render(
+                    "g2p_registration_portal_base.error_template",
+                    {"error_message": f"Nominee Mobile: {nominee_phone_error}"},
+                )
+
             member = request.env["res.partner"].sudo().browse(int(kw.get("group_id")))
             if member:
                 # Fields mapping from kw to vals

@@ -144,16 +144,30 @@
                             </label>
                             <div class="input-group">
                                 <span class="input-group-text" id="nominee-mobile-addon">+255</span>
-                                <input type="tel" id="nominee_mobile_visual" class="form-control" maxlength="9"
+                                <input type="tel" id="nominee_mobile_visual" class="form-control" maxlength="9" minlength="9"
+                                       pattern="[67][0-9]{8}"
+                                       title="Phone number must start with 6 or 7 and be 9 digits"
                                        oninput="
                                            this.value = this.value.replace(/[^0-9]/g, '');
                                            var fullVal = '+255' + this.value;
                                            document.getElementById('nominee_mobile').value = fullVal;
+                                           var errDiv = document.getElementById('nominee_mobile_error');
+                                           if (this.value.length > 0 &amp;&amp; !/^[67]/.test(this.value)) {
+                                               if (errDiv) errDiv.style.display = 'block';
+                                               this.classList.add('is-invalid');
+                                           } else {
+                                               if (errDiv) errDiv.style.display = 'none';
+                                               this.classList.remove('is-invalid');
+                                               if (this.value.length === 9) {
+                                                   this.classList.remove('is-invalid');
+                                               }
+                                           }
                                        " 
                                        t-att-value="(beneficiary.nominee_mobile[4:] if beneficiary and beneficiary.nominee_mobile and beneficiary.nominee_mobile.startswith('+255') else (beneficiary.nominee_mobile[3:] if beneficiary and beneficiary.nominee_mobile and beneficiary.nominee_mobile.startswith('255') else (beneficiary.nominee_mobile[1:] if beneficiary and beneficiary.nominee_mobile and beneficiary.nominee_mobile.startswith('0') else (beneficiary.nominee_mobile if beneficiary and beneficiary.nominee_mobile else ''))))"
                                 />
                                 <input type="hidden" id="nominee_mobile" name="nominee_mobile" t-att-value="beneficiary.nominee_mobile if beneficiary else ''"/>
                             </div>
+                            <div id="nominee_mobile_error" class="text-danger mt-1" style="font-size: 0.8rem; display: none;">Phone number must start with 6 or 7</div>
                         </div>
                     </div>
                 </div>
@@ -354,10 +368,33 @@
 
                                 // Helper to safe set value
                                 function setVal(id, val) {
-                                    var el = document.getElementById(id);
-                                    if (el) {
-                                        el.value = val || '';
-                                        el.dispatchEvent(new Event('change'));
+                                    if (id === 'nominee_mobile') {
+                                        var rawVal = val || '';
+                                        var visualVal = rawVal;
+                                        if (visualVal.startsWith('+255')) visualVal = visualVal.substring(4);
+                                        else if (visualVal.startsWith('255')) visualVal = visualVal.substring(3);
+                                        else if (visualVal.startsWith('0')) visualVal = visualVal.substring(1);
+                                        
+                                        var visualEl = document.getElementById(id + '_visual');
+                                        if (visualEl) {
+                                            visualEl.value = visualVal;
+                                            visualEl.dispatchEvent(new Event('input'));
+                                        }
+                                        
+                                        var hiddenVal = rawVal;
+                                        if (rawVal &amp;&amp; !rawVal.startsWith('+255')) {
+                                             if (rawVal.startsWith('255')) hiddenVal = '+' + rawVal;
+                                             else if (rawVal.startsWith('0')) hiddenVal = '+255' + rawVal.substring(1);
+                                             else hiddenVal = '+255' + rawVal;
+                                        }
+                                        var hiddenEl = document.getElementById(id);
+                                        if (hiddenEl) hiddenEl.value = hiddenVal;
+                                    } else {
+                                        var el = document.getElementById(id);
+                                        if (el) {
+                                            el.value = val || '';
+                                            el.dispatchEvent(new Event('change'));
+                                        }
                                     }
                                 }
                                 function setSelect(id, val) {
@@ -952,16 +989,27 @@
                     </label>
                     <div class="input-group">
                         <span class="input-group-text" id="mobile-addon">+255</span>
-                        <input type="tel" id="mobile_visual" class="form-control" maxlength="9" 
+                        <input type="tel" id="mobile_visual" class="form-control" maxlength="9" minlength="9"
+                               pattern="[67][0-9]{8}"
+                               title="Phone number must start with 6 or 7 and be 9 digits"
                                oninput="
                                    this.value = this.value.replace(/[^0-9]/g, '');
                                    var fullVal = '+255' + this.value;
                                    document.getElementById('mobile').value = fullVal;
+                                   var errDiv = document.getElementById('mobile_error');
+                                   if (this.value.length > 0 &amp;&amp; !/^[67]/.test(this.value)) {
+                                       errDiv.style.display = 'block';
+                                       this.classList.add('is-invalid');
+                                   } else {
+                                       errDiv.style.display = 'none';
+                                       this.classList.remove('is-invalid');
+                                   }
                                " 
                                t-att-value="(beneficiary.beneficiary_phone_number_ids[0].phone_no[4:] if beneficiary and beneficiary.beneficiary_phone_number_ids and beneficiary.beneficiary_phone_number_ids[0].phone_no.startswith('+255') else (beneficiary.beneficiary_phone_number_ids[0].phone_no[3:] if beneficiary and beneficiary.beneficiary_phone_number_ids and beneficiary.beneficiary_phone_number_ids[0].phone_no.startswith('255') else (beneficiary.beneficiary_phone_number_ids[0].phone_no[1:] if beneficiary and beneficiary.beneficiary_phone_number_ids and beneficiary.beneficiary_phone_number_ids[0].phone_no.startswith('0') else (beneficiary.beneficiary_phone_number_ids[0].phone_no if beneficiary and beneficiary.beneficiary_phone_number_ids else ''))))"
                         />
                         <input type="hidden" id="mobile" name="mobile" t-att-value="beneficiary.beneficiary_phone_number_ids[0].phone_no if beneficiary and beneficiary.beneficiary_phone_number_ids else ''"/>
                     </div>
+                    <div id="mobile_error" class="text-danger mt-1" style="font-size: 0.8rem; display: none;">Phone number must start with 6 or 7</div>
                 </div>
             </div>
         </div>
@@ -1094,7 +1142,10 @@
                                         }
                                         
                                         var visualEl = document.getElementById(id + '_visual');
-                                        if (visualEl) visualEl.value = visualVal;
+                                        if (visualEl) {
+                                            visualEl.value = visualVal;
+                                            visualEl.dispatchEvent(new Event('input'));
+                                        }
                                         
                                         // Ensure hidden input has full +255 format if not empty
                                         var hiddenVal = rawVal;
@@ -1330,7 +1381,74 @@
             });
         </script>
 
-        
+        <!-- Phone Number Validation on Form Submit (Overriding base validateForm) -->
+        <script type="text/javascript">
+            (function() {
+                var waitInterval = setInterval(function() {
+                    if (typeof window.validateForm === 'function') {
+                        clearInterval(waitInterval);
+                        var originalValidateForm = window.validateForm;
+                        
+                        window.validateForm = function(isCreateForm) {
+                            var mobileVisual = document.getElementById('mobile_visual');
+                            var nomineeVisual = document.getElementById('nominee_mobile_visual');
+                            var phoneRegex = /^[67][0-9]{8}$/;
+                            var errors = [];
+
+                            // Reset previous invalid states
+                            if (mobileVisual) mobileVisual.classList.remove('is-invalid');
+                            if (nomineeVisual) nomineeVisual.classList.remove('is-invalid');
+                            
+                            var mobileErrDiv = document.getElementById('mobile_error');
+                            var nomineeErrDiv = document.getElementById('nominee_mobile_error');
+                            if (mobileErrDiv) mobileErrDiv.style.display = 'none';
+                            if (nomineeErrDiv) nomineeErrDiv.style.display = 'none';
+
+                            // Validate beneficiary phone (if filled)
+                            if (mobileVisual &amp;&amp; mobileVisual.value.length > 0) {
+                                if (!phoneRegex.test(mobileVisual.value)) {
+                                    errors.push({field: mobileVisual, errId: 'mobile_error', section: 'demographic', label: 'Beneficiary Mobile'});
+                                }
+                            }
+
+                            // Validate nominee phone (if filled)
+                            if (nomineeVisual &amp;&amp; nomineeVisual.value.length > 0) {
+                                if (!phoneRegex.test(nomineeVisual.value)) {
+                                    errors.push({field: nomineeVisual, errId: 'nominee_mobile_error', section: 'nominee_info', label: 'Nominee Mobile'});
+                                }
+                            }
+
+                            if (errors.length > 0) {
+                                var messages = errors.map(function(err) { return err.label + ' must start with 6 or 7 and be 9 digits'; });
+                                alert(messages.join('\n'));
+
+                                // Show error styling
+                                errors.forEach(function(err) {
+                                    err.field.classList.add('is-invalid');
+                                    var div = document.getElementById(err.errId);
+                                    if (div) div.style.display = 'block';
+                                });
+
+                                // Expand section for the FIRST error
+                                var firstErr = errors[0];
+                                var section = document.getElementById(firstErr.section);
+                                if (section &amp;&amp; !section.classList.contains('show')) {
+                                    var accordionButton = document.querySelector('[data-bs-target="#' + firstErr.section + '"]');
+                                    if (accordionButton) accordionButton.click();
+                                }
+
+                                firstErr.field.scrollIntoView({behavior: 'smooth', block: 'center'});
+                                firstErr.field.focus();
+                                return false;
+                            }
+                            
+                            // If no phone errors, run the original required validation
+                            return originalValidateForm(isCreateForm);
+                        };
+                    }
+                }, 100);
+            })();
+        </script>
         
 
     </template>
@@ -1565,7 +1683,15 @@
                                            this.value = this.value.replace(/[^0-9]/g, '');
                                            var fullVal = '+255' + this.value;
                                            document.getElementById('mobile').value = fullVal;
-                                       " 
+                                           var errDiv = document.getElementById('mobile_error');
+                                           if (this.value.length > 0 &amp;&amp; !/^[67]/.test(this.value)) {
+                                               if (errDiv) errDiv.style.display = 'block';
+                                               this.classList.add('is-invalid');
+                                           } else {
+                                               if (errDiv) errDiv.style.display = 'none';
+                                               this.classList.remove('is-invalid');
+                                           }
+                                       "
                                        t-att-value="(beneficiary.phone_number_ids[0].phone_no[4:] if beneficiary and beneficiary.phone_number_ids and beneficiary.phone_number_ids[0].phone_no.startswith('+255') else (beneficiary.phone_number_ids[0].phone_no[3:] if beneficiary and beneficiary.phone_number_ids and beneficiary.phone_number_ids[0].phone_no.startswith('255') else (beneficiary.phone_number_ids[0].phone_no[1:] if beneficiary and beneficiary.phone_number_ids and beneficiary.phone_number_ids[0].phone_no.startswith('0') else (beneficiary.phone_number_ids[0].phone_no if beneficiary and beneficiary.phone_number_ids else ''))))"
                                 />
                                 <input type="hidden" id="mobile" name="mobile" t-att-value="beneficiary.phone_number_ids[0].phone_no if beneficiary and beneficiary.phone_number_ids else ''"/>
