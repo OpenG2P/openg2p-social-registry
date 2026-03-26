@@ -721,13 +721,26 @@
                 </div>
             </div>
         </div>
-        <!-- Simple Script to toggle fields -->
+        <!-- Simple Script to toggle fields and clear irrelevant data -->
         <script type="text/javascript">
             document.getElementById('payment_mode').addEventListener('change', function() {
                 var bankFields = document.getElementById('bank_fields');
                 var walletFields = document.getElementById('wallet_fields');
-                bankFields.style.display = (this.value === 'bank') ? 'block' : 'none';
-                walletFields.style.display = (this.value === 'mobile_wallet') ? 'block' : 'none';
+                var isBank = (this.value === 'bank');
+                var isWallet = (this.value === 'mobile_wallet');
+                
+                bankFields.style.display = isBank ? 'block' : 'none';
+                walletFields.style.display = isWallet ? 'block' : 'none';
+                
+                // Clear irrelevant fields to prevent stale data
+                if (!isBank) {
+                    document.getElementById('bank_name').value = '';
+                    document.getElementById('account_num').value = '';
+                    document.getElementById('account_name').value = '';
+                }
+                if (!isWallet) {
+                    document.getElementById('mobile_wallet').value = '';
+                }
             });
         </script>
     </template>
