@@ -13,7 +13,7 @@ main:has(.g2p_login) {
 .g2p_login .oe_login_form:not(.ssp-signup-body),
 .g2p_login .oe_signup_form:not(.ssp-signup-body),
 .g2p_login .oe_reset_password_form:not(.ssp-signup-body) {
-    max-width: 444px !important;
+    max-width: 520px !important;
     width: 90%;
     position: relative;
     margin: 50px auto;
@@ -21,7 +21,7 @@ main:has(.g2p_login) {
     box-shadow: 0px 3px 15px #0000000d;
     border-radius: 20px;
     opacity: 1;
-    padding: 25px;
+    padding: 40px;
     top: 0;
 }
 

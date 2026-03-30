@@ -40,10 +40,10 @@
 		</xpath>
 		<button type="submit" name="redirect" position="replace" />
 
-		<xpath expr="//label[@for='password']" position="after">
-			<span class="reset-password">
-				<a t-if="reset_password_enabled" t-attf-href="/web/reset_password?{{ keep_query() }}">Reset Password</a>
-			</span>
+		<xpath expr="//div[contains(@t-attf-class, 'oe_login_buttons')]" position="after">
+			<div class="text-end mt-1">
+				<a t-if="reset_password_enabled" t-attf-href="/web/reset_password?{{ keep_query() }}" class="reset-password">Reset Password</a>
+			</div>
 		</xpath>
 
     </template>
