@@ -6,6 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Odoo Server 17.0\n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-04-06 04:45+0000\n"
+"PO-Revision-Date: 2026-04-06 04:45+0000\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -33,6 +35,31 @@ msgstr ""
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__annual_income__5001_10000
 #: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_group_update_form_template
 msgid "5001-10,000"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_attachments_tab_fragment
+msgid "<i class=\"fa fa-camera\"/> Capture"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_attachments_tab_fragment
+msgid "<i class=\"fa fa-camera\"/> Take Photo"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid "<i class=\"fa fa-search\"/> Search"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_payment_tab_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid "<option value=\"\">Select</option>"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -305,39 +332,14 @@ msgid ""
 msgstr ""
 
 #. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_template
-msgid ""
-"<select id=\"education_level\" name=\"education_level\" class=\"form-select\">\n"
-"                        <option value=\"\">Select</option>\n"
-"                        <option value=\"primary\">Primary</option>\n"
-"                        <option value=\"secondary\">Secondary</option>\n"
-"                        <option value=\"higher_secondary\">Higher Secondary</option>\n"
-"                        <option value=\"bachelors\">Bachelors</option>\n"
-"                        <option value=\"masters\">Masters</option>\n"
-"                    </select>"
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid "<span class=\"input-group-text\" id=\"mobile-addon\">+255</span>"
 msgstr ""
 
 #. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_template
-msgid ""
-"<select id=\"employment_status\" name=\"employment_status\" class=\"form-select\">\n"
-"                        <option value=\"\">Select</option>\n"
-"                        <option value=\"employed_full\">Employed - Full Time</option>\n"
-"                        <option value=\"employed_part\">Employed - Part Time</option>\n"
-"                        <option value=\"self_employed\">Self-employed</option>\n"
-"                        <option value=\"unemployed\">Unemployed</option>\n"
-"                    </select>"
-msgstr ""
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_template
-msgid ""
-"<select id=\"marital_status\" name=\"marital_status\" class=\"form-select\">\n"
-"                        <option value=\"\">Select</option>\n"
-"                        <option value=\"single\">Single</option>\n"
-"                        <option value=\"married\">Married</option>\n"
-"                        <option value=\"divorced\">Divorced</option>\n"
-"                    </select>"
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid "<span class=\"input-group-text\" id=\"nominee-mobile-addon\">+255</span>"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -517,51 +519,301 @@ msgid ""
 msgstr ""
 
 #. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_template
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_payment_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: "
+"#666666;\">Account Name</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_payment_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: "
+"#666666;\">Account Number</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
 msgid ""
 "<span class=\"s_website_form_label_content\" style=\"color: "
 "#666666;\">Address</span>"
 msgstr ""
 
 #. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_template
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
 msgid ""
-"<span class=\"s_website_form_label_content\" style=\"color: "
-"#666666;\">Education Level</span>"
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Are "
+"you receiving 5000 allowance from district council? (Below 70 years)</span>"
 msgstr ""
 
 #. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_template
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
 msgid ""
-"<span class=\"s_website_form_label_content\" style=\"color: "
-"#666666;\">Employment Status</span>"
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Are "
+"you receiving any other pension?</span>"
 msgstr ""
 
 #. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_template
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_payment_tab_fragment
 msgid ""
-"<span class=\"s_website_form_label_content\" style=\"color: "
-"#666666;\">Income</span>"
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Bank "
+"Name</span>"
 msgstr ""
 
 #. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_template
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_attachments_tab_fragment
 msgid ""
-"<span class=\"s_website_form_label_content\" style=\"color: "
-"#666666;\">Marital Status</span>"
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Beneficiary Photo</span>\n"
+"                                <span class=\"s_website_form_mark\">*</span>"
 msgstr ""
 
 #. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_template
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
 msgid ""
 "<span class=\"s_website_form_label_content\" style=\"color: "
-"#666666;\">Occupation</span>"
+"#666666;\">Covered with any health insurance scheme?</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Date "
+"of Birth</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: "
+"#666666;\">Disability Status</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: "
+"#666666;\">District</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">District</span>\n"
+"                                <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">District</span>\n"
+"                        <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">First Name</span>\n"
+"                                <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">First Name</span>\n"
+"                        <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: "
+"#666666;\">Gender</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Gender</span>\n"
+"                                <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Gender</span>\n"
+"                        <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">House &amp; Street</span>\n"
+"                                <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">House &amp; Street</span>\n"
+"                        <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">If "
+"Yes, which scheme</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: "
+"#666666;\">Middle Name</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: "
+"#666666;\">Mobile Number</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_payment_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: "
+"#666666;\">Mobile Wallet Number</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: "
+"#666666;\">Mobile</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">PO "
+"BOX / Post code</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">PO BOX / Post code</span>\n"
+"                        <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_payment_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: "
+"#666666;\">Preferred Payment Method</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: "
+"#666666;\">Region</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Region</span>\n"
+"                                <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Region</span>\n"
+"                        <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: "
+"#666666;\">Relationship with beneficiary</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_attachments_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Relative / Nominee Photo</span>\n"
+"                                <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Shehia (Ward)</span>\n"
+"                                <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Shehia (Ward)</span>\n"
+"                        <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Surname</span>\n"
+"                                <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Surname</span>\n"
+"                        <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_attachments_tab_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Zan ID Photo</span>\n"
+"                                <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Zan ID</span>\n"
+"                                <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+msgid ""
+"<span class=\"s_website_form_label_content\" style=\"color: #666666;\">Zan ID</span>\n"
+"                        <span class=\"s_website_form_mark\">*</span>"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
+msgid ""
+"<span id=\"schemeSelectedText\" style=\"white-space: nowrap; overflow: "
+"hidden; text-overflow: ellipsis; max-width: 90%;\">Select Scheme</span>"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -595,9 +847,23 @@ msgid "Annual Income"
 msgstr ""
 
 #. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_attachments_tab_fragment
+msgid "Attachments"
+msgstr ""
+
+#. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__education_level__bachelors
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
 msgid "Bachelors"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid "Back to List"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_payment_tab_fragment
+msgid "Bank"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -620,9 +886,39 @@ msgid "Below 5000"
 msgstr ""
 
 #. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_extension
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_extension
+msgid "Beneficiary"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_extension
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_extension
+msgid "Beneficiary Details"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__beneficiary_image
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_users__beneficiary_image
+msgid "Beneficiary Photo"
+msgstr ""
+
+#. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__income_sources__business
 #: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_group_update_form_template
 msgid "Business"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_attachments_tab_fragment
+msgid "Cancel"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_attachments_tab_fragment
+msgid "Capture Photo"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -635,6 +931,11 @@ msgstr ""
 #. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__house_condition__cement
 msgid "Cement"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_attachments_tab_fragment
+msgid "Close"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -667,8 +968,13 @@ msgid "Contact"
 msgstr ""
 
 #. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
-msgid "Divorced"
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_extension
+msgid "Create New Beneficiary"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid "Daughter"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -692,13 +998,11 @@ msgstr ""
 
 #. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__employment_status__employed_full
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
 msgid "Employed - Full Time"
 msgstr ""
 
 #. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__employment_status__employed_part
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
 msgid "Employed - Part Time"
 msgstr ""
 
@@ -709,27 +1013,19 @@ msgid "Employment Status"
 msgstr ""
 
 #. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_template
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
-msgid "Enter Address"
-msgstr ""
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_template
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
-msgid "Enter Income"
-msgstr ""
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_template
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
-msgid "Enter Occupation"
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid "Enter Zan ID"
 msgstr ""
 
 #. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__type_of_land_owned__forest
 #: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_group_update_form_template
 msgid "Forest Land"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid "Grandchild"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -740,7 +1036,6 @@ msgstr ""
 
 #. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__education_level__higher_secondary
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
 msgid "Higher Secondary"
 msgstr ""
 
@@ -748,6 +1043,17 @@ msgstr ""
 #: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__house_condition
 #: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_users__house_condition
 msgid "House Condition"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid "Husband"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__other_id_type_id
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_users__other_id_type_id
+msgid "If Yes, what type of ID"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -789,13 +1095,11 @@ msgstr ""
 
 #. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__marital_status__married
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
 msgid "Married"
 msgstr ""
 
 #. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__education_level__masters
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
 msgid "Masters"
 msgstr ""
 
@@ -806,8 +1110,23 @@ msgid "Mining"
 msgstr ""
 
 #. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_payment_tab_fragment
+msgid "Mobile Wallet"
+msgstr ""
+
+#. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__house_condition__mud
 msgid "Mud"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
+msgid "NSSF (National Social Security Fund)"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_list_inherit_header_rename
+msgid "Name"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -829,6 +1148,9 @@ msgstr ""
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__owns_two_wheeler__no
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__sanitation_condition__no
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__water_access__no
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
 #: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_group_update_form_template
 msgid "No"
 msgstr ""
@@ -841,6 +1163,11 @@ msgid "No. of member with Disability"
 msgstr ""
 
 #. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid "Nominee Details"
+msgstr ""
+
+#. module: g2p_social_registry_model
 #: model:ir.model,name:g2p_social_registry_model.model_odk_import
 msgid "ODK Import"
 msgstr ""
@@ -848,6 +1175,8 @@ msgstr ""
 #. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__caste_ethnic_group__other
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__type_of_land_owned__other
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
 #: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_group_update_form_template
 msgid "Other"
 msgstr ""
@@ -893,14 +1222,41 @@ msgid "Owns a Two-Wheeler"
 msgstr ""
 
 #. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
+msgid "PSSSF (Public Service Social Security Fund)"
+msgstr ""
+
+#. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__type_of_land_owned__pastoral
 #: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_group_update_form_template
 msgid "Pastoral Land"
 msgstr ""
 
 #. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_payment_tab_fragment
+msgid "Payment Preference"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
+msgid "Pension Information"
+msgstr ""
+
+#. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__housing_type__permanent
 msgid "Permanent"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid "Phone number must start with 6 or 7"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid "Phone number must start with 6 or 7 and be 9 digits"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -918,7 +1274,6 @@ msgstr ""
 
 #. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__education_level__primary
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
 msgid "Primary"
 msgstr ""
 
@@ -926,6 +1281,12 @@ msgstr ""
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__caste_ethnic_group__pygmy
 #: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_group_update_form_template
 msgid "Pygmy"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__nominee_image
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_users__nominee_image
+msgid "Relative / Nominee Photo"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -942,25 +1303,26 @@ msgstr ""
 
 #. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__education_level__secondary
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
 msgid "Secondary"
 msgstr ""
 
 #. module: g2p_social_registry_model
 #: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_group_update_form_template
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
 msgid "Select"
 msgstr ""
 
 #. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
+msgid "Select All"
+msgstr ""
+
+#. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__employment_status__self_employed
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
 msgid "Self-employed"
 msgstr ""
 
 #. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__marital_status__single
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
 msgid "Single"
 msgstr ""
 
@@ -969,6 +1331,11 @@ msgstr ""
 #: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_group_update_form_template
 #: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.view_groups_sr_demo
 msgid "Social Status Information"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid "Son"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -1014,8 +1381,27 @@ msgstr ""
 
 #. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__employment_status__unemployed
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_template
 msgid "Unemployed"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
+msgid "Unselect All"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_extension
+msgid "Update Beneficiary"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_list_inherit_add_view_button
+msgid "View"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
+msgid "View Beneficiary"
 msgstr ""
 
 #. module: g2p_social_registry_model
@@ -1031,6 +1417,11 @@ msgid "Water Access"
 msgstr ""
 
 #. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
+msgid "Wife"
+msgstr ""
+
+#. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__belong_to_protected_groups__yes
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__electricity_access__yes
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__land_ownership__yes
@@ -1043,97 +1434,30 @@ msgstr ""
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__owns_two_wheeler__yes
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__sanitation_condition__yes
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__water_access__yes
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
 #: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_group_update_form_template
 msgid "Yes"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
+msgid "ZSSF (Zanzibar Social Security Fund)"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
+msgid "ZUPS (Zanzibar Universal Pension Scheme)"
+msgstr ""
+
+#. module: g2p_social_registry_model
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_partner__zan_image
+#: model:ir.model.fields,field_description:g2p_social_registry_model.field_res_users__zan_image
+msgid "Zan ID Photo"
 msgstr ""
 
 #. module: g2p_social_registry_model
 #: model:ir.model.fields.selection,name:g2p_social_registry_model.selection__res_partner__marital_status__divorced
 msgid "divorced"
 msgstr ""
-
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_extension
-msgid "Create New Beneficiary"
-msgstr "Unda Mfaidika Mpya"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
-msgid "Beneficiary"
-msgstr "Mnufaika"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
-msgid "Beneficiary Details"
-msgstr "Maelezo ya Mfaidika"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_extension
-msgid "Beneficiary Details"
-msgstr "Maelezo ya Mfaidika"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_view_details_readonly
-msgid "View Beneficiary"
-msgstr "Angalia Mfaidika"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_list_inherit_add_view_button
-msgid "View"
-msgstr "Angalia"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_extension
-msgid "Beneficiary"
-msgstr "Mnufaika"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_registrant_form_extension
-msgid "Beneficiary Details"
-msgstr "Maelezo ya Mfaidika"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_nominee_tab_fragment
-msgid "Nominee Details"
-msgstr "Maelezo ya Mteule"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_pension_tab_fragment
-msgid "Pension Information"
-msgstr "Taarifa za Pensheni"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_payment_tab_fragment
-msgid "Payment Preference"
-msgstr "Upendeleo wa Malipo"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.individual_attachments_tab_fragment
-msgid "Attachments"
-msgstr "Viambatisho"
-
-#. module: g2p_social_registry_model
-#: model:ir.model.fields,field_description:g2p_social_registry_model.individual_attachments_tab_fragment
-msgid "Beneficiary Photo"
-msgstr "Picha ya Mfaidika"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_extension
-msgid "Update Beneficiary"
-msgstr "Sasisha Mfaidika"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_extension
-msgid "Beneficiary Details"
-msgstr "Maelezo ya Mfaidika"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.beneficiary_details_fields_fragment
-msgid "Search"
-msgstr "Namba ya Zan"
-
-#. module: g2p_social_registry_model
-#: model_terms:ir.ui.view,arch_db:g2p_social_registry_model.social_registry_model_individual_update_form_extension
-msgid "Beneficiary"
-msgstr "Mnufaika"
