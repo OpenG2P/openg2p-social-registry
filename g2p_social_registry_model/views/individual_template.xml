@@ -490,21 +490,21 @@
                                         <input class="form-check-input scheme-checkbox" type="checkbox" value="ZSSF" id="scheme_zssf"/>
                                         <label class="form-check-label" for="scheme_zssf">ZSSF (Zanzibar Social Security Fund)</label>
                                     </div>
-                                    <div class="form-check custom-check mb-1">
+                                    <!-- <div class="form-check custom-check mb-1">
                                         <input class="form-check-input scheme-checkbox" type="checkbox" value="ZUPS" id="scheme_zups"/>
                                         <label class="form-check-label" for="scheme_zups">ZUPS (Zanzibar Universal Pension Scheme)</label>
-                                    </div>
-                                    <div class="form-check custom-check mb-1">
+                                    </div> -->
+                                    <!-- <div class="form-check custom-check mb-1">
                                         <input class="form-check-input scheme-checkbox" type="checkbox" value="PSSSF" id="scheme_psssf"/>
                                         <label class="form-check-label" for="scheme_psssf">PSSSF (Public Service Social Security Fund)</label>
-                                    </div>
-                                    <div class="form-check custom-check mb-1">
+                                    </div> -->
+                                    <!-- <div class="form-check custom-check mb-1">
                                         <input class="form-check-input scheme-checkbox" type="checkbox" value="NSSF" id="scheme_nssf"/>
                                         <label class="form-check-label" for="scheme_nssf">NSSF (National Social Security Fund)</label>
-                                    </div>
+                                    </div> -->
                                     <div class="form-check custom-check">
-                                        <input class="form-check-input scheme-checkbox" type="checkbox" value="Other" id="scheme_other"/>
-                                        <label class="form-check-label" for="scheme_other">Other</label>
+                                        <input class="form-check-input scheme-checkbox" type="checkbox" value="Demo scheme" id="scheme_demo"/>
+                                        <label class="form-check-label" for="scheme_demo">Demo scheme</label>
                                     </div>
                                 </div>
                                 <input type="hidden" name="scheme_name" id="scheme_name" t-att-value="beneficiary.scheme_name if beneficiary else ''"/>
@@ -1303,7 +1303,7 @@
 
         <!-- Row 5: Allowance, Health Insurance, Other ID -->
         <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
-            <div class="col-lg-4">
+            <!-- <div class="col-lg-4">
                 <div class="s_website_form_field mb-3">
                     <label class="s_website_form_label" for="is_receiving_allowance">
                         <span class="s_website_form_label_content" style="color: #666666;">Are you receiving 5000 allowance from district council? (Below 70 years)</span>
@@ -1314,7 +1314,7 @@
                         <option value="no" t-att-selected="beneficiary and beneficiary.is_receiving_allowance == 'no'">No</option>
                     </select>
                 </div>
-            </div>
+            </div> -->
             <div class="col-lg-4">
                 <div class="s_website_form_field mb-3">
                     <label class="s_website_form_label" for="has_health_insurance">
@@ -1781,7 +1781,7 @@
 
                 <!-- Row 5: Allowance, Health Insurance, Other ID -->
                 <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
-                    <div class="col-lg-4">
+                    <!-- <div class="col-lg-4">
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="is_receiving_allowance">
                                 <span class="s_website_form_label_content" style="color: #666666;">Are you receiving 5000 allowance from district council? (Below 70 years)</span>
@@ -1792,7 +1792,7 @@
                                 <option value="no" t-att-selected="beneficiary and beneficiary.is_receiving_allowance == 'no'">No</option>
                             </select>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="col-lg-4">
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="has_health_insurance">
