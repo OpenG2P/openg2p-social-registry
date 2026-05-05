@@ -502,10 +502,7 @@
                                         <input class="form-check-input scheme-checkbox" type="checkbox" value="NSSF" id="scheme_nssf"/>
                                         <label class="form-check-label" for="scheme_nssf">NSSF (National Social Security Fund)</label>
                                     </div> -->
-                                    <div class="form-check custom-check">
-                                        <input class="form-check-input scheme-checkbox" type="checkbox" value="Demo scheme" id="scheme_demo"/>
-                                        <label class="form-check-label" for="scheme_demo">Demo scheme</label>
-                                    </div>
+
                                 </div>
                                 <input type="hidden" name="scheme_name" id="scheme_name" t-att-value="beneficiary.scheme_name if beneficiary else ''"/>
                             </div>
