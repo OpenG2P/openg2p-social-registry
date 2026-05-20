@@ -7,7 +7,7 @@
         <field name="name">view_region_tree</field>
         <field name="model">g2p.region</field>
         <field name="arch" type="xml">
-            <tree editable="bottom">
+            <tree editable="bottom" import="false" export_xlsx="false">
                 <field name="name" />
                 <field name="code" />
                 <field name="iso_code" />

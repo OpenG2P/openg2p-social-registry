@@ -490,6 +490,14 @@
                                         <input class="form-check-input scheme-checkbox" type="checkbox" value="ZSSF" id="scheme_zssf"/>
                                         <label class="form-check-label" for="scheme_zssf">ZSSF (Zanzibar Social Security Fund)</label>
                                     </div>
+                                    <div class="form-check custom-check mb-1">
+                                        <input class="form-check-input scheme-checkbox" type="checkbox" value="Ministry of Finance" id="scheme_mof"/>
+                                        <label class="form-check-label" for="scheme_mof">Ministry of Finance</label>
+                                    </div>
+                                    <div class="form-check custom-check mb-1">
+                                        <input class="form-check-input scheme-checkbox" type="checkbox" value="Other" id="scheme_other"/>
+                                        <label class="form-check-label" for="scheme_other">Other</label>
+                                    </div>
                                     <!-- <div class="form-check custom-check mb-1">
                                         <input class="form-check-input scheme-checkbox" type="checkbox" value="ZUPS" id="scheme_zups"/>
                                         <label class="form-check-label" for="scheme_zups">ZUPS (Zanzibar Universal Pension Scheme)</label>
@@ -505,6 +513,9 @@
 
                                 </div>
                                 <input type="hidden" name="scheme_name" id="scheme_name" t-att-value="beneficiary.scheme_name if beneficiary else ''"/>
+                            </div>
+                            <div class="mt-2" id="scheme_other_input_container" style="display: none;">
+                                <input type="text" id="scheme_other_input" class="form-control" placeholder="Please specify other scheme *" style="font-size: 0.9rem;"/>
                             </div>
                         </div>
                     </div>
@@ -573,11 +584,34 @@
                         // 2. Multi-select logic
                         function updateHiddenInput() {
                             var selected = [];
+                            var hasOther = false;
                             checkboxes.forEach(function(cb) {
                                 if (cb.checked) {
-                                    selected.push(cb.value);
+                                    if (cb.value === 'Other') {
+                                        hasOther = true;
+                                    } else {
+                                        selected.push(cb.value);
+                                    }
                                 }
                             });
+
+                            var otherContainer = document.getElementById('scheme_other_input_container');
+                            var otherInput = document.getElementById('scheme_other_input');
+                            if (hasOther) {
+                                otherContainer.style.display = 'block';
+                                otherInput.setAttribute('required', 'required');
+                                var otherVal = otherInput.value.trim();
+                                if (otherVal) {
+                                    selected.push('Other: ' + otherVal);
+                                } else {
+                                    selected.push('Other');
+                                }
+                            } else {
+                                otherContainer.style.display = 'none';
+                                otherInput.removeAttribute('required');
+                                otherInput.value = ''; // Reset when unchecked
+                            }
+
                             hiddenInput.value = selected.join(', ');
                             
                             if (selected.length === 0) {
@@ -590,6 +624,11 @@
                         checkboxes.forEach(function(cb) {
                             cb.addEventListener('change', updateHiddenInput);
                         });
+
+                        var otherInput = document.getElementById('scheme_other_input');
+                        if (otherInput) {
+                            otherInput.addEventListener('input', updateHiddenInput);
+                        }
 
                         // 3. Select All / Unselect All
                         var selectAllBtn = document.getElementById('selectAllSchemes');
@@ -622,11 +661,24 @@
                         // Initialize based on existing value
                         if (hiddenInput &amp;&amp; hiddenInput.value) {
                             var vals = hiddenInput.value.split(',').map(s => s.trim());
+                            var otherVal = "";
                             checkboxes.forEach(function(cb) {
                                 if (vals.includes(cb.value)) {
                                     cb.checked = true;
                                 }
                             });
+
+                            // Check if any of the values start with "Other" or "Other: "
+                            var otherFound = vals.find(v => v === 'Other' || v.startsWith('Other: '));
+                            if (otherFound) {
+                                var cbOther = document.getElementById('scheme_other');
+                                if (cbOther) cbOther.checked = true;
+
+                                if (otherFound.startsWith('Other: ')) {
+                                    otherVal = otherFound.substring(7); // Extract after "Other: "
+                                }
+                                if (otherInput) otherInput.value = otherVal;
+                            }
                             updateHiddenInput();
                         }
                     });
@@ -912,6 +964,23 @@
                                 stopCamera();
                             });
                         }
+
+                        // File size validation (under 10MB)
+                        const maxSizeBytes = 10 * 1024 * 1024; // 10MB
+                        ['beneficiary_image', 'nominee_image', 'zan_image'].forEach(function(id) {
+                            var input = document.getElementById(id);
+                            if (input) {
+                                input.addEventListener('change', function() {
+                                    if (this.files &amp;&amp; this.files[0]) {
+                                        var file = this.files[0];
+                                        if (file.size > maxSizeBytes) {
+                                            alert("The file size of the selected image exceeds 10MB. Please choose a smaller image.");
+                                            this.value = ''; // Clear the input
+                                        }
+                                    }
+                                });
+                            }
+                        });
                     })();
                 </script>
             </div>
@@ -1048,9 +1117,8 @@
                 <div class="s_website_form_field mb-3">
                     <label class="s_website_form_label" for="benf_post_code">
                         <span class="s_website_form_label_content" style="color: #666666;">PO BOX / Post code</span>
-                        <span class="s_website_form_mark">*</span>
                     </label>
-                    <input type="text" id="benf_post_code" name="benf_post_code" class="form-control" required="1" pattern="[0-9]*" minlength="6" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '')" t-att-value="beneficiary.benf_post_code if beneficiary else ''"/>
+                    <input type="text" id="benf_post_code" name="benf_post_code" class="form-control" pattern="[0-9]*" minlength="6" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '')" t-att-value="beneficiary.benf_post_code if beneficiary else ''"/>
                 </div>
             </div>
         </div>
