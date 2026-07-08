@@ -27,7 +27,6 @@
                         <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="nominee_zanid">
                                 <span class="s_website_form_label_content" style="color: #666666;">Zan ID</span>
-                                <span class="s_website_form_mark">*</span>
                             </label>
                             <div class="input-group">
                                 <input
@@ -37,8 +36,6 @@
                                     class="form-control"
                                     placeholder="Enter Zan ID"
                                     maxlength="9"
-                                    minlength="9"
-                                    required="1"
                                     t-att-value="beneficiary.nominee_zanid if beneficiary else ''"
                                 />
                                 <button class="btn btn-outline-primary" type="button" id="nominee_zan_id_search">
@@ -209,6 +206,25 @@
                     </div>
                     <div class="col-lg-4">
                         <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="nominee_shehia">
+                                <span class="s_website_form_label_content" style="color: #666666;">Shehia (Ward)</span>
+                                <span class="s_website_form_mark">*</span>
+                            </label>
+                            <input
+                                type="text"
+                                id="nominee_shehia"
+                                name="nominee_shehia"
+                                class="form-control"
+                                required="1"
+                                t-att-value="beneficiary.nominee_shehia if beneficiary else ''"
+                            />
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+                    <div class="col-lg-4">
+                        <div class="s_website_form_field mb-3">
                             <label class="s_website_form_label" for="nominee_post_code">
                                 <span class="s_website_form_label_content" style="color: #666666;">PO BOX / Post code</span>
                             </label>
@@ -222,25 +238,6 @@
                                 pattern="[0-9]*"
                                 oninput="this.value = this.value.replace(/[^0-9]/g, '')"
                                 t-att-value="beneficiary.nominee_post_code if beneficiary else ''"
-                            />
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
-                    <div class="col-lg-4">
-                        <div class="s_website_form_field mb-3">
-                            <label class="s_website_form_label" for="nominee_shehia">
-                                <span class="s_website_form_label_content" style="color: #666666;">Shehia (Ward)</span>
-                                <span class="s_website_form_mark">*</span>
-                            </label>
-                            <input
-                                type="text"
-                                id="nominee_shehia"
-                                name="nominee_shehia"
-                                class="form-control"
-                                required="1"
-                                t-att-value="beneficiary.nominee_shehia if beneficiary else ''"
                             />
                         </div>
                     </div>
@@ -265,6 +262,42 @@
         </div>
         
         <script type="text/javascript">
+            // Helper to set image globally
+            window.setImg = function(id, b64) {
+                if (!b64) return;
+                var el = document.getElementById(id);
+                if (!el) return;
+                var container = el.closest('.s_website_form_field');
+                var img = container.querySelector('img');
+                if (!img) {
+                    var div = document.createElement('div');
+                    div.className = "mt-2 text-center";
+                    img = document.createElement('img');
+                    img.style.maxHeight = "150px";
+                    img.style.border = "1px solid #ddd";
+                    img.style.padding = "5px";
+                    img.style.borderRadius = "4px";
+                    div.appendChild(img);
+                    container.appendChild(div);
+                }
+                img.src = "data:image/png;base64," + b64;
+
+                // Remove required attribute from the file input since we have the base64 data
+                el.removeAttribute('required');
+
+                // Store the base64 string in a hidden input so it gets submitted with the form
+                var hiddenInputId = id + '_b64';
+                var hiddenInput = document.getElementById(hiddenInputId);
+                if (!hiddenInput) {
+                    hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.id = hiddenInputId;
+                    hiddenInput.name = hiddenInputId;
+                    el.parentNode.appendChild(hiddenInput);
+                }
+                hiddenInput.value = b64;
+            };
+
             document.addEventListener("DOMContentLoaded", function() {
                 try {
                     var nomRegionSelect = document.getElementById('nominee_region');
@@ -338,6 +371,14 @@
                             return;
                         }
 
+                        var benefZanId = document.getElementById('benf_zan_id') ? document.getElementById('benf_zan_id').value : '';
+                        if (zanId &amp;&amp; benefZanId &amp;&amp; zanId.trim() === benefZanId.trim()) {
+                            statusDiv.innerText = "Nominee Zan ID and Beneficiary Zan ID cannot be the same.";
+                            statusDiv.style.color = "red";
+                            statusDiv.style.display = "block";
+                            return;
+                        }
+
                         statusDiv.innerText = "Searching...";
                         statusDiv.style.color = "blue";
                         statusDiv.style.display = "block";
@@ -356,6 +397,7 @@
                         .then(response => response.json())
                         .then(data => {
                             var result = data.result;
+                            console.log("Nominee search result:", result);
                             if (result &amp;&amp; (result.status === 'SUCCESS' || result.status === 'ALREADY_EXISTS_BUT_FILL')) {
                                 
                                 if (result.status === 'ALREADY_EXISTS_BUT_FILL') {
@@ -412,11 +454,13 @@
                                 setVal('nominee_house_street', result.nominee_house_street);
                                 setVal('nominee_shehia', result.nominee_shehia);
                                 setSelect('nominee_rel_benf', result.nominee_rel_benf);
+                                setVal('nominee_post_code', result.nominee_post_code);
                                 
                                 setSelect('nominee_region', result.nominee_region);
                                 // Timeout for district
                                 setTimeout(() => {
                                     setSelect('nominee_district', result.nominee_district);
+                                    setImg('nominee_image', result.nominee_image);
                                 }, 100);
 
                             } else {
@@ -944,6 +988,7 @@
                                 var container = new DataTransfer();
                                 container.items.add(file);
                                 document.getElementById(currentFieldId).files = container.files;
+                                document.getElementById(currentFieldId).dispatchEvent(new Event('change'));
                                 
                                 // Stop stream and hide
                                 stopCamera();
@@ -965,7 +1010,7 @@
                             });
                         }
 
-                        // File size validation (under 10MB)
+                        // File size validation and preview update
                         const maxSizeBytes = 10 * 1024 * 1024; // 10MB
                         ['beneficiary_image', 'nominee_image', 'zan_image'].forEach(function(id) {
                             var input = document.getElementById(id);
@@ -976,6 +1021,34 @@
                                         if (file.size > maxSizeBytes) {
                                             alert("The file size of the selected image exceeds 10MB. Please choose a smaller image.");
                                             this.value = ''; // Clear the input
+                                            return;
+                                        }
+
+                                        // Update preview image
+                                        var container = this.closest('.s_website_form_field');
+                                        var img = container.querySelector('img');
+                                        if (!img) {
+                                            var div = document.createElement('div');
+                                            div.className = "mt-2 text-center";
+                                            img = document.createElement('img');
+                                            img.style.maxHeight = "150px";
+                                            img.style.border = "1px solid #ddd";
+                                            img.style.padding = "5px";
+                                            img.style.borderRadius = "4px";
+                                            div.appendChild(img);
+                                            container.appendChild(div);
+                                        }
+                                        
+                                        var reader = new FileReader();
+                                        reader.onload = function(e) {
+                                            img.src = e.target.result;
+                                        };
+                                        reader.readAsDataURL(file);
+                                        
+                                        // Clear the hidden base64 input since a new photo is chosen/captured
+                                        var hiddenInput = document.getElementById(id + '_b64');
+                                        if (hiddenInput) {
+                                            hiddenInput.value = "";
                                         }
                                     }
                                 });
@@ -1093,37 +1166,7 @@
             </div>
         </div>
 
-        <!-- Row 3: House & Street, Shehia (Ward), PO Code -->
-        <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
-            <div class="col-lg-4">
-                <div class="s_website_form_field mb-3">
-                    <label class="s_website_form_label" for="street">
-                        <span class="s_website_form_label_content" style="color: #666666;">House &amp; Street</span>
-                        <span class="s_website_form_mark">*</span>
-                    </label>
-                    <input type="text" id="street" name="street" class="form-control" required="1" t-att-value="beneficiary.street if beneficiary else ''"/>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="s_website_form_field mb-3">
-                    <label class="s_website_form_label" for="street2">
-                        <span class="s_website_form_label_content" style="color: #666666;">Shehia (Ward)</span>
-                        <span class="s_website_form_mark">*</span>
-                    </label>
-                    <input type="text" id="street2" name="street2" class="form-control" required="1" t-att-value="beneficiary.street2 if beneficiary else ''"/>
-                </div>
-            </div>
-            <div class="col-lg-4">
-                <div class="s_website_form_field mb-3">
-                    <label class="s_website_form_label" for="benf_post_code">
-                        <span class="s_website_form_label_content" style="color: #666666;">PO BOX / Post code</span>
-                    </label>
-                    <input type="text" id="benf_post_code" name="benf_post_code" class="form-control" pattern="[0-9]*" minlength="6" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '')" t-att-value="beneficiary.benf_post_code if beneficiary else ''"/>
-                </div>
-            </div>
-        </div>
-
-        <!-- Row 4: Region, District, Disability -->
+        <!-- Row 3: Region, District, Shehia (Ward) -->
         <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
             <div class="col-lg-4">
                 <div class="s_website_form_field mb-3">
@@ -1155,6 +1198,36 @@
                             </option>
                         </t>
                     </select>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="street2">
+                        <span class="s_website_form_label_content" style="color: #666666;">Shehia (Ward)</span>
+                        <span class="s_website_form_mark">*</span>
+                    </label>
+                    <input type="text" id="street2" name="street2" class="form-control" required="1" t-att-value="beneficiary.street2 if beneficiary else ''"/>
+                </div>
+            </div>
+        </div>
+
+        <!-- Row 4: PO BOX / Post code, House & Street, Disability Status -->
+        <div class="row mem-ind-row" style="padding: 0 20px 20px 20px;">
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="benf_post_code">
+                        <span class="s_website_form_label_content" style="color: #666666;">PO BOX / Post code</span>
+                    </label>
+                    <input type="text" id="benf_post_code" name="benf_post_code" class="form-control" pattern="[0-9]*" minlength="6" maxlength="6" oninput="this.value = this.value.replace(/[^0-9]/g, '')" t-att-value="beneficiary.benf_post_code if beneficiary else ''"/>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="street">
+                        <span class="s_website_form_label_content" style="color: #666666;">House &amp; Street</span>
+                        <span class="s_website_form_mark">*</span>
+                    </label>
+                    <input type="text" id="street" name="street" class="form-control" required="1" t-att-value="beneficiary.street if beneficiary else ''"/>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -1252,35 +1325,27 @@
                                     }
                                 }
                                 
-                                // Helper to set image
-                                function setImg(id, b64) {
-                                    if (!b64) return;
-                                    var el = document.getElementById(id);
-                                    if (!el) return;
-                                    var container = el.closest('.s_website_form_field');
-                                    var img = container.querySelector('img');
-                                    if (!img) {
-                                        var div = document.createElement('div');
-                                        div.className = "mt-2 text-center";
-                                        img = document.createElement('img');
-                                        img.style.maxHeight = "150px";
-                                        img.style.border = "1px solid #ddd";
-                                        img.style.padding = "5px";
-                                        img.style.borderRadius = "4px";
-                                        div.appendChild(img);
-                                        container.appendChild(div);
-                                    }
-                                    // Basic guess for standard Odoo images
-                                    img.src = "data:image/png;base64," + b64;
-                                }
+                                // Local setImg removed (using global window.setImg)
 
-                                // 1. Basic Details
-                                setVal('given_name', result.firstname);
-                                setVal('middle_name', result.middle_name);
-                                setVal('family_name', result.lastname);
-                                setVal('birthdate', result.dob);
-                                setVal('gender', result.gender);
-                                setVal('mobile', result.mobile);
+                                 // 1. Basic Details
+                                 setVal('given_name', result.firstname);
+                                 setVal('middle_name', result.middle_name);
+                                 setVal('family_name', result.lastname);
+                                 setVal('birthdate', result.dob);
+                                 setVal('gender', result.gender);
+                                 setVal('mobile', result.mobile);
+
+                                 // Make retrieved official details read-only
+                                 ['given_name', 'middle_name', 'family_name', 'birthdate'].forEach(function(id) {
+                                     var el = document.getElementById(id);
+                                     if (el) el.readOnly = true;
+                                 });
+                                 var genderEl = document.getElementById('gender');
+                                 if (genderEl) {
+                                     genderEl.style.pointerEvents = 'none';
+                                     genderEl.style.backgroundColor = '#e9ecef';
+                                     genderEl.setAttribute('tabindex', '-1');
+                                 }
                                 
                                 // 2. Address and Location
                                 setVal('street', result.street);
@@ -1927,6 +1992,39 @@
                         } catch (e) {
                             console.error(e);
                         }
+                    });
+                </script>
+
+                <script type="text/javascript">
+                    document.addEventListener("DOMContentLoaded", function() {
+                        function checkFormValidity() {
+                            var submitBtn = document.getElementById('beneficiary_submit');
+                            if (!submitBtn) return;
+
+                            var isValid = true;
+                            // Find all required inputs
+                            var requiredInputs = document.querySelectorAll('input[required], select[required], textarea[required]');
+                            for (var i = 0; i &lt; requiredInputs.length; i++) {
+                                var input = requiredInputs[i];
+                                if (input.disabled) continue;
+                                if (!input.value || input.value.trim() === "") {
+                                    isValid = false;
+                                    break;
+                                }
+                                if ((input.type === 'checkbox' || input.type === 'radio') &amp;&amp; !input.checked) {
+                                    isValid = false;
+                                    break;
+                                }
+                            }
+                            submitBtn.disabled = !isValid;
+                        }
+
+                        // Listen to input and change events
+                        document.addEventListener('input', checkFormValidity);
+                        document.addEventListener('change', checkFormValidity);
+
+                        // Initial check
+                        setTimeout(checkFormValidity, 500);
                     });
                 </script>
 
