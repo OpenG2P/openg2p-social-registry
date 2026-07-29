@@ -40,14 +40,7 @@ class G2PResPartnerInherited(models.Model):
     num_preg_lact_women = fields.Integer("Pregnant & Lactating Women")
     num_malnourished_children = fields.Integer("Malnourished Children Under 5")
     num_disabled = fields.Integer("No. of member with Disability")
-    type_of_disability = fields.Selection(
-        [
-            ("visual_impairment", "Visual Impairment"),
-            ("hearing_impairment", "Hearing Impairment"),
-            ("physical_disability", "Physical Disability"),
-            ("cognitive_disability", "Cognitive Disability"),
-        ]
-    )
+    type_of_disability = fields.Char(string="Type of Disease / Disability", tracking=True)
     caste_ethnic_group = fields.Selection(
         [
             ("bantu", "Bantu"),

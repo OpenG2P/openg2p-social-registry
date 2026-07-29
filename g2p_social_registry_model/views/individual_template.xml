@@ -1242,6 +1242,14 @@
                     </select>
                 </div>
             </div>
+            <div class="col-lg-4" id="type_of_disability_container" t-att-style="'display: block;' if (beneficiary and beneficiary.disability == 'yes') else 'display: none;'">
+                <div class="s_website_form_field mb-3">
+                    <label class="s_website_form_label" for="type_of_disability">
+                        <span class="s_website_form_label_content" style="color: #666666;">Type of Disease / Disability</span>
+                    </label>
+                    <input type="text" id="type_of_disability" name="type_of_disability" class="form-control" placeholder="Enter type of disease / disability" t-att-value="beneficiary.type_of_disability if beneficiary else ''"/>
+                </div>
+            </div>
         </div>
         
         <script type="text/javascript">
@@ -1357,6 +1365,8 @@
                                     setVal('ben_district', result.district);
                                 }, 100);
                                 setVal('disability', result.disability);
+                                setVal('type_of_disability', result.type_of_disability);
+                                if (typeof toggleDisabilityType === 'function') toggleDisabilityType();
                                 
                                 // 3. Allowance and Insurance
                                 setVal('is_receiving_allowance', result.is_receiving_allowance);
@@ -1425,6 +1435,25 @@
                             statusDiv.style.color = "red";
                         });
                     });
+                }
+
+                function toggleDisabilityType() {
+                    var disSelect = document.getElementById('disability');
+                    var container = document.getElementById('type_of_disability_container');
+                    var typeInput = document.getElementById('type_of_disability');
+                    if (disSelect &amp;&amp; container) {
+                        if (disSelect.value === 'yes') {
+                            container.style.display = 'block';
+                        } else {
+                            container.style.display = 'none';
+                            if (typeInput) typeInput.value = '';
+                        }
+                    }
+                }
+                var disSelect = document.getElementById('disability');
+                if (disSelect) {
+                    disSelect.addEventListener('change', toggleDisabilityType);
+                    toggleDisabilityType();
                 }
             });
         </script>
@@ -1599,6 +1628,21 @@
 
     <!-- Unified Form Extensions -->
     <template id="social_registry_model_individual_update_form_extension" inherit_id="g2p_registration_portal_base.individual_update_form_template">
+        <!-- Rejection Banner placed completely OUTSIDE the form card before form element -->
+        <xpath expr="//form" position="before">
+            <t t-if="beneficiary and beneficiary.state == 'rejected' and (beneficiary.rejection_reason or beneficiary.rejected_by_name)">
+                <div class="alert alert-danger shadow-sm border-danger mb-3" role="alert" style="border-left: 5px solid #dc3545; background-color: #f8d7da; color: #842029; margin-bottom: 20px;">
+                    <div class="d-flex align-items-center flex-wrap" style="padding: 10px 15px;">
+                        <i class="fa fa-exclamation-triangle me-2" style="font-size: 1.1rem;"></i>
+                        <strong class="me-1">Record Rejected:</strong>
+                        <span class="me-2"><t t-esc="', '.join(filter(None, [l.strip() for l in (beneficiary.rejection_reason or '').splitlines()])) or 'No reason specified'"/></span>
+                        <t t-if="beneficiary.rejected_by_name">
+                            <span style="font-weight: 500; font-size: 0.88rem; color: #555;" class="ms-auto">(Rejected by: <t t-esc="beneficiary.rejected_by_name"/>)</span>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </xpath>
         <!-- Change Label to Beneficiary Details -->
         <xpath expr="//button[@id='household_header']" position="replace">
             <button
@@ -1905,6 +1949,14 @@
                                 <option value="yes" t-att-selected="beneficiary and beneficiary.disability == 'yes'">Yes</option>
                                 <option value="no" t-att-selected="beneficiary and beneficiary.disability == 'no'">No</option>
                             </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-4" id="type_of_disability_container_readonly" t-att-style="'display: block;' if (beneficiary and beneficiary.disability == 'yes') else 'display: none;'">
+                        <div class="s_website_form_field mb-3">
+                            <label class="s_website_form_label" for="type_of_disability">
+                                <span class="s_website_form_label_content" style="color: #666666;">Type of Disease / Disability</span>
+                            </label>
+                            <input type="text" id="type_of_disability" name="type_of_disability" class="form-control" t-att-value="beneficiary.type_of_disability if beneficiary else ''" readonly="readonly"/>
                         </div>
                     </div>
                 </div>

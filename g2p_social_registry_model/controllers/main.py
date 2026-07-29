@@ -555,6 +555,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                 "benf_post_code": kw.get("benf_post_code"),
                 # "benf_zan_id" removed (stored in reg_ids)
                 "disability": kw.get("disability"),
+                "type_of_disability": kw.get("type_of_disability"),
                 "is_receiving_allowance": kw.get("is_receiving_allowance"),
                 "has_health_insurance": kw.get("has_health_insurance"),
 
@@ -653,6 +654,7 @@ class G2PSocialRegistryModel(G2PregistrationPortalBase):
                     "street2": "street2",
                     "benf_post_code": "benf_post_code",
                     "disability": "disability",
+                    "type_of_disability": "type_of_disability",
                     "is_receiving_allowance": "is_receiving_allowance",
                     "has_health_insurance": "has_health_insurance",
                 }
